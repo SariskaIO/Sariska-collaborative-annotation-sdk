@@ -6,11 +6,13 @@ import { StoreProvider } from "./context/store/StoreProvider";
 
 const SariskaCollaborativeAnnotation = () => {
   return (
+    <div>
     <StoreProvider>
       <SocketProvider>
         <App />
       </SocketProvider>
     </StoreProvider>
+    </div>
   )
 }
 
