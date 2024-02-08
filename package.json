@@ -25,12 +25,10 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "env-cmd -f .env.development react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts --openssl-legacy-provider build",
-    "build:development": "env-cmd -f .env.development npm run build",
-    "build:production": "env-cmd -f .env.production npm run build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "env-cmd -f .env.development webpack serve --mode development --open",
+    "build": "webpack --mode production",
+    "build:development": "env-cmd -f .env.development webpack --mode development",
+    "build:production": "env-cmd -f .env.production webpack --mode production"
   },
   "eslintConfig": {
     "extends": [
@@ -51,6 +49,17 @@
     ]
   },
   "devDependencies": {
-    "page-lifecycle": "^0.1.2"
+    "@babel/core": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
+    "@babel/preset-react": "^7.23.3",
+    "@svgr/webpack": "^8.1.0",
+    "babel-loader": "^9.1.3",
+    "css-loader": "^6.10.0",
+    "file-loader": "^6.2.0",
+    "page-lifecycle": "^0.1.2",
+    "style-loader": "^3.3.4",
+    "webpack": "^5.90.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   }
 }
