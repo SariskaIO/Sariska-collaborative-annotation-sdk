@@ -16,6 +16,7 @@ module.exports =() => {
     
     return {
         mode: 'development',
+        devtool: 'source-map',
         entry: './src/index.js',
         output: {
             path: path.resolve('lib'),
