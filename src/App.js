@@ -18,7 +18,7 @@ const App = (props)=> {
   const [canvasCtx, setCanvasCtx] = useState(null);
   const roomName = 'sariska1';
   const {users, dispatch} = useStore();
-  console.log('props', props);
+  
   const rtcChannel = CreateChannel(`rtc:${roomName}`, {});
   
   UseEventHandler(rtcChannel, 'ping', setLoading, message => {

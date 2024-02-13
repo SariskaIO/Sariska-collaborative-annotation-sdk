@@ -141,6 +141,5 @@ export function drawLine(ctx, end, start, color, width) {
 }
 
 export function onDraw (data) {
-    console.log('data uti', data);
-    drawLine(data.ctx, data.point, data.prevPoint, 'green',  2);
+    drawLine(data.ctx, data.point, data.prevPoint, data?.inputProps?.lineColor,  data?.inputProps?.lineWidth);
 }

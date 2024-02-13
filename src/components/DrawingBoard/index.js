@@ -16,7 +16,6 @@ const DrawingBoard = ({
       rooms: { room },
     } = useStore();
 
-  console.log('props are', inputProps);
     return (
     <div>
         <Canvas 

@@ -30,7 +30,6 @@ export function useOnDraw(
         }
         function initMouseMoveListener(){
             const mouseMoveListener = (e) => {
-                console.log('first input', inputProps)
                 if(isDrawingRef.current){
                     const point = computePointInCanvas(e.clientX, e.clientY);
                     let prevPoint = prevPointRef.current;
