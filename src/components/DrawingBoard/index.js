@@ -17,7 +17,6 @@ const DrawingBoard = ({
     } = useStore();
 
     return (
-    <div>
         <Canvas 
             width={inputProps.width}
             height={inputProps.height}
@@ -26,7 +25,6 @@ const DrawingBoard = ({
             setCanvasCtx={setCanvasCtx}
             inputProps={inputProps}
         />
-    </div>
     )
 }
 

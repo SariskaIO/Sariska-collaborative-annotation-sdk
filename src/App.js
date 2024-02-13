@@ -3,14 +3,12 @@ import './App.css';
 import SocketProvider from './context/socket/SocketProvider';
 import CreateChannel from './channel/CreateChannel';
 import UseEventHandler from './hooks/UseEventHandler';
-import BackdropLoader from './components/BackdropLoader';
 import DrawingBoard from './components/DrawingBoard';
 import { useStore } from './store';
 import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
 import { onDraw } from './utils';
-import note from './assets/images/note.png';
 
 const App = (props)=> {
   const [messages, setMessages] = useState([]);
@@ -69,7 +67,6 @@ const App = (props)=> {
 
   return (
       <SocketProvider>
-        <BackdropLoader open={loading} />
         {/* <iframe
           src="http://infolab.stanford.edu/pub/papers/google.pdf#toolbar=0&navpanes=0&scrollbar=0"
           height="500"

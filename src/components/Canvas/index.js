@@ -21,7 +21,6 @@ const Canvas = ({
       zIndex: inputProps.zIndex
     }
   return (
-    <div>
         <canvas 
             width={width}
             height={height}
@@ -29,7 +28,6 @@ const Canvas = ({
             ref={setCanvasRef}
             onMouseDown={onMouseDown}
         />
-    </div>
   )
 }
 
