@@ -6,15 +6,20 @@ const Canvas = ({
     height, 
     pushMessage,
     channel,
-    setCanvasCtx
-    //p
+    setCanvasCtx,
+    inputProps
   }) => {
     const {setCanvasRef, onMouseDown} = useOnDraw(
       pushMessage,
       channel,
-      setCanvasCtx
+      setCanvasCtx,
+      inputProps
       );
-      
+
+    const canvasStyle={
+      position: 'absolute', 
+      zIndex: inputProps.zIndex
+    }
   return (
     <div>
         <canvas 
@@ -30,8 +35,3 @@ const Canvas = ({
 
 export default Canvas
 
-const canvasStyle={
-    border: `1px solid black`,
-    position: 'relative', 
-    zIndex: 10
-}
