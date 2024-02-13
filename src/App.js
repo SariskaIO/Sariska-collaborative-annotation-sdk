@@ -12,13 +12,13 @@ import { SET_ROOM, SET_USER } from './store/action/types';
 import { onDraw } from './utils';
 import note from './assets/images/note.png';
 
-const App = ()=> {
+const App = (props)=> {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [canvasCtx, setCanvasCtx] = useState(null);
   const roomName = 'sariska1';
   const {users, dispatch} = useStore();
-  
+  console.log('props', props);
   const rtcChannel = CreateChannel(`rtc:${roomName}`, {});
   
   UseEventHandler(rtcChannel, 'ping', setLoading, message => {
@@ -70,13 +70,13 @@ const App = ()=> {
   return (
       <SocketProvider>
         <BackdropLoader open={loading} />
-        <iframe
+        {/* <iframe
           src="http://infolab.stanford.edu/pub/papers/google.pdf#toolbar=0&navpanes=0&scrollbar=0"
           height="500"
           width="700"
           title='stanford'
           style={{position: 'absolute', zIndex: 1}}
-      ></iframe>
+      ></iframe> */}
         {/* <img 
           alt='note'
           src={note} 
@@ -85,6 +85,7 @@ const App = ()=> {
           style={{position: 'absolute', zIndex: 1}}
           /> */}
         <DrawingBoard
+          inputProps={props}
           messages={messages} 
           pushMessage={pushMessage} 
           loading={loading}
