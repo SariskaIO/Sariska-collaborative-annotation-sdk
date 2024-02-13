@@ -15,7 +15,7 @@ const Canvas = ({
       setCanvasCtx,
       inputProps
       );
-
+console.log('canvas input ', inputProps)
     const canvasStyle={
       position: 'absolute', 
       zIndex: inputProps.zIndex
