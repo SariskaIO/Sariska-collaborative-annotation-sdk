@@ -21,13 +21,16 @@ const Canvas = ({
       zIndex: inputProps.zIndex
     }
   return (
-        <canvas 
-            width={width}
-            height={height}
-            style={canvasStyle}
-            ref={setCanvasRef}
-            onMouseDown={onMouseDown}
-        />
+        <>
+          {inputProps.children}
+          <canvas 
+              width={width}
+              height={height}
+              style={canvasStyle}
+              ref={setCanvasRef}
+              onMouseDown={onMouseDown}
+          />
+        </>
   )
 }
 

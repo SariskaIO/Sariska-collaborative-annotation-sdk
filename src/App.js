@@ -66,7 +66,7 @@ const App = (props)=> {
 
 
   return (
-      <SocketProvider>
+      <>
         {/* <iframe
           src="http://infolab.stanford.edu/pub/papers/google.pdf#toolbar=0&navpanes=0&scrollbar=0"
           height="500"
@@ -89,7 +89,7 @@ const App = (props)=> {
           channel={rtcChannel}
           setCanvasCtx={setCanvasCtx}
         />
-      </SocketProvider>
+      </>
   );
 }
 
