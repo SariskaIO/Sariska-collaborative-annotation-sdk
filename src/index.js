@@ -5,6 +5,7 @@ import SocketProvider from "./context/socket/SocketProvider";
 import { StoreProvider } from "./context/store/StoreProvider";
 
 const SariskaCollaborativeAnnotation = (props) => {
+  console.log('pripss', props)
   return (
     <StoreProvider>
       <SocketProvider>
