@@ -5,7 +5,7 @@ export function useOnDraw(
     pushMessage,
     channel,
     setCanvasCtx,
-    inputProps
+    otherProps
     ){
     const canvasRef = useRef(null);
     const prevPointRef = useRef()
@@ -33,8 +33,8 @@ export function useOnDraw(
                 if(isDrawingRef.current){
                     const point = computePointInCanvas(e.clientX, e.clientY);
                     let prevPoint = prevPointRef.current;
-                    if(onDraw) onDraw({ctx, point, prevPoint, inputProps});
-                    pushMessage(JSON.stringify({ctx, point, prevPoint, inputProps}), channel);
+                    if(onDraw) onDraw({ctx, point, prevPoint, otherProps});
+                    pushMessage(JSON.stringify({ctx, point, prevPoint, otherProps}), channel);
                     prevPointRef.current = point;
                 }
             }
