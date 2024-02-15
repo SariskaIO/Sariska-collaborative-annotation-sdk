@@ -81,14 +81,14 @@ const App = (props)=> {
           height={500} 
           style={{position: 'absolute', zIndex: 1}}
           /> */}
-        {/* <DrawingBoard
+        <DrawingBoard
           inputProps={props}
           messages={messages} 
           pushMessage={pushMessage} 
           loading={loading}
           channel={rtcChannel}
           setCanvasCtx={setCanvasCtx}
-        /> */}
+        />
       </>
   );
 }

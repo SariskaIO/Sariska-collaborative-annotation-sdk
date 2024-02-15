@@ -1,5 +1,5 @@
 import React from 'react';
-import { useOnDraw } from '../../hooks/useOnDraw';
+//import { useOnDraw } from '../../hooks/useOnDraw';
 
 const Canvas = ({
     width, 
@@ -9,12 +9,15 @@ const Canvas = ({
     setCanvasCtx,
     inputProps
   }) => {
-    const {setCanvasRef, onMouseDown} = useOnDraw(
-      pushMessage,
-      channel,
-      setCanvasCtx,
-      inputProps
-      );
+   // const {
+      // setCanvasRef, 
+      // onMouseDown} =
+      //  useOnDraw(
+      // pushMessage,
+      // channel,
+      // setCanvasCtx,
+      // inputProps
+      // );
       console.log('inputProps,', inputProps)
     const canvasStyle={
       position: 'absolute', 
@@ -27,8 +30,8 @@ const Canvas = ({
               width={width}
               height={height}
               style={canvasStyle}
-              ref={setCanvasRef}
-              onMouseDown={onMouseDown}
+          //    ref={setCanvasRef}
+            //  onMouseDown={onMouseDown}
           />
         </>
   )
