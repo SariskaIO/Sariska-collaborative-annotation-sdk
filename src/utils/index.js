@@ -141,5 +141,5 @@ export function drawLine(ctx, end, start, color, width) {
 }
 
 export function onDraw (data) {
-    drawLine(data.ctx, data.point, data.prevPoint, data?.inputProps?.lineColor,  data?.inputProps?.lineWidth);
+    drawLine(data.ctx, data.point, data.prevPoint, data?.otherProps?.lineColor,  data?.otherProps?.lineWidth);
 }
