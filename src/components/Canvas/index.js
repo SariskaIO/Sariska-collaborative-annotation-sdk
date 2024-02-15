@@ -23,14 +23,14 @@ const Canvas = ({
     }
   return (
         <>
+        <canvas 
+            width={width}
+            height={height}
+            style={canvasStyle}
+            ref={setCanvasRef}
+            onMouseDown={onMouseDown}
+        />
           {children}
-          <canvas 
-              width={width}
-              height={height}
-              style={canvasStyle}
-              ref={setCanvasRef}
-              onMouseDown={onMouseDown}
-          />
         </>
   )
 }
