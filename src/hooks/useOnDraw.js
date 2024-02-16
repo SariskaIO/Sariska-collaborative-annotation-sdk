@@ -57,16 +57,29 @@ export function useOnDraw(
                 window.removeEventListener('mouseup', mouseUpListenerRef.current);
             }
         }
+
+        if(otherProps.isParticipantAccess){
+            initMouseMoveListener();
+            initMouseUpListener();
+        }else{
+            if(otherProps.isModerator){
+                initMouseMoveListener();
+                initMouseUpListener();
+            }
+        }
         
-        initMouseMoveListener();
-        initMouseUpListener();
         return ()=>{
-            removeMouseEventListeners();
+            if(otherProps.isParticipantAccess){
+                removeMouseEventListeners();
+            }else{
+                if(otherProps.isModerator){
+                    removeMouseEventListeners();
+                }
         }
     },[
         onDraw, 
         channel
-    ])
+    ]});
 
     function setCanvasRef(ref){
         if(!ref) return;
