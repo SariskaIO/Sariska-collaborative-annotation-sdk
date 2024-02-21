@@ -73,7 +73,7 @@ export function useOnDraw(
         }
         
         if(otherProps.isCanvasClear){
-            clearCanvas( ctx.clearRect(0, 0, otherProps.width, otherProps.height))
+            clearCanvas( ctx, otherProps.width, otherProps.height)
         }
 
         return ()=>{
