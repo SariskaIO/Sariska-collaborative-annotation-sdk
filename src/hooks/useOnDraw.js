@@ -14,6 +14,10 @@ export function useOnDraw(
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
 
+    function clearCanvas(ctx, width, height){
+        ctx.clearRect(0, 0, width, height)
+    }
+
     useEffect(()=>{
         const ctx = canvasRef.current.getContext('2d');
         setCanvasCtx(ctx);
@@ -68,6 +72,10 @@ export function useOnDraw(
             }
         }
         
+        if(otherProps.isCanvasClear){
+            clearCanvas( ctx.clearRect(0, 0, otherProps.width, otherProps.height))
+        }
+
         return ()=>{
             if(otherProps.isParticipantAccess){
                 removeMouseEventListeners();
@@ -78,7 +86,8 @@ export function useOnDraw(
         }
     },[
         onDraw, 
-        channel
+        channel,
+        otherProps.isCanvasClear
     ]});
 
     function setCanvasRef(ref){
