@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { onDraw } from "../utils";
+import { clearCanvas, onDraw } from "../utils";
 
 export function useOnDraw(
     pushMessage,
@@ -13,10 +13,6 @@ export function useOnDraw(
 
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
-
-    function clearCanvas(ctx, width, height){
-        ctx.clearRect(0, 0, width, height)
-    }
 
     useEffect(()=>{
         const ctx = canvasRef.current.getContext('2d');
@@ -73,7 +69,7 @@ export function useOnDraw(
         }
         
         if(otherProps.isCanvasClear){
-            clearCanvas( ctx, otherProps.width, otherProps.height)
+            clearCanvas( ctx, otherProps.width, otherProps.height );
         }
 
         return ()=>{
