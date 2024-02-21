@@ -8,7 +8,7 @@ import { useStore } from './store';
 import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
-import { onDraw } from './utils';
+import { clearCanvas, onDraw } from './utils';
 
 const App = (props)=> {
   const [messages, setMessages] = useState([]);
@@ -43,9 +43,11 @@ const App = (props)=> {
     let content = JSON.parse(message.content);
     if(Object.keys(content.ctx).length){
       onDraw(content);
+      clearCanvas( content.ctx, props.width, props.height );
     }else{
       content.ctx = canvasCtx;
-      onDraw(content)
+      onDraw(content);
+      clearCanvas( content.ctx, props.width, props.height );
     }
     setMessages(messages => [...messages, message])
   });
