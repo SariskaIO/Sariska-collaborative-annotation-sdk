@@ -43,15 +43,9 @@ const App = (props)=> {
     let content = JSON.parse(message.content);
     if(Object.keys(content.ctx).length){
       onDraw(content);
-      if(props.isCanvasClear){
-        clearCanvas( content.ctx, props.width, props.height );
-      }
     }else{
       content.ctx = canvasCtx;
       onDraw(content);
-      if(props.isCanvasClear){
-        clearCanvas( content.ctx, props.width, props.height );
-      }
     }
     setMessages(messages => [...messages, message])
   });
