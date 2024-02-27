@@ -13,6 +13,7 @@ export function useOnDraw(
 
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
+    console.log('channel old', channel)
 
     useEffect(()=>{
         const ctx = canvasRef.current.getContext('2d');
@@ -30,6 +31,7 @@ export function useOnDraw(
         }
         function initMouseMoveListener(){
             const mouseMoveListener = (e) => {
+                console.log('channel new', channel)
                 if(isDrawingRef.current){
                     const point = computePointInCanvas(e.clientX, e.clientY);
                     let prevPoint = prevPointRef.current;
