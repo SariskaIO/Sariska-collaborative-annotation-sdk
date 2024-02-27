@@ -35,8 +35,12 @@ export function useOnDraw(
                 if(isDrawingRef.current){
                     const point = computePointInCanvas(e.clientX, e.clientY);
                     let prevPoint = prevPointRef.current;
-                    if(onDraw) onDraw({ctx, point, prevPoint, otherProps});
-                    pushMessage(JSON.stringify({ctx, point, prevPoint, otherProps}), channel);
+                    if(onDraw) {
+                        onDraw({ctx, point, prevPoint, otherProps});
+                    }
+                    if(channel) {
+                        pushMessage(JSON.stringify({ctx, point, prevPoint, otherProps}), channel);
+                    }
                     prevPointRef.current = point;
                 }
             }
