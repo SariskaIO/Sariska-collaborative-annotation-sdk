@@ -1,11 +1,11 @@
-import React from 'react'
-import useOnMessage from '../../hooks/useOnMessage'
+// import React from 'react'
+// import useOnMessage from '../../hooks/useOnMessage'
 
-const Message = ({pushMessage, content}) => {
-    useOnMessage(pushMessage, content);
-  return (
-    null
-  )
-}
+// const Message = ({pushMessage, content}) => {
+//     useOnMessage(pushMessage, content);
+//   return (
+//     null
+//   )
+// }
 
-export default Message
+// export default Message

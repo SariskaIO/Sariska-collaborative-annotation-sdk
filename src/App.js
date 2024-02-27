@@ -71,11 +71,12 @@ const App = (props)=> {
 
 
   return (
-      <>
-        {
-          props.content ?
-            <Message pushMessage={pushMessage} content={props.content} />
-            :
+      // <>
+      //   {
+      //     props.content ?
+      //       <Message pushMessage={pushMessage} content={props.content} />
+      //       :
+
             <DrawingBoard
               inputProps={props}
               pushMessage={pushMessage} 
@@ -83,8 +84,8 @@ const App = (props)=> {
               channel={rtcChannel}
               setCanvasCtx={setCanvasCtx}
             />
-        }
-      </>
+      //   }
+      // </>
   );
 }
 

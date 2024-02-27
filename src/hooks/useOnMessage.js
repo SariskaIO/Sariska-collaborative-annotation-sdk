@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react'
+// import React, { useEffect } from 'react'
 
-const useOnMessage = (pushMessage, content) => {
-  useEffect(()=>{
-    pushMessage(content)
-  },[])
-  return (
-    null
-  )
-}
+// const useOnMessage = (pushMessage, content) => {
+//   useEffect(()=>{
+//     pushMessage(content)
+//   },[])
+//   return (
+//     null
+//   )
+// }
 
-export default useOnMessage
+// export default useOnMessage
