@@ -3,7 +3,6 @@ import { useStore } from '../../store';
 import Canvas from '../Canvas';
 
 const DrawingBoard = ({
-    messages,
     pushMessage,
     channel,
     setCanvasCtx,

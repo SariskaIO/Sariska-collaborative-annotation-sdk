@@ -9,6 +9,7 @@ import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
 import { clearCanvas, onDraw } from './utils';
+import Message from './components/Message';
 
 const App = (props)=> {
   const [messages, setMessages] = useState([]);
@@ -41,13 +42,17 @@ const App = (props)=> {
 
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
     let content = JSON.parse(message.content);
-    if(Object.keys(content.ctx).length){
-      onDraw(content);
+    if(props.content){
+      return message;
     }else{
-      content.ctx = canvasCtx;
-      onDraw(content);
+      if(Object.keys(content.ctx).length){
+        onDraw(content);
+      }else{
+        content.ctx = canvasCtx;
+        onDraw(content);
+      }
+      setMessages(messages => [...messages, message])
     }
-    setMessages(messages => [...messages, message])
   });
 
   UseEventHandler(rtcChannel, 'archived_message', setLoading, message => {
@@ -67,28 +72,18 @@ const App = (props)=> {
 
   return (
       <>
-        {/* <iframe
-          src="http://infolab.stanford.edu/pub/papers/google.pdf#toolbar=0&navpanes=0&scrollbar=0"
-          height="500"
-          width="700"
-          title='stanford'
-          style={{position: 'absolute', zIndex: 1}}
-      ></iframe> */}
-        {/* <img 
-          alt='note'
-          src={note} 
-          width={700}
-          height={500} 
-          style={{position: 'absolute', zIndex: 1}}
-          /> */}
-        <DrawingBoard
-          inputProps={props}
-          messages={messages} 
-          pushMessage={pushMessage} 
-          loading={loading}
-          channel={rtcChannel}
-          setCanvasCtx={setCanvasCtx}
-        />
+        {
+          props.content ?
+            <Message pushMessage={pushMessage} content={props.content} />
+            :
+            <DrawingBoard
+              inputProps={props}
+              pushMessage={pushMessage} 
+              loading={loading}
+              channel={rtcChannel}
+              setCanvasCtx={setCanvasCtx}
+            />
+        }
       </>
   );
 }

@@ -19,7 +19,9 @@ const Canvas = ({
       
     const canvasStyle={
       position: 'absolute', 
-      zIndex: otherProps.zIndex
+      zIndex: otherProps.zIndex,
+      width,
+      height
     }
   return (
         <>
