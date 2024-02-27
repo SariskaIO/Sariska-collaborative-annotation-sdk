@@ -42,9 +42,9 @@ const App = (props)=> {
 
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
     let content = JSON.parse(message.content);
-    if(props.content){
-      return message;
-    }else{
+    // if(props.content){
+    //   return message;
+    // }else{
       if(Object.keys(content.ctx).length){
         onDraw(content);
       }else{
@@ -52,7 +52,7 @@ const App = (props)=> {
         onDraw(content);
       }
       setMessages(messages => [...messages, message])
-    }
+    //}
   });
 
   UseEventHandler(rtcChannel, 'archived_message', setLoading, message => {
