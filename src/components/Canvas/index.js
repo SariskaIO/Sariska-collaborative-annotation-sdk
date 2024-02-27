@@ -19,13 +19,13 @@ const Canvas = ({
       
     const canvasStyle={
       position: 'absolute', 
-      zIndex: otherProps.zIndex,
-      width,
-      height
+      zIndex: otherProps.zIndex
     }
   return (
         <>
         <canvas 
+            width={width}
+            height={height}
             style={canvasStyle}
             ref={setCanvasRef}
             onMouseDown={onMouseDown}
