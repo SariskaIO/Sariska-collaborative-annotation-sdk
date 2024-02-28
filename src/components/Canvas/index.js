@@ -29,6 +29,7 @@ const Canvas = ({
             style={canvasStyle}
             ref={setCanvasRef}
             onMouseDown={onMouseDown}
+            onClick={()=>console.log('clicked on canvas' )}
         />
           {children}
         </>
