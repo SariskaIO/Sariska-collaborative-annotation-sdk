@@ -16,6 +16,7 @@ export function useOnDraw(
     console.log('channel old', channel)
 
     useEffect(()=>{
+        console.log('useEffect mount')
         const ctx = canvasRef.current.getContext('2d');
         setCanvasCtx(ctx);
         function computePointInCanvas(clientX, clientY){
@@ -85,12 +86,13 @@ export function useOnDraw(
                 if(otherProps.isModerator){
                     removeMouseEventListeners();
                 }
+            }
         }
     },[
         onDraw, 
         channel,
         otherProps.isCanvasClear
-    ]});
+    ]);
 
     function setCanvasRef(ref){
         if(!ref) return;

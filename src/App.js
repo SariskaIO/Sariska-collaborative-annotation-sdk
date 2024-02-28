@@ -69,8 +69,6 @@ const App = (props)=> {
     channel.push('new_message', new_message);
   };
 
-  console.log('first channel', rtcChannel);
-
   return (
       // <>
       //   {
