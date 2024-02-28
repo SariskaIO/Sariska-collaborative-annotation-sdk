@@ -126,6 +126,7 @@ export const renderAction = (type, payload) => {
 }
 
 export function drawLine(ctx, end, start, color, width) {
+    console.log('drawline, ctx, end, start')
     start = start ?? end;
     ctx.beginPath();
     ctx.lineWidth= width;
