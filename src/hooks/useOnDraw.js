@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { clearCanvas, onDraw } from "../utils";
 
 export function useOnDraw(
@@ -7,12 +7,52 @@ export function useOnDraw(
     setCanvasCtx,
     otherProps
     ){
+
+    const [annotations, setAnnotations] = useState([]);
+
     const canvasRef = useRef(null);
     const prevPointRef = useRef()
     const isDrawingRef = useRef(false);
 
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
+
+    const saveImage = () => {
+        const context = canvasRef.current.getContext('2d');
+        const image = new Image();
+        image.src = otherProps.imageUrl;
+        image.onload = () => {
+          // Draw the image onto the canvas
+          context.drawImage(image, 0, 0, 800, 600);
+    
+          // Draw the annotations onto the canvas
+          context.strokeStyle = otherProps?.lineColor;
+          context.lineWidth = otherProps?.lineWidth;
+          annotations.forEach((annotation, index) => {
+            if (index === 0) {
+              context.beginPath();
+              context.moveTo(annotation.x, annotation.y);
+            } else {
+              context.lineTo(annotation.x, annotation.y);
+              context.stroke();
+            }
+          });
+    
+          // Convert the canvas to an image and open it in a new tab
+          const imageDataUrl = canvasRef.current.toDataURL('image/png');
+          const newWindow = window.open('about:blank', 'image from canvas');
+          newWindow.document.write('<img src="' + imageDataUrl + '" alt="Saved Annotation" />');
+        };
+        // const canvas = canvasRef.current;
+        // const link = document.createElement('a');
+        // link.download = 'image_with_drawing.png';
+        // canvas.toBlob((blob) => {
+        //   const url = URL.createObjectURL(blob);
+        //   setDownloadUrl(url);
+        //   link.href = url;
+        //   link.click();
+        // });
+      };
 
     useEffect(()=>{
         const ctx = canvasRef.current.getContext('2d');
@@ -35,6 +75,8 @@ export function useOnDraw(
                     let prevPoint = prevPointRef.current;
                     if(onDraw) {
                         onDraw({ctx, point, prevPoint, otherProps});
+                        const { offsetX, offsetY } = e.nativeEvent;
+                        setAnnotations([...annotations, { x: offsetX, y: offsetY }]);
                     }
                     if(channel) {
                         pushMessage(JSON.stringify({ctx, point, prevPoint, otherProps}), channel);
@@ -76,6 +118,9 @@ export function useOnDraw(
             clearCanvas( ctx, otherProps.width, otherProps.height );
         }
 
+        if(otherProps.isImageSaved){
+            saveImage();
+        }
         return ()=>{
             if(otherProps.isParticipantAccess){
                 removeMouseEventListeners();
@@ -96,9 +141,11 @@ export function useOnDraw(
         canvasRef.current = ref;
     }
     
-    function onMouseDown(){
+    function onMouseDown(e){
         if(!canvasRef.current) return;
         isDrawingRef.current = true;
+        const { offsetX, offsetY } = e.nativeEvent;
+        setAnnotations([...annotations, { x: offsetX, y: offsetY }]);
     }
     
     return {

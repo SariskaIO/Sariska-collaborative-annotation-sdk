@@ -137,7 +137,7 @@ export function drawLine(ctx, end, start, color, width) {
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(start.x, start.y, 2, 0, 2 * Math.PI);
-    ctx.fill()
+    ctx.fill();
 }
 
 export function onDraw (data) {
