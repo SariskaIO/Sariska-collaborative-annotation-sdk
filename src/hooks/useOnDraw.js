@@ -75,8 +75,7 @@ export function useOnDraw(
                     let prevPoint = prevPointRef.current;
                     if(onDraw) {
                         onDraw({ctx, point, prevPoint, otherProps});
-                        const { offsetX, offsetY } = e.nativeEvent;
-                        setAnnotations([...annotations, { x: offsetX, y: offsetY }]);
+                        setAnnotations([...annotations, { x: e.offsetX, y: e.offsetY }]);
                     }
                     if(channel) {
                         pushMessage(JSON.stringify({ctx, point, prevPoint, otherProps}), channel);
@@ -144,8 +143,7 @@ export function useOnDraw(
     function onMouseDown(e){
         if(!canvasRef.current) return;
         isDrawingRef.current = true;
-        const { offsetX, offsetY } = e.nativeEvent;
-        setAnnotations([...annotations, { x: offsetX, y: offsetY }]);
+        setAnnotations([...annotations, { x: e.offsetX, y: e.offsetY }]);
     }
     
     return {
