@@ -79,7 +79,7 @@ console.log('otherpropss', otherProps, annotations);
                     let prevPoint = prevPointRef.current;
                     if(onDraw) {
                         onDraw({ctx, point, prevPoint, props});
-                        setAnnotations([...annotations, { x: e.offsetX, y: e.offsetY }]);
+                        setAnnotations([...annotations, {ctx, point, prevPoint, props}]);
                     }
                     if(channel) {
                         pushMessage(JSON.stringify({ctx, point, prevPoint, props}), channel);
