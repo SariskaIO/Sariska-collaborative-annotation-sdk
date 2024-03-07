@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { clearCanvas, onDraw } from "../utils";
+import { saveImage } from "..";
 
 export function useOnDraw(
     pushMessage,
@@ -57,6 +58,7 @@ export function useOnDraw(
     //   };
 console.log('otherpropss', otherProps, annotations);
     useEffect(()=>{
+        saveImage(otherProps.lineColor)
         const ctx = canvasRef.current.getContext('2d');
         otherProps.canvasRef.current = canvasRef.current;
         setCanvasCtx(ctx);

@@ -16,3 +16,7 @@ const SariskaCollaborativeAnnotation = (props) => {
 }
 
 export default SariskaCollaborativeAnnotation;
+
+export const saveImage = (props) => {
+  console.log('saved', props.lineColor);
+}
