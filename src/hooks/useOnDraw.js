@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { clearCanvas, onDraw } from "../utils";
+import { clearCanvas, computePointInCanvas, onDraw } from "../utils";
 
 export function useOnDraw(
     pushMessage,
@@ -61,21 +61,11 @@ console.log('otherpropss', otherProps, annotations);
         const {parentCanvasRef, ...props} = otherProps;
         parentCanvasRef.current = canvasRef.current;
         setCanvasCtx(ctx);
-        function computePointInCanvas(clientX, clientY){
-            if(canvasRef.current){
-                const boundingRect = canvasRef.current.getBoundingClientRect();
-                return {
-                    x: clientX - boundingRect.left,
-                    y: clientY - boundingRect.top
-                }
-            }else{
-                return null;
-            }
-        }
+        
         function initMouseMoveListener(){
             const mouseMoveListener = (e) => {
                 if(isDrawingRef.current){
-                    const point = computePointInCanvas(e.clientX, e.clientY);
+                    const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
                     let prevPoint = prevPointRef.current;
                     if(onDraw) {
                         onDraw({ctx, point, prevPoint, props});
@@ -148,8 +138,12 @@ console.log('otherpropss', otherProps, annotations);
     
     function onMouseDown(e){
         if(!canvasRef.current) return;
+        const {parentCanvasRef, ...props} = otherProps;
         isDrawingRef.current = true;
-        setAnnotations([...annotations, { x: e.offsetX, y: e.offsetY }]);
+        const ctx = canvasRef.current.getContext('2d');
+        const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
+        let prevPoint = prevPointRef.current;
+        setAnnotations([...annotations, {ctx, point, prevPoint, props}]);
     }
     
     return {

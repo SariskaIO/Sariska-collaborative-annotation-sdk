@@ -147,3 +147,15 @@ export function onDraw (data) {
 export function clearCanvas(ctx, width, height){
     ctx.clearRect(0, 0, width, height)
 }
+
+export function computePointInCanvas(clientX, clientY, refCurrent){
+    if(refCurrent){
+        const boundingRect = refCurrent.getBoundingClientRect();
+        return {
+            x: clientX - boundingRect.left,
+            y: clientY - boundingRect.top
+        }
+    }else{
+        return null;
+    }
+}
