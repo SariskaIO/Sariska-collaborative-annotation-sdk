@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { clearCanvas, onDraw } from "../utils";
-import { saveImage } from "..";
 
 export function useOnDraw(
     pushMessage,
@@ -58,9 +57,9 @@ export function useOnDraw(
     //   };
 console.log('otherpropss', otherProps, annotations);
     useEffect(()=>{
-        saveImage(otherProps.lineColor)
         const ctx = canvasRef.current.getContext('2d');
-        otherProps.canvasRef.current = canvasRef.current;
+        const {parentCanvasRef, ...props} = otherProps;
+        parentCanvasRef.current = canvasRef.current;
         setCanvasCtx(ctx);
         function computePointInCanvas(clientX, clientY){
             if(canvasRef.current){
@@ -79,11 +78,11 @@ console.log('otherpropss', otherProps, annotations);
                     const point = computePointInCanvas(e.clientX, e.clientY);
                     let prevPoint = prevPointRef.current;
                     if(onDraw) {
-                        onDraw({ctx, point, prevPoint, otherProps});
+                        onDraw({ctx, point, prevPoint, props});
                         setAnnotations([...annotations, { x: e.offsetX, y: e.offsetY }]);
                     }
                     if(channel) {
-                        pushMessage(JSON.stringify({ctx, point, prevPoint, otherProps}), channel);
+                        pushMessage(JSON.stringify({ctx, point, prevPoint, props}), channel);
                     }
                     prevPointRef.current = point;
                 }
@@ -108,28 +107,29 @@ console.log('otherpropss', otherProps, annotations);
             }
         }
 
-        if(otherProps.isParticipantAccess){
+        if(props.isParticipantAccess){
             initMouseMoveListener();
             initMouseUpListener();
         }else{
-            if(otherProps.isModerator){
+            if(props.isModerator){
                 initMouseMoveListener();
                 initMouseUpListener();
             }
         }
         
-        if(otherProps.isCanvasClear){
-            clearCanvas( ctx, otherProps.width, otherProps.height );
+        if(props.isCanvasClear){
+            clearCanvas( ctx, props.width, props.height );
         }
 
-        // if(otherProps.isImageSaved){
-        //     saveImage();
-        // }
+        if(props.isImageSaved){
+            console.log('props.isImageSaved', props)
+            props.saveImage(annotations);
+        }
         return ()=>{
-            if(otherProps.isParticipantAccess){
+            if(props.isParticipantAccess){
                 removeMouseEventListeners();
             }else{
-                if(otherProps.isModerator){
+                if(props.isModerator){
                     removeMouseEventListeners();
                 }
             }
@@ -137,7 +137,8 @@ console.log('otherpropss', otherProps, annotations);
     },[
         onDraw, 
         channel,
-        otherProps.isCanvasClear
+        otherProps.isCanvasClear,
+        otherProps.isImageSaved
     ]);
 
     function setCanvasRef(ref){
