@@ -1,6 +1,4 @@
-import SariskaCollaborativeAnnotation from './src/index';
-
-import * as Utils from './src/utils/index';
+import SariskaCollaborativeAnnotation, {Utils} from './src/index';
 
 export {Utils};
 
