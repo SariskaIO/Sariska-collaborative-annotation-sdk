@@ -69,7 +69,7 @@ console.log('otherpropss', otherProps, annotations);
                     let prevPoint = prevPointRef.current;
                     if(onDraw) {
                         onDraw({ctx, point, prevPoint, props});
-                        setAnnotations([...annotations, {ctx, point, prevPoint, props}]);
+                        setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
                     }
                     if(channel) {
                         pushMessage(JSON.stringify({ctx, point, prevPoint, props}), channel);
@@ -143,7 +143,7 @@ console.log('otherpropss', otherProps, annotations);
         const ctx = canvasRef.current.getContext('2d');
         const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
         let prevPoint = prevPointRef.current;
-        setAnnotations([...annotations, {ctx, point, prevPoint, props}]);
+        setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
     }
     
     return {
