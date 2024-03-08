@@ -141,7 +141,7 @@ export function drawLine(ctx, end, start, color, width) {
 }
 
 export function onDraw (data) {
-    drawLine(data.ctx, data.point, data.prevPoint, data?.otherProps?.lineColor,  data?.otherProps?.lineWidth);
+    drawLine(data.ctx, data.point, data.prevPoint, data?.props?.lineColor,  data?.props?.lineWidth);
 }
 
 export function clearCanvas(ctx, width, height){
