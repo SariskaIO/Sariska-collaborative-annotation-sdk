@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { clearCanvas, onDraw } from "../utils";
+import { clearCanvas, computePointInCanvas, onDraw } from "../utils";
 
 export function useOnDraw(
     pushMessage,
@@ -61,21 +61,11 @@ console.log('otherpropss', otherProps, annotations);
         const {parentCanvasRef, ...props} = otherProps;
         parentCanvasRef.current = canvasRef.current;
         setCanvasCtx(ctx);
-        function computePointInCanvas(clientX, clientY){
-            if(canvasRef.current){
-                const boundingRect = canvasRef.current.getBoundingClientRect();
-                return {
-                    x: clientX - boundingRect.left,
-                    y: clientY - boundingRect.top
-                }
-            }else{
-                return null;
-            }
-        }
+        
         function initMouseMoveListener(){
             const mouseMoveListener = (e) => {
                 if(isDrawingRef.current){
-                    const point = computePointInCanvas(e.clientX, e.clientY);
+                    const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
                     let prevPoint = prevPointRef.current;
                     if(onDraw) {
                         onDraw({ctx, point, prevPoint, props});
@@ -121,10 +111,10 @@ console.log('otherpropss', otherProps, annotations);
             clearCanvas( ctx, props.width, props.height );
         }
 
-        // if(props.isImageSaved){
-        //     console.log('props.isImageSaved', props)
-        //     props.saveImage(annotations);
-        // }
+        if(props.isImageSaved){
+            console.log('props.isImageSaved', props)
+            props.saveImage(annotations);
+        }
         return ()=>{
             if(props.isParticipantAccess){
                 removeMouseEventListeners();
@@ -138,7 +128,7 @@ console.log('otherpropss', otherProps, annotations);
         onDraw, 
         channel,
         otherProps.isCanvasClear,
-       // otherProps.isImageSaved
+        otherProps.isImageSaved
     ]);
 
     function setCanvasRef(ref){
@@ -150,10 +140,10 @@ console.log('otherpropss', otherProps, annotations);
         if(!canvasRef.current) return;
         const {parentCanvasRef, ...props} = otherProps;
         isDrawingRef.current = true;
-        // const ctx = canvasRef.current.getContext('2d');
-        // const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
-        // let prevPoint = prevPointRef.current;
-        // setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
+        const ctx = canvasRef.current.getContext('2d');
+        const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
+        let prevPoint = prevPointRef.current;
+        setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
     }
     
     return {
