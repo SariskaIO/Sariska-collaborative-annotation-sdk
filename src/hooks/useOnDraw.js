@@ -55,7 +55,7 @@ export function useOnDraw(
     //     //   link.click();
     //     // });
     //   };
-console.log('otherpropss', otherProps, annotations);
+    
     useEffect(()=>{
         const ctx = canvasRef.current.getContext('2d');
         const {parentCanvasRef, ...props} = otherProps;
