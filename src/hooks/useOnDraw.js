@@ -129,7 +129,8 @@ console.log('otherProps useOnDraw', otherProps)
         onDraw, 
         channel,
         otherProps.isCanvasClear,
-        otherProps.isImageSaved
+        otherProps.isImageSaved,
+        otherProps.lineColor
     ]);
 
     function setCanvasRef(ref){
