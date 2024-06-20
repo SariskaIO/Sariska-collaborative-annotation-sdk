@@ -14,7 +14,7 @@ const DrawingBoard = ({
       users: { user },
       rooms: { room },
     } = useStore();
-
+console.log('inputProps', inputProps)
     return (
         <Canvas 
             width={inputProps.width}
