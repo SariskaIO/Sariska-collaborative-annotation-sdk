@@ -7,7 +7,6 @@ export function useOnDraw(
     setCanvasCtx,
     otherProps
     ){
-console.log('otherProps useOnDraw', otherProps)
     const [annotations, setAnnotations] = useState([]);
 
     const canvasRef = useRef(null);
@@ -68,7 +67,6 @@ console.log('otherProps useOnDraw', otherProps)
                     const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
                     let prevPoint = prevPointRef.current;
                     if(onDraw) {
-                        console.log('first props', props)
                         onDraw({ctx, point, prevPoint, props});
                         setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
                     }
@@ -113,7 +111,6 @@ console.log('otherProps useOnDraw', otherProps)
         }
 
         if(props.isImageSaved){
-            console.log('props.isImageSaved', props)
             props.saveImage(annotations);
         }
         return ()=>{

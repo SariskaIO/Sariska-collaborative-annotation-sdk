@@ -10,7 +10,6 @@ const Canvas = ({
     inputProps
   }) => {
     const {children, ...otherProps} = inputProps;
-    console.log('otherProps', otherProps);
     const {setCanvasRef, onMouseDown} = useOnDraw(
       pushMessage,
       channel,
