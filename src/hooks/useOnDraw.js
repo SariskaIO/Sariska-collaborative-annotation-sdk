@@ -7,7 +7,6 @@ export function useOnDraw(
     setCanvasCtx,
     otherProps
     ){
-
     const [annotations, setAnnotations] = useState([]);
 
     const canvasRef = useRef(null);
@@ -112,7 +111,6 @@ export function useOnDraw(
         }
 
         if(props.isImageSaved){
-            console.log('props.isImageSaved', props)
             props.saveImage(annotations);
         }
         return ()=>{
@@ -128,7 +126,8 @@ export function useOnDraw(
         onDraw, 
         channel,
         otherProps.isCanvasClear,
-        otherProps.isImageSaved
+        otherProps.isImageSaved,
+        otherProps.lineColor
     ]);
 
     function setCanvasRef(ref){
