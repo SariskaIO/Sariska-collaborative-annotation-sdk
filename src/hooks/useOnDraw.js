@@ -6,6 +6,7 @@ export function useOnDraw(
     channel,
     setCanvasCtx,
     otherProps
+    
     ){
     const [annotations, setAnnotations] = useState([]);
 

@@ -17,7 +17,7 @@ const Canvas = ({
       setCanvasCtx,
       otherProps
       );
-      const { enableEmoji, disableEmoji, onHandleClick ,emojiPositions } = useSticker(
+      const { enableEmoji, disableEmoji, onHandleClick ,selectEmoji ,emojiPositions } = useSticker(
         pushMessage,
         channel,
         ctx,
@@ -39,6 +39,7 @@ const Canvas = ({
             enableEmoji={enableEmoji}
             disableEmoji={disableEmoji}
             onHandleClick={onHandleClick}
+            selectEmoji={selectEmoji}
             emojiPositions={emojiPositions}
         />
           {children}
