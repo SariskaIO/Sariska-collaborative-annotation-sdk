@@ -7,15 +7,17 @@ const DrawingBoard = ({
     channel,
     setCanvasCtx,
     loading,
-    inputProps
+    inputProps,
+
 }) => {
     const [point, setPoint] = useState({});
     const {
       users: { user },
       rooms: { room },
     } = useStore();
-    
+
     return (
+        <div>
         <Canvas 
             width={inputProps.width}
             height={inputProps.height}
@@ -23,7 +25,8 @@ const DrawingBoard = ({
             channel={channel}
             setCanvasCtx={setCanvasCtx}
             inputProps={inputProps}
-        />
+          />
+       </div>
     )
 }
 
