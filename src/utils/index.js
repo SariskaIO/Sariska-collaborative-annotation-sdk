@@ -144,10 +144,10 @@ export function onDraw (data) {
     drawLine(data.ctx, data.point, data.prevPoint, data?.props?.lineColor,  data?.props?.lineWidth);
 }
 
-export function onSticker(data) {
-    const { ctx, point, emoji } = data;
+export function onSticker(stickerdata) {
+    const { ctx, point, emoji } = stickerdata;
     if (!ctx || !point || !emoji) return;
-    const emojiSize = data?.props?.emojiSize || 40;
+    const emojiSize = stickerdata?.props?.emojiSize || 40;
     ctx.font = `${emojiSize}px sans-serif`;
     ctx.fillText(emoji, point.x, point.y);
 }
