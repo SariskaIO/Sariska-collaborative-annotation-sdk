@@ -45,7 +45,15 @@ const App = (props)=> {
     // if(props.content){
     //   return message;
     // }else{
-      if(Object.keys(content.ctx).length){
+    if(content.type == Emoji){
+      const img = new Image();
+      img.src = content.emoji;
+      img.onload = () => {
+        canvasCtx.drawImage(img, content.position.x, content.position.y, 40, 40); // Adjust size if needed
+      };
+    }      
+    else{
+        if(Object.keys(content.ctx).length){
         onDraw(content);
       }else{
         content.ctx = canvasCtx;
@@ -53,6 +61,7 @@ const App = (props)=> {
       }
       setMessages(messages => [...messages, message])
     //}
+    }
   });
 
   UseEventHandler(rtcChannel, 'archived_message', setLoading, message => {
@@ -69,6 +78,9 @@ const App = (props)=> {
     channel.push('new_message', new_message);
   };
 
+  const { setCanvasRef, onHandleClick, selectEmoji, isEmojiEnabled } = useSticker(pushMessage, rtcChannel);
+
+
   return (
       // <>
       //   {
@@ -76,15 +88,34 @@ const App = (props)=> {
       //       <Message pushMessage={pushMessage} content={props.content} />
       //       :
 
+      <div>
+      <button onClick={onHandleClick}>
+        {isEmojiEnabled ? 'Disable Emoji' : 'Enable Emoji'}
+      </button>
             <DrawingBoard
               inputProps={props}
               pushMessage={pushMessage} 
               loading={loading}
               channel={rtcChannel}
               setCanvasCtx={setCanvasCtx}
+              setCanvasRef={setCanvasRef}
             />
-      //   }
-      // </>
+
+<div className="emoji-picker">
+        <img 
+          src="path/to/emoji1.png" 
+          alt="Emoji 1"
+          onClick={() => selectEmoji('path/to/emoji1.png')} 
+        />
+        <img 
+          src="path/to/emoji2.png" 
+          alt="Emoji 2"
+          onClick={() => selectEmoji('path/to/emoji2.png')} 
+        />
+        {/* Add more emojis as needed */}
+      </div>
+    </div>
+    
   );
 }
 
