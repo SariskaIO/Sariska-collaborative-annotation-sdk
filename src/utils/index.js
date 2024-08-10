@@ -141,7 +141,14 @@ export function drawLine(ctx, end, start, color, width) {
 }
 
 export function onDraw (data) {
-    drawLine(data.ctx, data.point, data.prevPoint, data?.props?.lineColor,  data?.props?.lineWidth);
+    drawLine(
+        data.ctx, 
+        data.point, 
+        data.prevPoint, 
+        data.props ? data.props.lineColor : undefined, 
+        data.props ? data.props.lineWidth : undefined
+      );
+      
 }
 
 export function onSticker(stickerdata) {
