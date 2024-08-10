@@ -110,10 +110,14 @@ export function useSticker(pushMessage, channel) {
       window.addEventListener("click", handleScreenClick);
     }
 
+    if(props.isCanvasClear){
+      clearCanvas( ctx, props.width, props.height );
+  }
+
     return () => {
       window.removeEventListener("click", handleScreenClick);
     };
-  }, [onSticker, showEmoji, pushMessage, channel]);
+  }, [onSticker, showEmoji, isCanvasClear, pushMessage, channel]);
 
   function enableEmoji() {
     setShowEmoji(true);

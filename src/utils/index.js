@@ -154,7 +154,7 @@ export function onDraw (data) {
 export function onSticker(stickerdata) {
     const { ctx, point, emoji } = stickerdata;
     if (!ctx || !point || !emoji) return;
-    const emojiSize = stickerdata?.props?.emojiSize || 40;
+    const emojiSize = (stickerdata && stickerdata.props && stickerdata.props.emojiSize) || 40;
     ctx.font = `${emojiSize}px sans-serif`;
     ctx.fillText(emoji, point.x, point.y);
 }
