@@ -11,6 +11,7 @@ const Canvas = ({
     inputProps
   }) => {
     const {children, ...otherProps} = inputProps;
+
     const {setCanvasRef, onMouseDown} = useOnDraw(
       pushMessage,
       channel,
@@ -19,9 +20,7 @@ const Canvas = ({
       );
       const { enableEmoji, disableEmoji, onHandleClick ,selectEmoji ,emojiPositions } = useSticker(
         pushMessage,
-        channel,
-        ctx,
-        otherProps
+        channel
       );
     const canvasStyle={
       position: 'absolute', 
@@ -36,16 +35,12 @@ const Canvas = ({
             style={canvasStyle}
             ref={setCanvasRef}
             onMouseDown={onMouseDown}
-            enableEmoji={enableEmoji}
-            disableEmoji={disableEmoji}
-            onHandleClick={onHandleClick}
-            selectEmoji={selectEmoji}
-            emojiPositions={emojiPositions}
+            onClick ={onHandleClick}
         />
           {children}
         </>
   )
 }
 
-export default Canvas
+export default Canvas;
 
