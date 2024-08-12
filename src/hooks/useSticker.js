@@ -27,7 +27,7 @@ export function useSticker(pushMessage, channel) {
 
     const clearAllStickers = () => {
       emojiPositions.current = [];
-      const ctx = canvasRef.current?.getContext('2d');
+      const ctx = canvasRef.current && canvasRef.current.getContext('2d');
       if (ctx) {
         clearCanvas(ctx, canvasRef.current.width, canvasRef.current.height);
       }
