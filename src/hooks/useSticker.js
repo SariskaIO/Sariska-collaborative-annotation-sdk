@@ -43,7 +43,7 @@ export function useSticker(pushMessage, channel) {
   };
 
   useEffect(() => {
-    const ctx = canvasRef.current?.getContext('2d');
+    const ctx = canvasRef.current && canvasRef.current.getContext('2d');
 
     if (props.isCanvasClear) {
       clearCanvas(ctx, props.width, props.height);
