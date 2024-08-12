@@ -1,190 +1,64 @@
 
+
+
 import { useEffect, useRef, useState } from "react";
-import { onSticker, computePointInCanvas, clearCanvas } from "../utils";
+import { clearCanvas, computePointInCanvas, onEmojiPlace } from "../utils";
 
 export function useSticker(pushMessage, channel) {
-  const [showEmoji, setShowEmoji] = useState(false);
-  const [emojiPositions, setEmojiPositions] = useState([]);
-  const [isEmojiEnabled, setIsEmojiEnabled] = useState(false);
-  const selectedEmojiRef = useRef(null);
+  const [selectedEmoji, setSelectedEmoji] = useState(null);
+  const emojiPositions = useRef([]); // Array to store emoji positions
+
   const canvasRef = useRef(null);
 
-  const onHandleClick = () => {
-    if (isEmojiEnabled) {
-      disableEmoji();
-    } else {
-      enableEmoji();
-    }
-    setIsEmojiEnabled((prevState) => !prevState);
+  const handleEmojiClick = (emoji) => {
+    setSelectedEmoji(emoji);
   };
 
-  const selectEmoji = (emoji) => {
-    selectedEmojiRef.current = emoji;
-    enableEmoji();
+  const onMouseDown = (e) => {
+    if (!canvasRef.current || !selectedEmoji) return;
+
+    const ctx = canvasRef.current.getContext('2d');
+    const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
+
+    const newEmoji = {
+      emoji: selectedEmoji,
+      position: point,
+    };
+
+    const clearAllStickers = () => {
+      emojiPositions.current = [];
+      const ctx = canvasRef.current?.getContext('2d');
+      if (ctx) {
+        clearCanvas(ctx, canvasRef.current.width, canvasRef.current.height);
+      }
+    };
+
+    onEmojiPlace({ ctx, point, emoji: selectedEmoji });
+
+    emojiPositions.current = [...emojiPositions.current, newEmoji];
+
+    if (channel) {
+      pushMessage(JSON.stringify({ type: "emoji", ...newEmoji }), channel);
+    }
   };
 
   useEffect(() => {
-    const ctx = canvasRef.current.getContext('2d');
-        const {parentCanvasRef, ...props} = otherProps;
-        parentCanvasRef.current = canvasRef.current;
-        setCanvasCtx(ctx);
+    const ctx = canvasRef.current?.getContext('2d');
 
-    function handleScreenClick(e) {
-      if (showEmoji && selectedEmojiRef.current) {
-        const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
-        const prevPoint = prevPointRef.current;
-        const newEmoji = {
-          emoji: selectedEmojiRef.current,
-          position: point,
-        };
-        if (onSticker) {
-          onSticker({
-            ctx,
-            point,
-            emoji: selectedEmojiRef.current,
-            props: { emojiSize: 40 },
-          });
-          setEmojiPositions((prevPositions) => [...prevPositions, newEmoji]);
-        }
-        if (channel) {
-          pushMessage(JSON.stringify({ type: "emoji", ...newEmoji }), channel);
-        }
-        prevPointRef.current = point;
-      }
+    if (props.isCanvasClear) {
+      clearCanvas(ctx, props.width, props.height);
+      emojiPositions.current = []; 
     }
 
-    if (showEmoji) {
-      window.addEventListener("click", handleScreenClick);
-    }
-    return () => {
-      window.removeEventListener("click", handleScreenClick);
-    };
-  }, [onSticker, otherProps.showEmoji, otherProps.isCanvasClear, channel]);
-
-  function enableEmoji() {
-    setShowEmoji(true);
-  }
-
-  function disableEmoji() {
-    setShowEmoji(false);
-  }
-
-  function setCanvasRef(ref) {
-    if (!ref) return;
-    canvasRef.current = ref;
-  }
-
-  if(props.isCanvasClear){
-    clearCanvas( ctx, props.width, props.height );
-    setEmojiPositions([]);
-}
-
-if(props.isParticipantAccess){
-  handleScreenClick();
-  enableEmoji();
-  disableEmoji();
-}else{
-  if(props.isModerator){
-    handleScreenClick();
-    enableEmoji();
-    disableEmoji();
-  }
-}
+    return () => {};
+  }, [props.isCanvasClear, channel]);
 
   return {
-    enableEmoji,
-    disableEmoji,
-    onHandleClick,
-    selectEmoji,
+    selectedEmoji,
+    setSelectedEmoji: handleEmojiClick, // Alias for readability
+    onMouseDown,
     emojiPositions,
-    setCanvasRef,
+    setCanvasRef: (ref) => { canvasRef.current = ref; },
+    clearAllStickers,
   };
 }
-
-
-// import { useEffect, useRef, useState } from "react";
-// import { clearCanvas, computePointInCanvas } from "../utils";
-
-// export function useOnPasteSticker(pushMessage, channel, setCanvasCtx, otherProps) {
-//     const [stickers, setStickers] = useState([]);
-
-//     const canvasRef = useRef(null);
-//     const isPastingRef = useRef(false);
-
-//     const mouseClickListenerRef = useRef(null);
-
-//     useEffect(() => {
-//         const ctx = canvasRef.current.getContext('2d');
-//         const { parentCanvasRef, ...props } = otherProps;
-//         parentCanvasRef.current = canvasRef.current;
-//         setCanvasCtx(ctx);
-
-//         function initMouseClickListener() {
-//             const mouseClickListener = (e) => {
-//                 const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
-//                 const sticker = {
-//                     src: props.selectedEmojiUrl, // The URL or image source of the selected emoji
-//                     point,
-//                     width: props.stickerWidth || 50, // Default width if not provided
-//                     height: props.stickerHeight || 50, // Default height if not provided
-//                 };
-
-//                 setStickers(stickers => [...stickers, sticker]);
-
-//                 // Draw the sticker on the canvas
-//                 const img = new Image();
-//                 img.src = sticker.src;
-//                 img.onload = () => {
-//                     ctx.drawImage(img, sticker.point.x, sticker.point.y, sticker.width, sticker.height);
-//                 };
-
-//                 // Send sticker data via channel if necessary
-//                 if (channel) {
-//                     pushMessage(JSON.stringify(sticker), channel);
-//                 }
-//             };
-
-//             mouseClickListenerRef.current = mouseClickListener;
-//             window.addEventListener("click", mouseClickListener);
-//         }
-
-//         function removeMouseClickListener() {
-//             if (mouseClickListenerRef.current) {
-//                 window.removeEventListener('click', mouseClickListenerRef.current);
-//             }
-//         }
-
-//         if (props.isParticipantAccess || props.isModerator) {
-//             initMouseClickListener();
-//         }
-
-//         if (props.isCanvasClear) {
-//             clearCanvas(ctx, props.width, props.height);
-//             setStickers([]); // Clear stickers
-//         }
-
-//         if (props.isImageSaved) {
-//             props.saveImage(stickers);
-//         }
-
-//         return () => {
-//             if (props.isParticipantAccess || props.isModerator) {
-//                 removeMouseClickListener();
-//             }
-//         };
-//     }, [
-//         channel,
-//         otherProps.isCanvasClear,
-//         otherProps.isImageSaved,
-//         otherProps.selectedEmojiUrl,
-//     ]);
-
-//     function setCanvasRef(ref) {
-//         if (!ref) return;
-//         canvasRef.current = ref;
-//     }
-
-//     return {
-//         setCanvasRef,
-//     };
-// }

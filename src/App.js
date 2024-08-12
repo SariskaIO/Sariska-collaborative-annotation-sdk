@@ -10,6 +10,7 @@ import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
 import { clearCanvas, onDraw } from './utils';
 import Message from './components/Message';
+import { useSticker } from './hooks/useSticker';
 
 const App = (props)=> {
   const [messages, setMessages] = useState([]);
@@ -17,6 +18,10 @@ const App = (props)=> {
   const [canvasCtx, setCanvasCtx] = useState(null);
   const roomName = 'sariska1';
   const {users, dispatch} = useStore();
+
+  const { selectedEmoji, setSelectedEmoji, onMouseDown: onEmojiMouseDown } = useSticker(pushMessage, rtcChannel); // Use emoji hook
+  const emojiPositions = useSticker.emojiPositions; // Access emoji positions from useEmoji
+
   
   const rtcChannel = CreateChannel(`rtc:${roomName}`, {});
   
@@ -45,14 +50,7 @@ const App = (props)=> {
     // if(props.content){
     //   return message;
     // }else{
-    if(content.type == Emoji){
-      const img = new Image();
-      img.src = content.emoji;
-      img.onload = () => {
-        canvasCtx.drawImage(img, content.position.x, content.position.y, 40, 40); // Adjust size if needed
-      };
-    }      
-    else{
+
         if(Object.keys(content.ctx).length){
         onDraw(content);
       }else{
@@ -61,7 +59,7 @@ const App = (props)=> {
       }
       setMessages(messages => [...messages, message])
     //}
-    }
+    // }
   });
 
   UseEventHandler(rtcChannel, 'archived_message', setLoading, message => {
@@ -78,44 +76,46 @@ const App = (props)=> {
     channel.push('new_message', new_message);
   };
 
-  const { setCanvasRef, onHandleClick, selectEmoji, isEmojiEnabled } = useSticker(pushMessage, rtcChannel);
-
-
+  const handleSendEmoji = () => {
+    
+      // Get canvas dimensions (assuming DrawingBoard provides them)
+        const canvasWidth = DrawingBoard.getCanvasWidth();
+        const canvasHeight = DrawingBoard.getCanvasHeight();
+    
+        // Send emoji data over the channel
+        const emojiData = {
+          type: 'emoji',
+          emoji: selectedEmoji,
+          // Calculate relative position based on canvas size and emojiPositions
+          position: {
+            x: (emojiPositions[emojiPositions.length - 1].position.x / canvasWidth) * 100, // Percentage for network transmission
+            y: (emojiPositions[emojiPositions.length - 1].position.y / canvasHeight) * 100,
+          },
+        };
+    
+        pushMessage(JSON.stringify(emojiData), rtcChannel);
+    
+        // Clear selection and potentially update UI (optional)
+        setSelectedEmoji(null);
+      };
+    
   return (
       // <>
       //   {
       //     props.content ?
       //       <Message pushMessage={pushMessage} content={props.content} />
       //       :
-
-      <div>
-      <button onClick={onHandleClick}>
-        {isEmojiEnabled ? 'Disable Emoji' : 'Enable Emoji'}
-      </button>
             <DrawingBoard
               inputProps={props}
               pushMessage={pushMessage} 
               loading={loading}
               channel={rtcChannel}
               setCanvasCtx={setCanvasCtx}
-              setCanvasRef={setCanvasRef}
+              selectedEmoji={selectedEmoji}
+              setSelectedEmoji={setSelectedEmoji}
+              onEmojiMouseDown={onEmojiMouseDown}
+              emojiPositions={emojiPositions}
             />
-
-<div className="emoji-picker">
-        <img 
-          src="path/to/emoji1.png" 
-          alt="Emoji 1"
-          onClick={() => selectEmoji('path/to/emoji1.png')} 
-        />
-        <img 
-          src="path/to/emoji2.png" 
-          alt="Emoji 2"
-          onClick={() => selectEmoji('path/to/emoji2.png')} 
-        />
-        {/* Add more emojis as needed */}
-      </div>
-    </div>
-    
   );
 }
 

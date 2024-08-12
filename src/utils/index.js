@@ -151,16 +151,20 @@ export function onDraw (data) {
       
 }
 
-export function onSticker(data) {
-    const { ctx, point, emoji, props } = data;
+export function onEmojiPlace(ctx, emoji, position) {
+    // Your emoji drawing logic here
+    // Example:
+    const img = new Image();
+    img.src = emoji.imageUrl;
+    img.onload = () => {
+      ctx.drawImage(img, position.x, position.y, emoji.width, emoji.height);
+    };
+  }
 
-    if (!ctx || !point || !emoji) return;
-
-    const emojiSize = (props && props.emojiSize) ? props.emojiSize : 40;
-
-    ctx.font = `${emojiSize}px sans-serif`;
-    ctx.fillText(emoji, point.x, point.y);
-}
+  export function clearStickers(setEmojiPositions) {
+    setEmojiPositions([]);
+  }
+  
 
 export function clearCanvas(ctx, width, height){
     ctx.clearRect(0, 0, width, height)
