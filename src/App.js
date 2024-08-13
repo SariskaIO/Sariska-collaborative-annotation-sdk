@@ -134,6 +134,7 @@ import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
 import { clearCanvas, onDraw } from './utils';
 import Message from './components/Message';
+import { useSticker } from './hooks/useSticker';
 
 const App = (props)=> {
   const [messages, setMessages] = useState([]);

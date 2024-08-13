@@ -139,6 +139,7 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
   }
 
   return {
+    positions,
     toggleEmoji
   };
 }
