@@ -132,9 +132,8 @@ import { useStore } from './store';
 import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
-import { clearCanvas, onDraw } from './utils';
+import { clearCanvas, onDraw, onSticker } from './utils';
 import Message from './components/Message';
-import { useSticker } from './hooks/useSticker';
 
 const App = (props)=> {
   const [messages, setMessages] = useState([]);
@@ -142,11 +141,6 @@ const App = (props)=> {
   const [canvasCtx, setCanvasCtx] = useState(null);
   const roomName = 'sariska1';
   const {users, dispatch} = useStore();
-  
-  const {
-    setSelectedEmoji,
-    positions
-  } = useSticker(pushMessage, rtcChannel, setCanvasCtx, { parentCanvasRef: canvasRef, isCanvasClear: false });
 
   const rtcChannel = CreateChannel(`rtc:${roomName}`, {});
   
@@ -178,7 +172,7 @@ const App = (props)=> {
       if(Object.keys(content.ctx).length){
         onDraw(content);
       }else if(content.type === 'emoji' && content.position){
-          onSticker(content);
+        onSticker(content);
       }else{
         content.ctx = canvasCtx;
         onDraw(content);
@@ -186,23 +180,6 @@ const App = (props)=> {
       setMessages(messages => [...messages, message])
     //}
   });
-
-  const handleSendEmoji = () => {
-    const canvasWidth = DrawingBoard.getCanvasWidth();
-    const canvasHeight = DrawingBoard.getCanvasHeight();
-
-    const emojiData = {
-      type: 'emoji',
-      emoji: selectedEmoji,
-      position: {
-        x: (positions[positions.length - 1].position.x / canvasWidth) * 100, 
-        y: (positions[positions.length - 1].position.y / canvasHeight) * 100,
-      },
-    };
-
-    pushMessage(JSON.stringify(emojiData), rtcChannel);
-    setSelectedEmoji(null);
-  }
 
   UseEventHandler(rtcChannel, 'archived_message', setLoading, message => {
     setMessages(messages => [...messages, message])
