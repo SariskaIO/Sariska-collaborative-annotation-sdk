@@ -150,12 +150,18 @@ export function onDraw (data) {
       );
       
 }
-export function onSticker(ctx, sticker, position, scale = 1) {
+export function pasteSticker(ctx, sticker, position, scale = 1) {
     ctx.save();
     ctx.translate(position.x, position.y);
     ctx.scale(scale, scale);
+    ctx.font = `${24 * scale}px sans-serif`;
+    ctx.fillText(sticker, 0, 0);
     ctx.restore();
 } 
+
+export function onSticker(data){
+    pasteSticker(data.ctx, data.sticker, data.position, data.scale);
+}
 
 export function clearCanvas(ctx, width, height){
     ctx.clearRect(0, 0, width, height)

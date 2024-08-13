@@ -159,12 +159,16 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
       ...prevPositions,
       { ctx, newEmojiPosition, prevPositions, props},
     ]);
-    console.log("position in sdk",positions);
+
     prevPointRef.current = point;
   }
 
+  useEffect(() => {
+    console.log('New Emoji Position:', positions);
+  }, [positions]);
+  
   return {
-    positions,
+    setPositions,
     toggleEmoji,
     setCanvasRef,
     selectedEmoji,
