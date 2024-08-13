@@ -65,7 +65,7 @@ import { computePointInCanvas, onSticker } from "../utils";
 export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
   const [emoji, setEmoji] = useState(false);
   const [positions, setPositions] = useState([]);
-  const [selectedEmoji, setSelectedEmoji] = useState(null);
+  const [selectedEmoji, setSelectedEmoji] = useState("😊");
   const canvasRef = useRef(null);
   const prevPointRef = useRef();
   const isStickRef = useRef(false);
