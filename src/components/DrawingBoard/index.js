@@ -8,7 +8,8 @@ const DrawingBoard = ({
     setCanvasCtx,
     loading,
     inputProps,
-
+    onMouseDown,
+    toggleEmoji
 }) => {
     const [point, setPoint] = useState({});
     const {

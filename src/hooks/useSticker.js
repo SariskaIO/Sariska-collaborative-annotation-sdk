@@ -72,7 +72,12 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
   const handleClickRef = useRef();
 
   const toggleEmoji = () => {
-    setEmoji((prev) => !prev);
+    if (!emoji) {
+      setEmoji(true);
+      handleClick();
+    } else {
+      setEmoji(false);
+    }
   };
 
   useEffect(() => {
@@ -103,8 +108,8 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
             type: "emoji",
             emoji: selectedEmoji,
             position: {
-              x: (positions[positions.length - 1].position.x / props.canvasWidth) * 100,
-              y: (positions[positions.length - 1].position.y / props.canvasHeight) * 100,
+              x: (newEmojiPosition.x / props.canvasWidth) * 100,
+              y: (newEmojiPosition.y / props.canvasHeight) * 100,
             },
           };
 
@@ -152,7 +157,7 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
 
     setPositions((prevPositions) => [
       ...prevPositions,
-      { ctx, newEmojiPosition: point, prevPosition: prevPoint, props: otherProps },
+      { ctx, newEmojiPosition, prevPositions, props},
     ]);
     console.log("position in sdk",positions);
     prevPointRef.current = point;
@@ -162,7 +167,6 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
     positions,
     toggleEmoji,
     setCanvasRef,
-    handleClick,
     selectedEmoji,
     setSelectedEmoji,
   };
