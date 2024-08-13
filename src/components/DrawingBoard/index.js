@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useStore } from '../../store';
 import Canvas from '../Canvas';
-import { useSticker } from '../../hooks/useSticker';
 
 const DrawingBoard = ({
     pushMessage,
@@ -17,9 +16,6 @@ const DrawingBoard = ({
       rooms: { room },
     } = useStore();
 
-    const { selectedEmoji, setSelectedEmoji, onMouseDown, emojiPositions } = useSticker(pushMessage, channel);
-
-
     return (
         <div>
         <Canvas 
@@ -29,10 +25,8 @@ const DrawingBoard = ({
             channel={channel}
             setCanvasCtx={setCanvasCtx}
             inputProps={inputProps}
-            selectedEmoji={selectedEmoji}
-            setSelectedEmoji={setSelectedEmoji}
             onMouseDown={onMouseDown}
-            emojiPositions={emojiPositions}
+            toggleEmoji={toggleEmoji}
           />
        </div>
     )

@@ -150,21 +150,12 @@ export function onDraw (data) {
       );
       
 }
-
-export function onEmojiPlace(ctx, emoji, position) {
-    // Your emoji drawing logic here
-    // Example:
-    const img = new Image();
-    img.src = emoji.imageUrl;
-    img.onload = () => {
-      ctx.drawImage(img, position.x, position.y, emoji.width, emoji.height);
-    };
-  }
-
-  export function clearStickers(setEmojiPositions) {
-    setEmojiPositions([]);
-  }
-  
+export function onSticker(ctx, sticker, position, scale = 1) {
+    ctx.save();
+    ctx.translate(position.x, position.y);
+    ctx.scale(scale, scale);
+    ctx.restore();
+} 
 
 export function clearCanvas(ctx, width, height){
     ctx.clearRect(0, 0, width, height)
