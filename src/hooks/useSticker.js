@@ -1,61 +1,124 @@
+
 // import { useEffect, useRef, useState } from "react";
-// import { clearCanvas, computePointInCanvas, onEmojiPlace } from "../utils";
-// export function useSticker(pushMessage, channel) {
-//   const [selectedEmoji, setSelectedEmoji] = useState(null);
-//   const emojiPositions = useRef([]); // Array to store emoji positions
+// import { computePointInCanvas, onSticker } from "../utils";
 
+// export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
+//   const [emoji, setEmoji] = useState(false);
+//   const [positions, setPositions] = useState([]);
+//   const [selectedEmoji, setSelectedEmoji] = useState("😊");
 //   const canvasRef = useRef(null);
+//   const prevPointRef = useRef();
+//   const isStickRef = useRef(false);
+//   const handleClickRef = useRef();
 
-//   const handleEmojiClick = (emoji) => {
-//     setSelectedEmoji(emoji);
-//   };
-
-//   const onMouseDown = (e) => {
-//     if (!canvasRef.current || !selectedEmoji) return;
-
-//     const ctx = canvasRef.current.getContext('2d');
-//     const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
-
-//     const newEmoji = {
-//       emoji: selectedEmoji,
-//       position: point,
-//     };
-
-//     const clearAllStickers = () => {
-//       emojiPositions.current = [];
-//       const ctx = canvasRef.current && canvasRef.current.getContext('2d');
-//       if (ctx) {
-//         clearCanvas(ctx, canvasRef.current.width, canvasRef.current.height);
-//       }
-//     };
-
-//     onEmojiPlace({ ctx, point, emoji: selectedEmoji });
-
-//     emojiPositions.current = [...emojiPositions.current, newEmoji];
-
-//     if (channel) {
-//       pushMessage(JSON.stringify({ type: "emoji", ...newEmoji }), channel);
+//   const toggleEmoji = () => {
+//     if (!emoji) {
+//       setEmoji(true);
+//       handleClick();
+//     } else {
+//       setEmoji(false);
 //     }
 //   };
 
 //   useEffect(() => {
-//     const ctx = canvasRef.current && canvasRef.current.getContext('2d');
+//     const ctx = canvasRef.current && canvasRef.current.getContext("2d");
+//     const { parentCanvasRef, ...props } = otherProps;
 
-//     if (props.isCanvasClear) {
-//       clearCanvas(ctx, props.width, props.height);
-//       emojiPositions.current = [];
+//     if (ctx) {
+//       parentCanvasRef.current = canvasRef.current;
+//       setCanvasCtx(ctx);
 //     }
 
-//     return () => {};
-//   }, [props.isCanvasClear, channel]);
+//     function initHandleClick(e) {
+//       if (emoji && isStickRef.current) {
+//         const newEmojiPosition = computePointInCanvas(
+//           e.clientX,
+//           e.clientY,
+//           canvasRef.current
+//         );
 
+//         const prevPosition = prevPointRef.current;
+
+//         if (onSticker) {
+//           onSticker({ ctx, newEmojiPosition, prevPosition, props });
+//           setPositions((prevPositions) => [
+//             ...prevPositions,
+//             newEmojiPosition
+//             // { ctx, newEmojiPosition, prevPositions, props},
+//           ]);
+//         }
+
+//         if (channel) {
+//           const emojiData = {
+//             type: "emoji",
+//             emoji: selectedEmoji,
+//             position: {
+//               x: (newEmojiPosition.x / props.canvasWidth) * 100,
+//               y: (newEmojiPosition.y / props.canvasHeight) * 100,
+//             },
+//           };
+
+//           pushMessage(JSON.stringify(emojiData), channel);
+//           setSelectedEmoji(null);
+//         }
+
+//         prevPointRef.current = newEmojiPosition;
+//       }
+//     }
+
+//     handleClickRef.current = initHandleClick;
+
+//     window.addEventListener("click", handleClickRef.current);
+
+//     return () => {
+//       window.removeEventListener("click", handleClickRef.current);
+//     };
+//   }, [emoji, onSticker, channel, otherProps, setCanvasCtx]);
+
+//   useEffect(() => {
+//     if (emoji) {
+//       window.addEventListener("click", handleClickRef.current);
+//     } else {
+//       window.removeEventListener("click", handleClickRef.current);
+//     }
+
+//     return () => {
+//       window.removeEventListener("click", handleClickRef.current);
+//     };
+//   }, [emoji]);
+
+//   function setCanvasRef(ref) {
+//     if (!ref) return;
+//     canvasRef.current = ref;
+//   }
+
+//   function handleClick(e) {
+//     if (!canvasRef.current) return;
+
+//     isStickRef.current = true;
+//     const ctx = canvasRef.current.getContext("2d");
+//     const newEmojiPosition = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
+//     const prevPoint = prevPointRef.current || newEmojiPosition;
+
+//     setPositions((prevPositions) => [
+//       ...prevPositions,
+//       newEmojiPosition
+//       // { ctx, newEmojiPosition, prevPositions, props},
+//     ]);
+
+//     prevPointRef.current = newEmojiPosition;
+//   }
+
+//   useEffect(() => {
+//     console.log('New Emoji Position:', positions);
+//   }, [positions]);
+  
 //   return {
+//     positions,
+//     toggleEmoji,
+//     setCanvasRef,
 //     selectedEmoji,
-//     setSelectedEmoji: handleEmojiClick, // Alias for readability
-//     onMouseDown,
-//     emojiPositions,
-//     setCanvasRef: (ref) => { canvasRef.current = ref; },
-//     clearAllStickers,
+//     setSelectedEmoji,
 //   };
 // }
 
@@ -72,12 +135,7 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
   const handleClickRef = useRef();
 
   const toggleEmoji = () => {
-    if (!emoji) {
-      setEmoji(true);
-      handleClick();
-    } else {
-      setEmoji(false);
-    }
+    setEmoji((prev) => !prev);
   };
 
   useEffect(() => {
@@ -101,6 +159,7 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
 
         if (onSticker) {
           onSticker({ ctx, newEmojiPosition, prevPosition, props });
+          setPositions((prevPositions) => [...prevPositions, newEmojiPosition]);
         }
 
         if (channel) {
@@ -128,7 +187,7 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
     return () => {
       window.removeEventListener("click", handleClickRef.current);
     };
-  }, [emoji, onSticker, channel, otherProps, setCanvasCtx]);
+  }, [emoji, onSticker, channel, otherProps, setCanvasCtx, selectedEmoji]);
 
   useEffect(() => {
     if (emoji) {
@@ -152,26 +211,28 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
 
     isStickRef.current = true;
     const ctx = canvasRef.current.getContext("2d");
-    const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
-    const prevPoint = prevPointRef.current || point;
+    const newEmojiPosition = computePointInCanvas(
+      e.clientX,
+      e.clientY,
+      canvasRef.current
+    );
+    const prevPoint = prevPointRef.current || newEmojiPosition;
 
-    setPositions((prevPositions) => [
-      ...prevPositions,
-      { ctx, newEmojiPosition, prevPositions, props},
-    ]);
+    setPositions((prevPositions) => [...prevPositions, newEmojiPosition]);
 
-    prevPointRef.current = point;
+    prevPointRef.current = newEmojiPosition;
   }
 
   useEffect(() => {
-    console.log('New Emoji Position:', positions);
+    console.log("New Emoji Position:", positions);
   }, [positions]);
-  
+
   return {
-    setPositions,
+    positions,
     toggleEmoji,
     setCanvasRef,
     selectedEmoji,
     setSelectedEmoji,
   };
 }
+
