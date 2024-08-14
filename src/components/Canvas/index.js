@@ -113,23 +113,23 @@ const Canvas = ({
   inputProps,
 }) => {
   const { children, ...otherProps } = inputProps;
-  const { setCanvasRef, onMouseDown } = useOnDraw(
+  const { setCanvasRef, onMouseDown, setSelectedSticker } = useOnDraw(
     pushMessage,
     channel,
     setCanvasCtx,
     otherProps
   );
 
-  const {
-    toggleEmoji,
-    positions,
-    setStickerCanvasRef,
-    selectedEmoji,
-    setSelectedEmoji,
-    onMouseClick,
-  } = useSticker(pushMessage, channel, setCanvasCtx, otherProps);
+  // const {
+  //   toggleEmoji,
+  //   positions,
+  //   setStickerCanvasRef,
+  //   selectedEmoji,
+  //   setSelectedEmoji,
+  //   onMouseClick,
+  // } = useSticker(pushMessage, channel, setCanvasCtx, otherProps);
 
-  const ref = otherProps.useSticker ? setStickerCanvasRef : setCanvasRef;
+  // const ref = otherProps.useSticker ? setStickerCanvasRef : setCanvasRef;
 
   const canvasStyle = {
     position: "absolute",
@@ -143,8 +143,8 @@ const Canvas = ({
         height={height}
         style={canvasStyle}
         ref={ref}
-        onMouseDown={otherProps.useSticker ? onMouseClick : onMouseDown} 
-        
+        // onMouseDown={otherProps.useSticker ? onMouseClick : onMouseDown} 
+        onMouseDown={onMouseDown}
       />
       {children}
     </>

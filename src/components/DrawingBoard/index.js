@@ -9,8 +9,8 @@ const DrawingBoard = ({
     loading,
     inputProps,
     onMouseDown,
-    onMouseClick,
-    setStickerCanvasRef,
+    // onMouseClick,
+    // setStickerCanvasRef,
     
 }) => {
     const [point, setPoint] = useState({});
@@ -29,8 +29,8 @@ const DrawingBoard = ({
             setCanvasCtx={setCanvasCtx}
             inputProps={inputProps}
             onMouseDown={onMouseDown}
-            onMouseClick={onMouseClick}
-            setStickerCanvasRef={setStickerCanvasRef}
+            // onMouseClick={onMouseClick}
+            // setStickerCanvasRef={setStickerCanvasRef}
           />
        </div>
     )
