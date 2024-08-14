@@ -35,7 +35,7 @@ export function useSticker(
     }
 
     function handleClick(e) {
-      if (emoji) return;
+      if (!emoji) {
 
       const newEmojiPosition = computePointInCanvas(
         e.clientX,
@@ -45,7 +45,6 @@ export function useSticker(
 
       const prevPosition = prevPointRef.current;
 
-      // Ensure that the click is handled only if the canvas exists and was clicked
       if (canvasRef.current && ctx && e.target === canvasRef.current) {
         isStickRef.current = true;
 
@@ -76,11 +75,12 @@ export function useSticker(
           };
 
           pushMessage(JSON.stringify(emojiData), channel);
-          setSelectedEmoji(null);
+          setEmoji(false);
         }
 
         prevPointRef.current = newEmojiPosition;
       }
+    }
     }
 
     handleClickRef.current = handleClick; 
@@ -96,18 +96,6 @@ export function useSticker(
     canvasRef.current = ref;
   },[]);
 
-  const onMouseClick =((e)=>{
-    if(!canvasRef.current)return;
-    const {parentCanvasRef, ...props} = otherProps;
-    isStickRef.current = true;
-    const ctx = canvasRef.current.getContext('2d');
-    const point =computePointInCanvas(e.clientX,e.clientY,canvasRef.current);
-    setPositions(positions => [...positions,{ctx,point,props}]);
-    prevPointRef.current = point ;
-  },[otherProps]);
-  
-  console.log("Position of useSticker after onMouseDown : ",positions);
-
   useEffect(() => {
     console.log("New Emoji Position:", positions);
   }, [positions]);
@@ -118,8 +106,6 @@ export function useSticker(
     setStickerCanvasRef,
     selectedEmoji,
     setSelectedEmoji,
-    onMouseClick,
-
   };
 }
 
