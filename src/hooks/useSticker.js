@@ -3,10 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import { computePointInCanvas, onSticker } from "../utils";
 
-export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
+export function useSticker(
+  pushMessage, 
+  channel,
+  setCanvasCtx,
+  otherProps
+
+  ){
   const [emoji, setEmoji] = useState(false);
   const [positions, setPositions] = useState([]);
   const [selectedEmoji, setSelectedEmoji] = useState("😊");
+
   const canvasRef = useRef(null);
   const prevPointRef = useRef();
   const isStickRef = useRef(false);
@@ -15,6 +22,8 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
   const toggleEmoji = () => {
     setEmoji((prev) => !prev);
   };
+  console.log("Position of useSticker in staring",positions);
+
 
   useEffect(() => {
     const ctx = canvasRef.current && canvasRef.current.getContext("2d");
@@ -26,7 +35,7 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
     }
 
     function handleClick(e) {
-      if (!emoji) return;
+      if (emoji) return;
 
       const newEmojiPosition = computePointInCanvas(
         e.clientX,
@@ -49,6 +58,7 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
 
         if (onSticker) {
           onSticker(stickerData);
+
           setPositions((prevPositions) => [
             ...prevPositions,
             newEmojiPosition,
@@ -87,6 +97,17 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
     canvasRef.current = ref;
   }
 
+  function onMouseClick(e){
+    if(!canvasRef.current)return;
+    const {parentCanvasRef, ...props}=otherProps;
+    isStickRef.current=true;
+    const ctx = canvasRef.current.getContext('2d');
+    const point =computePointInCanvas(e.clientX,e.clientY,canvasRef.current);
+    let prevPoint = prevPointRef.current;
+    setPositions(positions => ([...positions,{ctx,prevPoint,props}]));
+  }
+  console.log("Position of useOnDraw after onMouseDown : ",annotations);
+
   useEffect(() => {
     console.log("New Emoji Position:", positions);
   }, [positions]);
@@ -97,6 +118,8 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
     setStickerCanvasRef,
     selectedEmoji,
     setSelectedEmoji,
+    onMouseClick,
+
   };
 }
 
