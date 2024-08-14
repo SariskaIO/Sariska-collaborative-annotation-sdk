@@ -142,7 +142,7 @@ const Canvas = ({
         width={width}
         height={height}
         style={canvasStyle}
-        ref={ref}
+        ref={setCanvasRef}
         // onMouseDown={otherProps.useSticker ? onMouseClick : onMouseDown} 
         onMouseDown={onMouseDown}
       />
