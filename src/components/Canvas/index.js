@@ -4,8 +4,8 @@
 // import { useSticker } from '../../hooks/useSticker';
 
 // const Canvas = ({
-//     width, 
-//     height, 
+//     width,
+//     height,
 //     pushMessage,
 //     channel,
 //     setCanvasCtx,
@@ -19,7 +19,7 @@
 //   }) => {
 //     const {children, ...otherProps} = inputProps;
 
-// //     
+// //
 
 // const { setCanvasRef: setDrawCanvasRef, onMouseDown: onDrawMouseDown, onMouseMove: onDrawMouseMove, onMouseUp: onDrawMouseUp } = useOnDraw(
 //   pushMessage,
@@ -100,52 +100,54 @@
 
 // export default Canvas;
 
-
-import React from 'react';
-import { useOnDraw } from '../../hooks/useOnDraw';
-import { useSticker } from '../../hooks/useSticker';
+import React from "react";
+import { useOnDraw } from "../../hooks/useOnDraw";
+import { useSticker } from "../../hooks/useSticker";
 
 const Canvas = ({
-    width, 
-    height, 
+  width,
+  height,
+  pushMessage,
+  channel,
+  setCanvasCtx,
+  inputProps,
+}) => {
+  const { children, ...otherProps } = inputProps;
+  const { setCanvasRef, onMouseDown } = useOnDraw(
     pushMessage,
     channel,
     setCanvasCtx,
-    inputProps
-  }) => {
-    const {children, ...otherProps} = inputProps;
-    const {setCanvasRef, onMouseDown} = useOnDraw(
-      pushMessage,
-      channel,
-      setCanvasCtx,
-      otherProps
-      );
+    otherProps
+  );
 
-      const {toggleEmoji} = useSticker(
-        pushMessage,
-        channel,
-        setCanvasCtx,
-        otherProps
-        );
-      
-    const canvasStyle={
-      position: 'absolute', 
-      zIndex: otherProps.zIndex,
-      background: 'none'
-    }
+  const {
+    toggleEmoji,
+    positions,
+    setStickerCanvasRef,
+    selectedEmoji,
+    setSelectedEmoji,
+  } = useSticker(pushMessage, channel, setCanvasCtx, otherProps);
+
+  const ref = otherProps.useSticker ? setStickerCanvasRef : setCanvasRef;
+
+  const canvasStyle = {
+    position: "absolute",
+    zIndex: otherProps.zIndex,
+    background: "none",
+  };
   return (
-        <>
-        <canvas 
-            width={width}
-            height={height}
-            style={canvasStyle}
-            ref={setCanvasRef}
-            onMouseDown={onMouseDown}
-            toggleEmoji={toggleEmoji}
-        />
-          {children}
-        </>
-  )
-}
+    <>
+      <canvas
+        width={width}
+        height={height}
+        style={canvasStyle}
+        ref={setCanvasRef}
+        onMouseDown={otherProps.useSticker ? null : onMouseDown} 
 
-export default Canvas
+      />
+      {children}
+    </>
+  );
+};
+
+export default Canvas;
