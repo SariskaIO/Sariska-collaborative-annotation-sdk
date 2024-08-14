@@ -55,6 +55,8 @@ export function useOnDraw(
     //     //   link.click();
     //     // });
     //   };
+
+    console.log("Position of useOnDraw in staring",annotations);
     
     useEffect(()=>{
         const ctx = canvasRef.current.getContext('2d');
@@ -71,6 +73,9 @@ export function useOnDraw(
                         onDraw({ctx, point, prevPoint, props});
                         setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
                     }
+                    console.log("Position of useOnDraw after position set :",annotations);
+
+
                     if(channel) {
                         pushMessage(JSON.stringify({ctx, point, prevPoint, props}), channel);
                     }
@@ -145,7 +150,8 @@ export function useOnDraw(
         let prevPoint = prevPointRef.current;
         setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
     }
-    
+    console.log("Position of useOnDraw after onMouseDown : ",annotations);
+
     return {
         setCanvasRef,
         onMouseDown

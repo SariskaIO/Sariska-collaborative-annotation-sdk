@@ -138,6 +138,7 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
     setEmoji((prev) => !prev);
   };
 
+  console.log("first positions created",positions);
   useEffect(() => {
     const ctx = canvasRef.current && canvasRef.current.getContext("2d");
     const { parentCanvasRef, ...props } = otherProps;
@@ -161,6 +162,8 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
           onSticker({ ctx, newEmojiPosition, prevPosition, props });
           setPositions((prevPositions) => [...prevPositions, newEmojiPosition]);
         }
+        console.log("in inithandleclick",positions);
+
 
         if (channel) {
           const emojiData = {
@@ -182,24 +185,27 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
 
     handleClickRef.current = initHandleClick;
 
-    window.addEventListener("click", handleClickRef.current);
-
+    if (emoji) {
+      window.addEventListener("click", initHandleClick);
+    } else {
+      window.removeEventListener("click", initHandleClick);
+    }
     return () => {
-      window.removeEventListener("click", handleClickRef.current);
+      window.removeEventListener("click", initHandleClick);
     };
   }, [emoji, onSticker, channel, otherProps, setCanvasCtx, selectedEmoji]);
 
-  useEffect(() => {
-    if (emoji) {
-      window.addEventListener("click", handleClickRef.current);
-    } else {
-      window.removeEventListener("click", handleClickRef.current);
-    }
+  // useEffect(() => {
+  //   if (emoji) {
+  //     window.addEventListener("click", initHandleClick);
+  //   } else {
+  //     window.removeEventListener("click", initHandleClick);
+  //   }
 
-    return () => {
-      window.removeEventListener("click", handleClickRef.current);
-    };
-  }, [emoji]);
+  //   return () => {
+  //     window.removeEventListener("click", handleClickRef.current);
+  //   };
+  // }, [emoji]);
 
   function setCanvasRef(ref) {
     if (!ref) return;
@@ -232,7 +238,7 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
     toggleEmoji,
     setCanvasRef,
     selectedEmoji,
-    setSelectedEmoji,
+    handleClick,
   };
 }
 

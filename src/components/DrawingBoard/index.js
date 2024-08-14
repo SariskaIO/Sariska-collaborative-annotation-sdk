@@ -9,7 +9,7 @@ const DrawingBoard = ({
     loading,
     inputProps,
     onMouseDown,
-    toggleEmoji
+    handleClick
 }) => {
     const [point, setPoint] = useState({});
     const {
@@ -27,7 +27,7 @@ const DrawingBoard = ({
             setCanvasCtx={setCanvasCtx}
             inputProps={inputProps}
             onMouseDown={onMouseDown}
-            toggleEmoji={toggleEmoji}
+            handleClick={handleClick}
           />
        </div>
     )
