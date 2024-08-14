@@ -126,6 +126,7 @@ const Canvas = ({
     setStickerCanvasRef,
     selectedEmoji,
     setSelectedEmoji,
+    onMouseClick,
   } = useSticker(pushMessage, channel, setCanvasCtx, otherProps);
 
   const ref = otherProps.useSticker ? setStickerCanvasRef : setCanvasRef;
@@ -141,9 +142,9 @@ const Canvas = ({
         width={width}
         height={height}
         style={canvasStyle}
-        ref={setCanvasRef}
-        onMouseDown={otherProps.useSticker ? null : onMouseDown} 
-
+        ref={Ref}
+        onMouseDown={otherProps.useSticker ? onMouseClick : onMouseDown} 
+        
       />
       {children}
     </>

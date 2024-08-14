@@ -1,6 +1,6 @@
 
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { computePointInCanvas, onSticker } from "../utils";
 
 export function useSticker(
@@ -83,8 +83,7 @@ export function useSticker(
       }
     }
 
-    handleClickRef.current = handleClick;
-
+    handleClickRef.current = handleClick; 
     window.addEventListener("click", handleClickRef.current);
 
     return () => {
@@ -92,21 +91,22 @@ export function useSticker(
     };
   }, [emoji, onSticker, channel, otherProps, setCanvasCtx, selectedEmoji]);
 
-  function setStickerCanvasRef(ref) {
+  const setStickerCanvasRef = useCallback((ref) => {
     if (!ref) return;
     canvasRef.current = ref;
-  }
+  },[]);
 
-  function onMouseClick(e){
+  const onMouseClick =((e)=>{
     if(!canvasRef.current)return;
-    const {parentCanvasRef, ...props}=otherProps;
-    isStickRef.current=true;
+    const {parentCanvasRef, ...props} = otherProps;
+    isStickRef.current = true;
     const ctx = canvasRef.current.getContext('2d');
     const point =computePointInCanvas(e.clientX,e.clientY,canvasRef.current);
-    let prevPoint = prevPointRef.current;
-    setPositions(positions => ([...positions,{ctx,prevPoint,props}]));
-  }
-  console.log("Position of useOnDraw after onMouseDown : ",annotations);
+    setPositions(positions => [...positions,{ctx,point,props}]);
+    prevPointRef.current = point ;
+  },[otherProps]);
+  
+  console.log("Position of useSticker after onMouseDown : ",positions);
 
   useEffect(() => {
     console.log("New Emoji Position:", positions);
