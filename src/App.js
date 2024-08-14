@@ -169,17 +169,19 @@ const App = (props)=> {
     // if(props.content){
     //   return message;
     // }else{
+    if(content.type === 'emoji' && content.position){
+        onSticker(content);
+    }
+    else{
       if(Object.keys(content.ctx).length){
         onDraw(content);
-      }else if(content.type === 'emoji' && content.position){
-        onSticker(content);
       }else{
         content.ctx = canvasCtx;
         onDraw(content);
       }
       setMessages(messages => [...messages, message])
     //}
-  });
+  }});
 
   UseEventHandler(rtcChannel, 'archived_message', setLoading, message => {
     setMessages(messages => [...messages, message])
