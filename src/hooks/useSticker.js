@@ -16,7 +16,7 @@ export function useSticker(
   const isStickRef = useRef(false);
 
   const toggleEmoji = () => {
-    setEmoji((prev) => !prev);
+    setEmoji(!emoji);
   };
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export function useSticker(
       console.log("Canvas click detected:", e); // Log the click event
 
       // if (!emoji || !canvasRef.current) return;
-
+      if (!emoji) {
       const newEmojiPosition = computePointInCanvas(
         e.clientX,
         e.clientY,
@@ -77,6 +77,7 @@ export function useSticker(
 
         prevPointRef.current = newEmojiPosition;
       }
+    }
     }
 
     if (canvasRef.current) {
