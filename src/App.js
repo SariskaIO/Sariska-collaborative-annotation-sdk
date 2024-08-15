@@ -275,6 +275,13 @@ const App = (props) => {
         },
         scale: 1
       });
+    } else{
+      if(Object.keys(content.ctx).length){
+        onDraw(content);
+      }else{
+        content.ctx = canvasCtx;
+        onDraw(content);
+      }
     }
     setMessages(messages => [...messages, message]);
   });

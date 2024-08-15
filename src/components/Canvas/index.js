@@ -166,6 +166,13 @@ const Canvas = ({
   inputProps,
 }) => {
   const { children, ...otherProps } = inputProps;
+
+  const { setCanvasRef, onMouseDown, handleDraw} = useOnDraw(
+        pushMessage,
+        channel,
+        setCanvasCtx,
+        otherProps
+      );
   
   // Use the useSticker hook
   const {
@@ -174,7 +181,7 @@ const Canvas = ({
     setStickerCanvasRef,
     selectedEmoji,
     setSelectedEmoji,
-    onMouseClick,
+    // onMouseClick,
   } = useSticker(pushMessage, channel, setCanvasCtx, otherProps);
 
   // Use setStickerCanvasRef to set the canvas reference
@@ -193,7 +200,7 @@ const Canvas = ({
         height={height}
         style={canvasStyle}
         ref={ref}
-        onMouseDown={onMouseClick} // Handle click for placing stickers
+        // onMouseDown={onMouseDown} // Handle click for placing stickers
       />
       {children}
     </>

@@ -16,7 +16,11 @@ export function useSticker(
   const isStickRef = useRef(false);
 
   const toggleEmoji = () => {
-    setEmoji(!emoji);
+    if(!emoji){
+      setEmoji(true);
+    }else{
+      setEmoji(false);
+    }
   };
 
   useEffect(() => {
@@ -31,8 +35,8 @@ export function useSticker(
     function handleClick(e) {
       console.log("Canvas click detected:", e); // Log the click event
 
-      // if (!emoji || !canvasRef.current) return;
-      if (!emoji) {
+      if (emoji || !canvasRef.current) return;
+      // if (!emoji) {
       const newEmojiPosition = computePointInCanvas(
         e.clientX,
         e.clientY,
@@ -77,7 +81,7 @@ export function useSticker(
 
         prevPointRef.current = newEmojiPosition;
       }
-    }
+    
     }
 
     if (canvasRef.current) {
@@ -91,6 +95,17 @@ export function useSticker(
     };
   }, [emoji, onSticker, channel, otherProps, setCanvasCtx, selectedEmoji]);
 
+  useEffect(() => {
+    if (!emoji) {
+      document.addEventListener('click', handleClick);
+    } else {
+      document.removeEventListener('click', handleClick);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  }, [!emoji]);
 
   const setStickerCanvasRef = useCallback((ref) => {
     if (!ref) return;

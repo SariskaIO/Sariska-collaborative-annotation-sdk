@@ -71,7 +71,7 @@ const DrawingBoard = ({
                 setStickerCanvasRef={setStickerCanvasRef}
                 positions={positions}
                 selectedEmoji={selectedEmoji}
-                toggleEmoji={toggleEmoji}
+                // toggleEmoji={toggleEmoji}
                 setSelectedEmoji={setSelectedEmoji}
             />
         </div>
