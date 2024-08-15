@@ -29,6 +29,8 @@ export function useSticker(
     }
 
     function handleClick(e) {
+      console.log("Canvas click detected:", e); // Log the click event
+
       if (!emoji || !canvasRef.current) return;
 
       const newEmojiPosition = computePointInCanvas(
@@ -36,6 +38,9 @@ export function useSticker(
         e.clientY,
         canvasRef.current
       );
+
+      console.log("Computed emoji position:", newEmojiPosition); // Log the computed position
+
 
       if (e.target === canvasRef.current) {
         isStickRef.current = true;
@@ -74,12 +79,17 @@ export function useSticker(
       }
     }
 
-    window.addEventListener("click", handleClick);
+    if (canvasRef.current) {
+      canvasRef.current.addEventListener("click", handleClick);
+    }
 
     return () => {
-      window.removeEventListener("click", handleClick);
+      if (canvasRef.current) {
+        canvasRef.current.removeEventListener("click", handleClick);
+      }
     };
   }, [emoji, onSticker, channel, otherProps, setCanvasCtx, selectedEmoji]);
+
 
   const setStickerCanvasRef = useCallback((ref) => {
     if (!ref) return;
