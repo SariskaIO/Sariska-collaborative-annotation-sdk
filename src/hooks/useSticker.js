@@ -15,8 +15,8 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
   };
 
   const handleClick = useCallback((e) => {
-    const ctx = canvasRef.current.getContext("2d");
-    const { parentCanvasRef, ...props } = otherProps;
+    const ctx = canvasRef.current?canvasRef.current.getContext("2d"):null;
+const { parentCanvasRef, ...props } = otherProps;
 
     if (ctx) {
       parentCanvasRef.current = canvasRef.current;
@@ -24,6 +24,7 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
     }
 
     if (!emoji && canvasRef.current && e.target === canvasRef.current) {
+      // if (!emoji) {
       const newEmojiPosition = computePointInCanvas(
         e.clientX,
         e.clientY,
