@@ -31,7 +31,7 @@ export function useSticker(
     function handleClick(e) {
       console.log("Canvas click detected:", e); // Log the click event
 
-      if (!emoji || !canvasRef.current) return;
+      // if (!emoji || !canvasRef.current) return;
 
       const newEmojiPosition = computePointInCanvas(
         e.clientX,
