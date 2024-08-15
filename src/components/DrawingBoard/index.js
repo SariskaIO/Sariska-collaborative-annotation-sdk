@@ -40,8 +40,10 @@
 
 
 import React from 'react';
-import { useSticker } from '../../hooks/useSticker'; // Adjust the path if necessary
+import { useSticker } from '../../hooks/useSticker';
 import Canvas from '../Canvas';
+import { useStore } from '../../store';
+import { useOnDraw } from './../../hooks/useOnDraw';
 
 const DrawingBoard = ({
     pushMessage,

@@ -156,6 +156,7 @@
 
 import React from "react";
 import { useSticker } from "../../hooks/useSticker";
+import { useOnDraw } from "../../hooks/useOnDraw";
 
 const Canvas = ({
   width,
