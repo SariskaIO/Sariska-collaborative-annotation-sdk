@@ -20,7 +20,7 @@ export function useSticker(
   };
 
   useEffect(() => {
-    const ctx = canvasRef.current?.getContext("2d");
+    const ctx = canvasRef.current?canvasRef.current.getContext("2d"):null;
     const { parentCanvasRef, ...props } = otherProps;
 
     if (ctx) {
