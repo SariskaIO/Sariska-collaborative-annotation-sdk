@@ -149,21 +149,8 @@ export function useOnDraw(
         const ctx = canvasRef.current.getContext('2d');
         const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
         let prevPoint = prevPointRef.current;
-
-        if (selectedSticker) {
-            onSticker({
-                ctx,
-                sticker: selectedSticker,
-                position: point,
-                scale: 1 
-            });
-            setAnnotations(annotations => ([...annotations, { ctx, point, selectedSticker, props }]));
-            if (channel) {
-                pushMessage(JSON.stringify({ ctx, point, selectedSticker, props }), channel);
-            }
-        } else {
             setAnnotations(annotations => ([...annotations, { ctx, point, prevPoint, props }]));
-        }
+        
     }
     console.log("Position of useOnDraw after onMouseDown : ",annotations);
 
