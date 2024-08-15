@@ -102,6 +102,7 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
   return {
     positions,
     toggleEmoji,
+    handleClick,
     setStickerCanvasRef,
     selectedEmoji,
     setSelectedEmoji,
