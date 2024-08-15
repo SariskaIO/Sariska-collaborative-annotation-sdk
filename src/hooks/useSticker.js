@@ -15,7 +15,7 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
   };
 
   const handleClick = useCallback((e) => {
-    const ctx = canvasRef.current?.getContext("2d");
+    const ctx = canvasRef.current.getContext("2d");
     const { parentCanvasRef, ...props } = otherProps;
 
     if (ctx) {
