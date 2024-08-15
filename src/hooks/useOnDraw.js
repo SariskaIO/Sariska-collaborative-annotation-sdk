@@ -58,7 +58,7 @@ export function useOnDraw(
 
       console.log("Position of useOnDraw in staring",annotations);
 
-    handleDraw = ()=>{
+    const handleDraw = ()=>{
         if(!isDrawing){
             setIsDrawing(true);
         }else{
@@ -164,6 +164,6 @@ export function useOnDraw(
     return {
         setCanvasRef,
         onMouseDown,
-        handleDraw
+        handleDraw,
     };
 }
