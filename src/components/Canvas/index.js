@@ -53,7 +53,7 @@
 // export default Canvas;
 
 
-import React from "react";
+import React, { useRef } from "react";
 import { useSticker } from "../../hooks/useSticker";
 import { useOnDraw } from "../../hooks/useOnDraw";
 
