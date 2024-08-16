@@ -11,7 +11,9 @@ export function useSticker(pushMessage, channel, setCanvasCtx, otherProps) {
   const isStickRef = useRef(false);
 
   const toggleEmoji = () => {
-    setEmoji((prev) => !prev);
+    // setEmoji((prev) => !prev);
+       setEmoji(prev => !prev);
+
   };
 
   const handleClick = useCallback((e) => {

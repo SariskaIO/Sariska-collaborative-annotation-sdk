@@ -67,7 +67,7 @@ const Canvas = ({
 }) => {
   const { children, ...otherProps } = inputProps;
 
-  const { setCanvasRef, onMouseDown, handleDraw} = useOnDraw(
+  const { setCanvasRef:setDrawCanvasRef, onMouseDown, handleDraw} = useOnDraw(
         pushMessage,
         channel,
         setCanvasCtx,
@@ -85,13 +85,13 @@ const Canvas = ({
     // onMouseClick,
   } = useSticker(pushMessage, channel, setCanvasCtx, otherProps);
 
-  const ref = (ref) => {
+  const canvasRef = useRef(null);
+
+  const combinedRef = (ref) => {
     if (ref) {
-      if (handleDraw) {
-        setCanvasRef(ref);
-      } else {
-        setStickerCanvasRef(ref);
-      }
+      canvasRef.current = ref;
+      setDrawCanvasRef(ref); 
+      setStickerCanvasRef(ref); 
     }
   };
   
@@ -107,7 +107,7 @@ const Canvas = ({
         width={width}
         height={height}
         style={canvasStyle}
-        ref={ref}
+        ref={combinedRef}
         onMouseDown={onMouseDown} 
         onClick={handleClick}
       />
