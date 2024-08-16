@@ -23,8 +23,8 @@ const { parentCanvasRef, ...props } = otherProps;
       setCanvasCtx(ctx);
     }
 
-    if (!emoji && canvasRef.current && e.target === canvasRef.current) {
-      // if (!emoji) {
+    // if (!emoji && canvasRef.current && e.target === canvasRef.current) {
+      if (!emoji) {
       const newEmojiPosition = computePointInCanvas(
         e.clientX,
         e.clientY,
