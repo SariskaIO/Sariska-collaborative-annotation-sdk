@@ -38,8 +38,7 @@
 
 // export default DrawingBoard
 
-
-import React from 'react';
+ import React, { useState } from 'react'
 import { useSticker } from '../../hooks/useSticker';
 import Canvas from '../Canvas';
 import { useStore } from '../../store';
