@@ -110,7 +110,7 @@ const Canvas = ({
         style={canvasStyle}
         ref={combinedRef}
         onMouseDown={onMouseDown} 
-        onClick={handleClick}
+        handleClick={handleClick}
       />
       {children}
     </>

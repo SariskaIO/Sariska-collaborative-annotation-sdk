@@ -43,7 +43,6 @@ import React from 'react';
 import { useSticker } from '../../hooks/useSticker';
 import Canvas from '../Canvas';
 import { useStore } from '../../store';
-import { useOnDraw } from './../../hooks/useOnDraw';
 
 const DrawingBoard = ({
     pushMessage,
@@ -52,15 +51,6 @@ const DrawingBoard = ({
     loading,
     inputProps,
 }) => {
-    // Use the useSticker hook
-    const {
-        positions,
-        emoji,
-        toggleEmoji,
-        setStickerCanvasRef,
-        selectedEmoji,
-        setSelectedEmoji,
-    } = useSticker(pushMessage, channel, setCanvasCtx, inputProps);
 
     return (
         <div>
@@ -71,11 +61,11 @@ const DrawingBoard = ({
                 channel={channel}
                 setCanvasCtx={setCanvasCtx}
                 inputProps={inputProps}
-                setStickerCanvasRef={setStickerCanvasRef}
-                positions={positions}
-                selectedEmoji={selectedEmoji}
-                // toggleEmoji={toggleEmoji}
-                setSelectedEmoji={setSelectedEmoji}
+                // setStickerCanvasRef={setStickerCanvasRef}
+                // positions={positions}
+                // selectedEmoji={selectedEmoji}
+                // // toggleEmoji={toggleEmoji}
+                // setSelectedEmoji={setSelectedEmoji}
             />
         </div>
     );
