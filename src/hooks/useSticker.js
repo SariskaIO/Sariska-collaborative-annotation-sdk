@@ -67,7 +67,7 @@ const { parentCanvasRef, ...props } = otherProps;
 
       prevPointRef.current = newEmojiPosition;
     }
-  }, [emoji, selectedEmoji, otherProps, onSticker, channel, setCanvasCtx]);
+  }, [emoji, selectedEmoji, otherProps.isCanvasClear, onSticker, channel, setCanvasCtx]);
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -80,6 +80,10 @@ const { parentCanvasRef, ...props } = otherProps;
       }
     };
   }, [handleClick]);
+
+  if(props.isCanvasClear){
+    clearCanvas( ctx, props.width, props.height );
+}
 
   useEffect(() => {
     if (!emoji) {
@@ -103,6 +107,7 @@ const { parentCanvasRef, ...props } = otherProps;
   }, [positions]);
 
   return {
+    emoji,
     positions,
     toggleEmoji,
     handleClick,

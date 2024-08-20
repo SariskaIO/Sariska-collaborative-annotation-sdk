@@ -77,6 +77,7 @@ const Canvas = ({
   // Use the useSticker hook
   const {
     toggleEmoji,
+    emoji,
     positions,
     setStickerCanvasRef,
     selectedEmoji,
