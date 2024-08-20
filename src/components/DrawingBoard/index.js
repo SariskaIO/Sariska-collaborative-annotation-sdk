@@ -51,6 +51,11 @@ const DrawingBoard = ({
     loading,
     inputProps,
 }) => {
+    const [point, setPoint] = useState({});
+    const {
+      users: { user },
+      rooms: { room },
+    } = useStore();
 
     return (
         <div>
@@ -61,7 +66,6 @@ const DrawingBoard = ({
                 channel={channel}
                 setCanvasCtx={setCanvasCtx}
                 inputProps={inputProps}
-                // setStickerCanvasRef={setStickerCanvasRef}
                 // positions={positions}
                 // selectedEmoji={selectedEmoji}
                 // // toggleEmoji={toggleEmoji}

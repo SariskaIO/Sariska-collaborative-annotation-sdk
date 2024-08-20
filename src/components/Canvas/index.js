@@ -74,16 +74,13 @@ const Canvas = ({
         otherProps
       );
   
-  // Use the useSticker hook
   const {
     toggleEmoji,
-    emoji,
     positions,
     setStickerCanvasRef,
     selectedEmoji,
     setSelectedEmoji,
     handleClick,
-    // onMouseClick,
   } = useSticker(pushMessage, channel, setCanvasCtx, otherProps);
 
   const canvasRef = useRef(null);

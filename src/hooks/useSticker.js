@@ -107,7 +107,6 @@ const { parentCanvasRef, ...props } = otherProps;
   }, [positions]);
 
   return {
-    emoji,
     positions,
     toggleEmoji,
     handleClick,
