@@ -145,6 +145,7 @@ export function onDraw (data) {
 }
 
 export function onDrawEmoji({ctx, point, emoji}) {
+    console.log('onDrawEmoji', ctx, point, emoji)
     ctx.font = '24px Arial';
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
