@@ -47,7 +47,7 @@ const App = (props)=> {
     // if(props.content){
     //   return message;
     // }else{
-      if(Object.keys(content.ctx).length){
+      if(content?.ctx && Object.keys(content?.ctx)?.length){
         if(props.annotationTool === ANNOTATION_TOOLS.pen){
           onDraw(content);
         }else{
