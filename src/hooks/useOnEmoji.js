@@ -19,15 +19,17 @@ export function useOnEmoji(
     useEffect(() => {
         const ctx = canvasRef.current.getContext('2d');
          const { parentCanvasRef, ...props } = otherProps;
-        // parentCanvasRef.current = canvasRef.current;
-        // setCanvasCtx(ctx);
+        parentCanvasRef.current = canvasRef.current;
+        setCanvasCtx(ctx);
 
         if (props.isCanvasClear) {
             clearCanvas(ctx, props.width, props.height);
         }
     }, [
         channel,
-        otherProps.isCanvasClear
+        otherProps.isCanvasClear,
+        setCanvasCtx,
+        otherProps
     ]);
 
 console.log('emojier', emojis);
@@ -37,8 +39,6 @@ const onMouseDown = useCallback((event) => {
     console.log('onMouseDown');
     const ctx = canvasRef.current?.getContext('2d');
     const { parentCanvasRef, ...props } = otherProps;
-    parentCanvasRef.current = canvasRef.current;
-    setCanvasCtx(ctx);
 
     const point = computePointInCanvas(event.clientX, event.clientY, canvasRef.current);
     console.log('pointonMouseDown', point);
