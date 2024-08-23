@@ -56,7 +56,7 @@ export function useOnDraw(
     //   };
     
     useEffect(()=>{
-        const ctx = canvasRef.current.getContext('2d');
+        const ctx = canvasRef.current?.getContext('2d');
         const {parentCanvasRef, ...props} = otherProps;
         parentCanvasRef.current = canvasRef.current;
         setCanvasCtx(ctx);
