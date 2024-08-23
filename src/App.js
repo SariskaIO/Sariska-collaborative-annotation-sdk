@@ -51,7 +51,8 @@ const App = (props)=> {
         if(props.annotationTool === ANNOTATION_TOOLS.pen){
           onDraw(content);
         }else{
-          console.log('new_message', message)
+          console.log('new_message', message);
+          content.emojis = [...messages];
           onDrawEmoji(content);
         }
       }else{
@@ -64,6 +65,7 @@ const App = (props)=> {
         }else{
           console.log('emoji tool')
           if(content.ctx){
+            content.emojis = [...messages];
             onDrawEmoji(content);
           }
         }

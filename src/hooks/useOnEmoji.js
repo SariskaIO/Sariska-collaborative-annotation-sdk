@@ -50,7 +50,7 @@ const onMouseDown = useCallback((event) => {
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
     ctx.clearRect(0, 0, ctx.width, ctx.height);
-console.log('emojiesp', emojis, point)
+    console.log('emojiesp', emojis, point)
     emojis.forEach(({ x, y }) => {
       ctx.fillText('😀', x, y);
     });

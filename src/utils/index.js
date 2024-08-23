@@ -144,11 +144,14 @@ export function onDraw (data) {
     drawLine(data.ctx, data.point, data.prevPoint, data?.props?.lineColor,  data?.props?.lineWidth);
 }
 
-export function onDrawEmoji({ctx, point, emoji}) {
+export function onDrawEmoji({ctx, point, emoji, emojis}) {
     console.log('onDrawEmoji', ctx, point, emoji)
     ctx.font = '24px Arial';
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
+    emojis.forEach(({ x, y }) => {
+        ctx.fillText('😀', x, y);
+      });
     ctx.fillText(emoji || '😀', point.x, point.y); // Draw the latest emoji
 }
 
