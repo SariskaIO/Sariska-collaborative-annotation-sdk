@@ -57,9 +57,15 @@ const App = (props)=> {
       }else{
         content.ctx = canvasCtx;
         if(props.annotationTool === ANNOTATION_TOOLS.pen){
-          onDraw(content);
+          console.log('pen tool')
+          if(content.ctx){
+            onDraw(content);
+          }
         }else{
-          onDrawEmoji(content);
+          console.log('emoji tool')
+          if(content.ctx){
+            onDrawEmoji(content);
+          }
         }
       }
       setMessages(messages => [...messages, message])
