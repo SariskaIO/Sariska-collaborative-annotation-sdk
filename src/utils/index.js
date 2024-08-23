@@ -144,6 +144,10 @@ export function onDraw (data) {
     drawLine(data.ctx, data.point, data.prevPoint, data?.props?.lineColor,  data?.props?.lineWidth);
 }
 
+export function drawEmoji(data) {
+
+}
+
 export function clearCanvas(ctx, width, height){
     ctx.clearRect(0, 0, width, height)
 }

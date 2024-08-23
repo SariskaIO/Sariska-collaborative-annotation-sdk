@@ -10,6 +10,7 @@ import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
 import { clearCanvas, onDraw } from './utils';
 import Message from './components/Message';
+import { ANNOTATION_TOOLS } from './constants';
 
 const App = (props)=> {
   const [messages, setMessages] = useState([]);
@@ -42,11 +43,16 @@ const App = (props)=> {
 
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
     let content = JSON.parse(message.content);
+    console.log('pre new_message', message)
     // if(props.content){
     //   return message;
     // }else{
       if(Object.keys(content.ctx).length){
-        onDraw(content);
+        if(props.annotationTool === ANNOTATION_TOOLS.pen){
+          onDraw(content);
+        }else{
+          console.log('new_message', message)
+        }
       }else{
         content.ctx = canvasCtx;
         onDraw(content);
@@ -60,6 +66,7 @@ const App = (props)=> {
   });
 
   const pushMessage = ( content, channel )=>{
+    console.log('pushmessahe', content)
     const new_message = {
       created_by_name: users.user.name,  
       x: "uu", 
