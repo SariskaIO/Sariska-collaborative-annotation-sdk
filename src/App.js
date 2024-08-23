@@ -71,8 +71,9 @@ const App = (props)=> {
       setMessages(messages => [...messages, message])
     //}
   });
-
+console.log('messages', messages);
   UseEventHandler(rtcChannel, 'archived_message', setLoading, message => {
+    console.log('archived_message', message);
     setMessages(messages => [...messages, message])
   });
 
