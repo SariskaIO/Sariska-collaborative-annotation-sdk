@@ -8,7 +8,7 @@ import { useStore } from './store';
 import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
-import { clearCanvas, onDraw } from './utils';
+import { clearCanvas, onDraw, onDrawEmoji } from './utils';
 import Message from './components/Message';
 import { ANNOTATION_TOOLS } from './constants';
 
@@ -52,10 +52,15 @@ const App = (props)=> {
           onDraw(content);
         }else{
           console.log('new_message', message)
+          onDrawEmoji(content);
         }
       }else{
         content.ctx = canvasCtx;
-        onDraw(content);
+        if(props.annotationTool === ANNOTATION_TOOLS.pen){
+          onDraw(content);
+        }else{
+          onDrawEmoji(content);
+        }
       }
       setMessages(messages => [...messages, message])
     //}
