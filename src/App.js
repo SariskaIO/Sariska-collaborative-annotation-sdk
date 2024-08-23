@@ -74,6 +74,21 @@ const App = (props)=> {
 console.log('messages', messages);
   UseEventHandler(rtcChannel, 'archived_message', setLoading, message => {
     console.log('archived_message', message);
+    let content = JSON.parse(message.content);
+    if(content?.ctx && Object.keys(content?.ctx)?.length){
+      if(props.annotationTool === ANNOTATION_TOOLS.emoji){
+        console.log('arc1', message)
+        onDrawEmoji(content);
+      }
+    }else{
+      content.ctx = canvasCtx;
+      if(props.annotationTool === ANNOTATION_TOOLS.emoji){
+        console.log('elsecanvs')
+        if(content.ctx){
+          onDrawEmoji(content);
+        }
+      }
+    }
     setMessages(messages => [...messages, message])
   });
 
