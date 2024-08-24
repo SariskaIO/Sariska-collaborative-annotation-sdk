@@ -144,6 +144,16 @@ export function onDraw (data) {
     drawLine(data.ctx, data.point, data.prevPoint, data?.props?.lineColor,  data?.props?.lineWidth);
 }
 
+export function onDrawEmoji({ctx, point, emoji, emojis}) {
+    ctx.font = '24px Arial';
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center';
+    emojis.forEach(({ x, y }) => {
+        ctx.fillText('😀', x, y);
+      });
+    ctx.fillText(emoji || '😀', point.x, point.y); // Draw the latest emoji
+}
+
 export function clearCanvas(ctx, width, height){
     ctx.clearRect(0, 0, width, height)
 }

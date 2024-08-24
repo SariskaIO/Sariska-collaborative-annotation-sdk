@@ -56,7 +56,7 @@ export function useOnDraw(
     //   };
     
     useEffect(()=>{
-        const ctx = canvasRef.current.getContext('2d');
+        const ctx = canvasRef.current?.getContext('2d');
         const {parentCanvasRef, ...props} = otherProps;
         parentCanvasRef.current = canvasRef.current;
         setCanvasCtx(ctx);
@@ -127,7 +127,9 @@ export function useOnDraw(
         channel,
         otherProps.isCanvasClear,
         otherProps.isImageSaved,
-        otherProps.lineColor
+        otherProps.lineColor,
+        otherProps,
+
     ]);
 
     function setCanvasRef(ref){
@@ -139,7 +141,7 @@ export function useOnDraw(
         if(!canvasRef.current) return;
         const {parentCanvasRef, ...props} = otherProps;
         isDrawingRef.current = true;
-        const ctx = canvasRef.current.getContext('2d');
+        const ctx = canvasRef.current?.getContext('2d');
         const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
         let prevPoint = prevPointRef.current;
         setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
