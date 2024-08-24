@@ -24,7 +24,7 @@ const App = (props)=> {
   UseEventHandler(rtcChannel, 'ping', setLoading, message => {
     console.info('ping', message)
   })
-
+console.log('all props', props)
   UseEventHandler(rtcChannel, 'user_joined', setLoading, async (response) => {
     const {room, user} = response;
     let userDetails = {id : user.id, name: user.name};
@@ -45,7 +45,7 @@ const App = (props)=> {
     let content = JSON.parse(message.content);
     console.log('new_message', message);
       if(content?.ctx && Object.keys(content?.ctx)?.length){
-        if(props.annotationTool === ANNOTATION_TOOLS.pen){
+        if(props.annotationTool === ANNOTATION_TOOLS.pen || props.annotationTool === ANNOTATION_TOOLS.pen){
           onDraw(content);
         }else{
           content.emojis = [...messages];
@@ -53,7 +53,7 @@ const App = (props)=> {
         }
       }else{
         content.ctx = canvasCtx;
-        if(props.annotationTool === ANNOTATION_TOOLS.pen){
+        if(props.annotationTool === ANNOTATION_TOOLS.pen || props.annotationTool === ANNOTATION_TOOLS.pen){
           if(content.ctx){
             onDraw(content);
           }

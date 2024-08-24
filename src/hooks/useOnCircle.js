@@ -22,7 +22,7 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
                 if (isDrawingRef.current) {
                     const point = computePointInCanvas(e.clientX, e.clientY);
                     const prevPoint = prevPointRef.current;
-                    if (onDrawCircle) onDrawCircle({ ctx, point, prevPoint });
+                    onDrawCircle({ ctx, point, prevPoint });
                     console.log('onDrawCircle before', ctx, point, prevPoint);
                     pushMessage(JSON.stringify({ ctx, point, prevPoint }), channel);
                     prevPointRef.current = point;
@@ -86,7 +86,7 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
         const point = computePointInCanvas(e.clientX, e.clientY);
         const prevPoint = prevPointRef.current;
         prevPointRef.current = point; // Initialize the previous point with the current point
-        if (onDrawCircle) onDrawCircle({ ctx, point, prevPoint, otherProps });
+        onDrawCircle({ ctx, point, prevPoint, otherProps });
     }
 
     return {
