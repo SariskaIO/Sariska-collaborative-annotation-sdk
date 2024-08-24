@@ -20,7 +20,7 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
             const mouseMoveListener = (e) => {
                 console.log('mouseMoveListener e is', e);
                 if (isDrawingRef.current) {
-                    const point = computePointInCanvas(e.clientX, e.clientY);
+                    const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
                     const prevPoint = prevPointRef.current;
                     onDrawCircle({ ctx, point, prevPoint });
                     console.log('onDrawCircle before', ctx, point, prevPoint);
@@ -81,9 +81,10 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
     function onMouseDown(e) {
         console.log('onMouseDown', e);
         if (!canvasRef.current) return;
+        console.log('in canvasRef.current')
         isDrawingRef.current = true;
         const ctx = canvasRef.current.getContext('2d');
-        const point = computePointInCanvas(e.clientX, e.clientY);
+        const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
         const prevPoint = prevPointRef.current;
         prevPointRef.current = point; // Initialize the previous point with the current point
         onDrawCircle({ ctx, point, prevPoint, otherProps });
