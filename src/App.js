@@ -63,8 +63,14 @@ const App = (props)=> {
           }
         }
       }
-      setMessages(messages => [...messages, message])
-    //}
+    }else{
+      content.ctx = canvasCtx;
+      onDraw(content);
+      if(props.isCanvasClear){
+        clearCanvas( content.ctx, props.width, props.height );
+      }
+    }
+    setMessages(messages => [...messages, message])
   });
   
 
@@ -78,22 +84,32 @@ const App = (props)=> {
     channel.push('new_message', new_message);
   };
 
-  return (
-      // <>
-      //   {
-      //     props.content ?
-      //       <Message pushMessage={pushMessage} content={props.content} />
-      //       :
 
-            <DrawingBoard
-              inputProps={props}
-              pushMessage={pushMessage} 
-              loading={loading}
-              channel={rtcChannel}
-              setCanvasCtx={setCanvasCtx}
-            />
-      //   }
-      // </>
+  return (
+      <>
+        {/* <iframe
+          src="http://infolab.stanford.edu/pub/papers/google.pdf#toolbar=0&navpanes=0&scrollbar=0"
+          height="500"
+          width="700"
+          title='stanford'
+          style={{position: 'absolute', zIndex: 1}}
+      ></iframe> */}
+        {/* <img 
+          alt='note'
+          src={note} 
+          width={700}
+          height={500} 
+          style={{position: 'absolute', zIndex: 1}}
+          /> */}
+        <DrawingBoard
+          inputProps={props}
+          messages={messages} 
+          pushMessage={pushMessage} 
+          loading={loading}
+          channel={rtcChannel}
+          setCanvasCtx={setCanvasCtx}
+        />
+      </>
   );
 }
 

@@ -3,6 +3,7 @@ import { useStore } from '../../store';
 import Canvas from '../Canvas';
 
 const DrawingBoard = ({
+    messages,
     pushMessage,
     channel,
     setCanvasCtx,
@@ -14,7 +15,7 @@ const DrawingBoard = ({
       users: { user },
       rooms: { room },
     } = useStore();
-    
+
     return (
         <Canvas 
             width={inputProps.width}

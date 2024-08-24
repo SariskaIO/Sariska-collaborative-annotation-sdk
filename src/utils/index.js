@@ -137,11 +137,11 @@ export function drawLine(ctx, end, start, color, width) {
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(start.x, start.y, 2, 0, 2 * Math.PI);
-    ctx.fill();
+    ctx.fill()
 }
 
 export function onDraw (data) {
-    drawLine(data.ctx, data.point, data.prevPoint, data?.props?.lineColor,  data?.props?.lineWidth);
+    drawLine(data.ctx, data.point, data.prevPoint, data?.otherProps?.lineColor,  data?.otherProps?.lineWidth);
 }
 
 export function onDrawEmoji({ctx, point, emoji, emojis}) {
@@ -156,16 +156,4 @@ export function onDrawEmoji({ctx, point, emoji, emojis}) {
 
 export function clearCanvas(ctx, width, height){
     ctx.clearRect(0, 0, width, height)
-}
-
-export function computePointInCanvas(clientX, clientY, refCurrent){
-    if(refCurrent){
-        const boundingRect = refCurrent.getBoundingClientRect();
-        return {
-            x: clientX - boundingRect.left,
-            y: clientY - boundingRect.top
-        }
-    }else{
-        return null;
-    }
 }
