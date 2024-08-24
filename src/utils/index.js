@@ -154,11 +154,14 @@ export function onDrawEmoji({ctx, point, emoji, emojis}) {
     ctx.fillText(emoji || '😀', point.x, point.y); // Draw the latest emoji
 }
 
-export function onDrawCircle ({ ctx, point, prevPoint }) {
+export function onDrawCircle ({ ctx, point, prevPoint, props }) {
+    console.log('onDrawCircle def', point, prevPoint, ctx)
     if (prevPoint) {
         const radius = Math.sqrt(Math.pow(point.x - prevPoint.x, 2) + Math.pow(point.y - prevPoint.y, 2));
         ctx.beginPath();
         ctx.arc(prevPoint.x, prevPoint.y, radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
         ctx.stroke();
     }
 };

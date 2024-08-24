@@ -16,7 +16,9 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
         setCanvasCtx(ctx);
 
         function initMouseMoveListener() {
+            console.log('initMouseMoveListener');
             const mouseMoveListener = (e) => {
+                console.log('mouseMoveListener e is', e);
                 if (isDrawingRef.current) {
                     const point = computePointInCanvas(e.clientX, e.clientY);
                     const prevPoint = prevPointRef.current;
@@ -31,6 +33,7 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
         }
 
         function initMouseUpListener() {
+            console.log('initMouseUpListener');
             const mouseUpListener = () => {
                 isDrawingRef.current = false;
                 prevPointRef.current = null;
@@ -40,6 +43,7 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
         }
 
         function removeMouseEventListeners() {
+            console.log('removeMouseEventListeners')
             if (mouseMoveListenerRef.current) {
                 window.removeEventListener('mousemove', mouseMoveListenerRef.current);
             }
@@ -75,6 +79,7 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
     }
 
     function onMouseDown(e) {
+        console.log('onMouseDown', e);
         if (!canvasRef.current) return;
         isDrawingRef.current = true;
         const ctx = canvasRef.current.getContext('2d');
