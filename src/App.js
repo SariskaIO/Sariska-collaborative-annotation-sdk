@@ -55,18 +55,16 @@ console.log('all props', props)
         }
       }else{
         content.ctx = canvasCtx;
-        if(props.annotationTool === ANNOTATION_TOOLS.pen || props.annotationTool === ANNOTATION_TOOLS.circle){
-          if(content.ctx){
+        if(content.ctx){
+          if(props.annotationTool === ANNOTATION_TOOLS.pen){
             onDraw(content);
+          }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
+            onDrawCircle(content);
+          }else{
+              content.emojis = [...messages];
+              onDrawEmoji(content);
+            }
           }
-        }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
-          onDrawCircle(content);
-        }else{
-          if(content.ctx){
-            content.emojis = [...messages];
-            onDrawEmoji(content);
-          }
-        }
       }
       setMessages(messages => [...messages, message])
     //}
