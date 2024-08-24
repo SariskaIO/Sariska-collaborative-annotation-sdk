@@ -45,7 +45,7 @@ console.log('all props', props)
     let content = JSON.parse(message.content);
     console.log('new_message', message);
       if(content?.ctx && Object.keys(content?.ctx)?.length){
-        if(props.annotationTool === ANNOTATION_TOOLS.pen || props.annotationTool === ANNOTATION_TOOLS.pen){
+        if(props.annotationTool === ANNOTATION_TOOLS.pen || props.annotationTool === ANNOTATION_TOOLS.circle){
           onDraw(content);
         }else{
           content.emojis = [...messages];
@@ -53,7 +53,7 @@ console.log('all props', props)
         }
       }else{
         content.ctx = canvasCtx;
-        if(props.annotationTool === ANNOTATION_TOOLS.pen || props.annotationTool === ANNOTATION_TOOLS.pen){
+        if(props.annotationTool === ANNOTATION_TOOLS.pen || props.annotationTool === ANNOTATION_TOOLS.circle){
           if(content.ctx){
             onDraw(content);
           }
