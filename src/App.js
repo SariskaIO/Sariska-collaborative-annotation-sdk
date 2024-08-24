@@ -8,7 +8,7 @@ import { useStore } from './store';
 import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
-import { clearCanvas, onDraw, onDrawEmoji } from './utils';
+import { clearCanvas, onDraw, onDrawCircle, onDrawEmoji } from './utils';
 import Message from './components/Message';
 import { ANNOTATION_TOOLS } from './constants';
 
@@ -45,8 +45,10 @@ console.log('all props', props)
     let content = JSON.parse(message.content);
     console.log('new_message', message);
       if(content?.ctx && Object.keys(content?.ctx)?.length){
-        if(props.annotationTool === ANNOTATION_TOOLS.pen || props.annotationTool === ANNOTATION_TOOLS.circle){
+        if(props.annotationTool === ANNOTATION_TOOLS.pen){
           onDraw(content);
+        }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
+          onDrawCircle(content);
         }else{
           content.emojis = [...messages];
           onDrawEmoji(content);
@@ -57,6 +59,8 @@ console.log('all props', props)
           if(content.ctx){
             onDraw(content);
           }
+        }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
+          onDrawCircle(content);
         }else{
           if(content.ctx){
             content.emojis = [...messages];
