@@ -8,9 +8,7 @@ import { useStore } from './store';
 import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
-import { clearCanvas, onDraw, onDrawEmoji } from './utils';
-import Message from './components/Message';
-import { ANNOTATION_TOOLS } from './constants';
+import { clearCanvas, onDraw } from './utils';
 
 const App = (props)=> {
   const [messages, setMessages] = useState([]);
@@ -43,25 +41,10 @@ const App = (props)=> {
 
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
     let content = JSON.parse(message.content);
-      if(content?.ctx && Object.keys(content?.ctx)?.length){
-        if(props.annotationTool === ANNOTATION_TOOLS.pen){
-          onDraw(content);
-        }else{
-          content.emojis = [...messages];
-          onDrawEmoji(content);
-        }
-      }else{
-        content.ctx = canvasCtx;
-        if(props.annotationTool === ANNOTATION_TOOLS.pen){
-          if(content.ctx){
-            onDraw(content);
-          }
-        }else{
-          if(content.ctx){
-            content.emojis = [...messages];
-            onDrawEmoji(content);
-          }
-        }
+    if(Object.keys(content.ctx).length){
+      onDraw(content);
+      if(props.isCanvasClear){
+        clearCanvas( content.ctx, props.width, props.height );
       }
     }else{
       content.ctx = canvasCtx;
@@ -72,7 +55,10 @@ const App = (props)=> {
     }
     setMessages(messages => [...messages, message])
   });
-  
+
+  UseEventHandler(rtcChannel, 'archived_message', setLoading, message => {
+    setMessages(messages => [...messages, message])
+  });
 
   const pushMessage = ( content, channel )=>{
     const new_message = {
