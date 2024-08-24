@@ -14,7 +14,7 @@ const Canvas = ({
     const {children, annotationTool, ...otherProps} = inputProps;
     const emojiHook = useOnEmoji(pushMessage, channel, setCanvasCtx, otherProps);
    const drawHook = useOnDraw(pushMessage, channel, setCanvasCtx, otherProps);
-console.log('inputPropsanno', inputProps)
+   
   // Use logic to select the correct hook result
   const { setCanvasRef, onMouseDown } = annotationTool === ANNOTATION_TOOLS.emoji ? emojiHook : drawHook;
       

@@ -32,16 +32,15 @@ export function useOnEmoji(
         otherProps
     ]);
 
-console.log('emojier', emojis);
-
 const onMouseDown = useCallback((event) => {
+    if(!otherProps.isModerator){
+        return ;
+    }
     let emojiType = '😎';
-    console.log('onMouseDown');
     const ctx = canvasRef.current?.getContext('2d');
     const { parentCanvasRef, ...props } = otherProps;
 
     const point = computePointInCanvas(event.clientX, event.clientY, canvasRef.current);
-    console.log('pointonMouseDown', point);
 
     setEmojis((prevEmojis) => [...prevEmojis, { point, emoji: props.emojiType }]);
 
@@ -50,12 +49,11 @@ const onMouseDown = useCallback((event) => {
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
     ctx.clearRect(0, 0, ctx.width, ctx.height);
-    console.log('emojiesp', emojis, point)
     emojis.forEach(({ x, y }) => {
-      ctx.fillText('😀', x, y);
+      ctx.fillText(props.emojiType || '😀', x, y);
     });
 
-    ctx.fillText(emojiType || '😀', point.x, point.y); // Draw the latest emoji
+    ctx.fillText(props.emojiType || '😀', point.x, point.y); // Draw the latest emoji
     if (channel) {
         pushMessage(JSON.stringify({ point, emoji: props.emojiType }), channel);
     }
