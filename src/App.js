@@ -51,22 +51,21 @@ const App = (props)=> {
         if(props.annotationTool === ANNOTATION_TOOLS.pen){
           onDraw(content);
         }else{
-          console.log('new_message', message);
+          console.log('content?.ctx ANNOTATION_TOOLS.pen new_message', message);
           content.emojis = [...messages];
           onDrawEmoji(content);
         }
       }else{
         content.ctx = canvasCtx;
         if(props.annotationTool === ANNOTATION_TOOLS.pen){
-          console.log('pen tool')
+          console.log('no context pen tool', content)
           if(content.ctx){
             onDraw(content);
           }
         }else{
-          console.log('emoji tool', content, content.ctx, messages);
+          console.log('no context emoji tool', content, content.ctx, messages);
           if(content.ctx){
             content.emojis = [...messages];
-            console.log('content.emo', content)
             onDrawEmoji(content);
           }
         }

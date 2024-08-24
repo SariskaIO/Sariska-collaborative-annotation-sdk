@@ -67,10 +67,12 @@ export function useOnDraw(
                     const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
                     let prevPoint = prevPointRef.current;
                     if(onDraw) {
+                        console.log('onDrawctx', ctx)
                         onDraw({ctx, point, prevPoint, props});
                         setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
                     }
                     if(channel) {
+                        console.log('onDrawctxpushMessage', ctx)
                         pushMessage(JSON.stringify({ctx, point, prevPoint, props}), channel);
                     }
                     prevPointRef.current = point;
@@ -127,7 +129,9 @@ export function useOnDraw(
         channel,
         otherProps.isCanvasClear,
         otherProps.isImageSaved,
-        otherProps.lineColor
+        otherProps.lineColor,
+        otherProps,
+
     ]);
 
     function setCanvasRef(ref){
