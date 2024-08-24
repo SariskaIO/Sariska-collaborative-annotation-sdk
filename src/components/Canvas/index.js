@@ -1,5 +1,7 @@
 import React from 'react';
 import { useOnDraw } from '../../hooks/useOnDraw';
+import { ANNOTATION_TOOLS } from '../../constants';
+import { useOnEmoji } from '../../hooks/useOnEmoji';
 
 const Canvas = ({
     width, 
@@ -9,17 +11,17 @@ const Canvas = ({
     setCanvasCtx,
     inputProps
   }) => {
-    const {children, ...otherProps} = inputProps;
-    const {setCanvasRef, onMouseDown} = useOnDraw(
-      pushMessage,
-      channel,
-      setCanvasCtx,
-      otherProps
-      );
+    const {children, annotationTool, ...otherProps} = inputProps;
+    const emojiHook = useOnEmoji(pushMessage, channel, setCanvasCtx, otherProps);
+   const drawHook = useOnDraw(pushMessage, channel, setCanvasCtx, otherProps);
+   
+  // Use logic to select the correct hook result
+  const { setCanvasRef, onMouseDown } = annotationTool === ANNOTATION_TOOLS.emoji ? emojiHook : drawHook;
       
     const canvasStyle={
       position: 'absolute', 
-      zIndex: otherProps.zIndex
+      zIndex: otherProps.zIndex,
+      background: 'none'
     }
   return (
         <>
