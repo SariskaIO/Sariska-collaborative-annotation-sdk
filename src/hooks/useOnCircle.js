@@ -15,25 +15,14 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
         parentCanvasRef.current = canvasRef.current;
         setCanvasCtx(ctx);
 
-        function computePointInCanvas(clientX, clientY) {
-            if (canvasRef.current) {
-                const boundingRect = canvasRef.current.getBoundingClientRect();
-                return {
-                    x: clientX - boundingRect.left,
-                    y: clientY - boundingRect.top,
-                };
-            } else {
-                return null;
-            }
-        }
-
         function initMouseMoveListener() {
             const mouseMoveListener = (e) => {
                 if (isDrawingRef.current) {
                     const point = computePointInCanvas(e.clientX, e.clientY);
                     const prevPoint = prevPointRef.current;
-                    if (onDrawCircle) onDrawCircle({ ctx, point, prevPoint, otherProps });
-                    pushMessage(JSON.stringify({ ctx, point, prevPoint, otherProps }), channel);
+                    if (onDrawCircle) onDrawCircle({ ctx, point, prevPoint });
+                    console.log('onDrawCircle before', ctx, point, prevPoint);
+                    pushMessage(JSON.stringify({ ctx, point, prevPoint }), channel);
                     prevPointRef.current = point;
                 }
             };
