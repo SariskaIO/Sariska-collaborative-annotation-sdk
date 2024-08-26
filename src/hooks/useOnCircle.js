@@ -27,7 +27,6 @@ console.log('first circles', circles);
                     redrawCircles({ctx, circles, props});
                     onDrawCircle({ ctx, center: startPoint, radius, props});
                     console.log('onDrawCircle before', ctx, currentPoint, startPoint, props);
-                    pushMessage(JSON.stringify({ ctx, center: startPoint, radius, props }), channel);
                 }
             };
             mouseMoveListenerRef.current = mouseMoveListener;
@@ -42,6 +41,7 @@ console.log('first circles', circles);
                     const startPoint = startPointRef.current;
                     const radius = calculateCircleRadius(startPoint, currentPoint);
                     setCircles([...circles, { center: startPoint, radius }]);
+                    pushMessage(JSON.stringify({ ctx, center: startPoint, radius, props }), channel);
                     isDrawingRef.current = false;
                     startPointRef.current = null;
 
