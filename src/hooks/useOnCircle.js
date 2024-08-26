@@ -1,10 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { clearCanvas, computePointInCanvas, onDrawCircle } from "../utils";
+import { calculateCircleRadius, clearCanvas, computePointInCanvas, onDrawCircle, redrawCircles } from "../utils";
 
 export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
     const canvasRef = useRef(null);
-    const prevPointRef = useRef(null);
+    const startPointRef = useRef(null);
     const isDrawingRef = useRef(false);
+    const [circles, setCircles] = useState([]);
 
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
@@ -20,12 +21,14 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
             const mouseMoveListener = (e) => {
                 console.log('mouseMoveListener e is', e);
                 if (isDrawingRef.current) {
-                    const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
-                    const prevPoint = prevPointRef.current;
-                    onDrawCircle({ ctx, point, prevPoint, props});
-                    console.log('onDrawCircle before', ctx, point, prevPoint, props);
-                    pushMessage(JSON.stringify({ ctx, point, prevPoint, props }), channel);
-                    prevPointRef.current = point;
+                    const currentPoint = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
+                    const startPoint = startPointRef.current;
+                    const radius = calculateCircleRadius(startPoint, currentPoint);
+                    redrawCircles({ctx, circles, props});
+                    onDrawCircle({ ctx, startPoint, radius, props});
+                    console.log('onDrawCircle before', ctx, currentPoint, startPoint, props);
+                    pushMessage(JSON.stringify({ ctx, currentPoint, startPoint, props }), channel);
+                    startPointRef.current = currentPoint;
                 }
             };
             mouseMoveListenerRef.current = mouseMoveListener;
@@ -34,9 +37,16 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
 
         function initMouseUpListener() {
             console.log('initMouseUpListener');
-            const mouseUpListener = () => {
-                isDrawingRef.current = false;
-                prevPointRef.current = null;
+            const mouseUpListener = (event) => {
+                if (isDrawingRef.current) {
+                    const currentPoint = computePointInCanvas(event.clientX, event.clientY, canvasRef.current);
+                    const startPoint = startPointRef.current;
+                    const radius = calculateCircleRadius(startPoint, currentPoint);
+                    setCircles([...circles, { center: startPoint, radius }]);
+                    isDrawingRef.current = false;
+                    startPointRef.current = null;
+
+                }
             };
             mouseUpListenerRef.current = mouseUpListener;
             window.addEventListener('mouseup', mouseUpListener);
@@ -85,9 +95,9 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
         isDrawingRef.current = true;
         const ctx = canvasRef.current.getContext('2d');
         const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
-        const prevPoint = prevPointRef.current;
-        prevPointRef.current = point; // Initialize the previous point with the current point
-       // onDrawCircle({ ctx, point, prevPoint, otherProps });
+        const startPoint = startPointRef.current;
+        startPointRef.current = point; // Initialize the previous point with the current point
+       // onDrawCircle({ ctx, point, startPoint, otherProps });
     }
 
     return {

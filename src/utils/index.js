@@ -159,17 +159,22 @@ export function onDrawEmoji({ctx, point, emoji, emojis}) {
     ctx.fillText(emoji || '😀', point.x, point.y); // Draw the latest emoji
 }
 
-export function onDrawCircle ({ ctx, point, prevPoint, props }) {
-    console.log('onDrawCircle def', point, prevPoint, ctx)
-    if (prevPoint) {
-        const radius = Math.sqrt(Math.pow(point.x - prevPoint.x, 2) + Math.pow(point.y - prevPoint.y, 2));
-        clearCanvas(ctx, props.width, props.height);
+export function onDrawCircle ({ ctx, center, radius, props }) {
+    console.log('onDrawCircle def', radius, center, ctx)
+    if (center) {
         ctx.beginPath();
-        ctx.arc(prevPoint.x, prevPoint.y, radius, 0, 2 * Math.PI);
+        ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 2;
         ctx.stroke();
     }
+};
+
+export const redrawCircles = ({ctx, circles, props}) => {
+    clearCanvas(ctx, props.width, props.height);
+    circles.forEach(({ center, radius }) => {
+        onDrawCircle({ctx, center, radius, props});
+    });
 };
 
 export function computePointInCanvas(clientX, clientY, refCurrent){
@@ -182,4 +187,11 @@ export function computePointInCanvas(clientX, clientY, refCurrent){
     }else{
         return null;
     }
+}
+
+export const calculateCircleRadius = (startPos, currentPos) => {
+    return Math.sqrt(
+        Math.pow(currentPos.x - startPos.x, 2) +
+        Math.pow(currentPos.y - startPos.y, 2)
+    );
 }
