@@ -48,6 +48,8 @@ console.log('all props', props)
         if(props.annotationTool === ANNOTATION_TOOLS.pen){
           onDraw(content);
         }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
+          console.log('props in cirle wo ctx', content);
+          content.props = {width: props.width, height: props.height};
           onDrawCircle(content);
         }else{
           content.emojis = [...messages];
@@ -59,6 +61,7 @@ console.log('all props', props)
           if(props.annotationTool === ANNOTATION_TOOLS.pen){
             onDraw(content);
           }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
+            console.log('props in cirle', content)
             content.props = {width: props.width, height: props.height};
             onDrawCircle(content);
           }else{

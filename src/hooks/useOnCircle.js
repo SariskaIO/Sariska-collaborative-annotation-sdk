@@ -25,10 +25,9 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
                     const startPoint = startPointRef.current;
                     const radius = calculateCircleRadius(startPoint, currentPoint);
                     redrawCircles({ctx, circles, props});
-                    onDrawCircle({ ctx, startPoint, radius, props});
+                    onDrawCircle({ ctx, center: startPoint, radius, props});
                     console.log('onDrawCircle before', ctx, currentPoint, startPoint, props);
-                    pushMessage(JSON.stringify({ ctx, currentPoint, startPoint, props }), channel);
-                    startPointRef.current = currentPoint;
+                    pushMessage(JSON.stringify({ ctx, center: startPoint, radius, props }), channel);
                 }
             };
             mouseMoveListenerRef.current = mouseMoveListener;
@@ -77,10 +76,11 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
     }, [
         onDrawCircle,
         channel,
+        circles,
         otherProps.isCanvasClear,
         otherProps.isImageSaved,
         otherProps.lineColor,
-        otherProps,
+        otherProps
     ]);
 
     function setCanvasRef(ref) {
