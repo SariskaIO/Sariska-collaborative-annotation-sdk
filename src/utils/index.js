@@ -125,6 +125,11 @@ export const renderAction = (type, payload) => {
     }
 }
 
+
+export function clearCanvas(ctx, width, height){
+    ctx.clearRect(0, 0, width, height)
+}
+
 export function drawLine(ctx, end, start, color, width) {
     start = start ?? end;
     ctx.beginPath();
@@ -158,6 +163,7 @@ export function onDrawCircle ({ ctx, point, prevPoint, props }) {
     console.log('onDrawCircle def', point, prevPoint, ctx)
     if (prevPoint) {
         const radius = Math.sqrt(Math.pow(point.x - prevPoint.x, 2) + Math.pow(point.y - prevPoint.y, 2));
+        clearCanvas(ctx, props.width, props.height);
         ctx.beginPath();
         ctx.arc(prevPoint.x, prevPoint.y, radius, 0, 2 * Math.PI);
         ctx.strokeStyle = 'black';
@@ -165,9 +171,6 @@ export function onDrawCircle ({ ctx, point, prevPoint, props }) {
         ctx.stroke();
     }
 };
-export function clearCanvas(ctx, width, height){
-    ctx.clearRect(0, 0, width, height)
-}
 
 export function computePointInCanvas(clientX, clientY, refCurrent){
     if(refCurrent){

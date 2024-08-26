@@ -59,6 +59,7 @@ console.log('all props', props)
           if(props.annotationTool === ANNOTATION_TOOLS.pen){
             onDraw(content);
           }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
+            content.props = {width: props.width, height: props.height};
             onDrawCircle(content);
           }else{
               content.emojis = [...messages];

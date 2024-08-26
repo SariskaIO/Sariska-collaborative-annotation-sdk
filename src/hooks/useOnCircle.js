@@ -22,9 +22,9 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
                 if (isDrawingRef.current) {
                     const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
                     const prevPoint = prevPointRef.current;
-                    onDrawCircle({ ctx, point, prevPoint });
-                    console.log('onDrawCircle before', ctx, point, prevPoint);
-                    pushMessage(JSON.stringify({ ctx, point, prevPoint }), channel);
+                    onDrawCircle({ ctx, point, prevPoint, props});
+                    console.log('onDrawCircle before', ctx, point, prevPoint, props);
+                    pushMessage(JSON.stringify({ ctx, point, prevPoint, props }), channel);
                     prevPointRef.current = point;
                 }
             };
