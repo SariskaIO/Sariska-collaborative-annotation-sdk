@@ -9,7 +9,7 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
 
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
-
+console.log('first circles', circles);
     useEffect(() => {
         const ctx = canvasRef.current?.getContext('2d');
         const { parentCanvasRef, ...props } = otherProps;
