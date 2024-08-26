@@ -87,7 +87,7 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
         const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
         const prevPoint = prevPointRef.current;
         prevPointRef.current = point; // Initialize the previous point with the current point
-        onDrawCircle({ ctx, point, prevPoint, otherProps });
+       // onDrawCircle({ ctx, point, prevPoint, otherProps });
     }
 
     return {
