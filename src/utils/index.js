@@ -178,7 +178,7 @@ export const redrawCircles = ({ctx, circles, annotations, props}) => {
         const {type, ...params} = annotation;
         if(type === 'pen'){
             onDraw(params);
-        }else if(type === 'pen'){
+        }else if(type === 'emoji'){
             onDrawEmoji(params);
         }else{
             return;
