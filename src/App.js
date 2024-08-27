@@ -8,7 +8,7 @@ import { useStore } from './store';
 import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
-import { clearCanvas, onDraw, onDrawEmoji } from './utils';
+import { clearCanvas, onDraw, onDrawCircle, onDrawEmoji } from './utils';
 import Message from './components/Message';
 import { ANNOTATION_TOOLS } from './constants';
 
@@ -24,7 +24,7 @@ const App = (props)=> {
   UseEventHandler(rtcChannel, 'ping', setLoading, message => {
     console.info('ping', message)
   })
-
+  
   UseEventHandler(rtcChannel, 'user_joined', setLoading, async (response) => {
     const {room, user} = response;
     let userDetails = {id : user.id, name: user.name};
@@ -46,22 +46,26 @@ const App = (props)=> {
       if(content?.ctx && Object.keys(content?.ctx)?.length){
         if(props.annotationTool === ANNOTATION_TOOLS.pen){
           onDraw(content);
+        }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
+          content.props = {width: props.width, height: props.height};
+          onDrawCircle(content);
         }else{
           content.emojis = [...messages];
           onDrawEmoji(content);
         }
       }else{
         content.ctx = canvasCtx;
-        if(props.annotationTool === ANNOTATION_TOOLS.pen){
-          if(content.ctx){
+        if(content.ctx){
+          if(props.annotationTool === ANNOTATION_TOOLS.pen){
             onDraw(content);
+          }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
+            content.props = {width: props.width, height: props.height};
+            onDrawCircle(content);
+          }else{
+              content.emojis = [...messages];
+              onDrawEmoji(content);
+            }
           }
-        }else{
-          if(content.ctx){
-            content.emojis = [...messages];
-            onDrawEmoji(content);
-          }
-        }
       }
       setMessages(messages => [...messages, message])
     //}

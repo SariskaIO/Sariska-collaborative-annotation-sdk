@@ -125,6 +125,11 @@ export const renderAction = (type, payload) => {
     }
 }
 
+
+export function clearCanvas(ctx, width, height){
+    ctx.clearRect(0, 0, width, height)
+}
+
 export function drawLine(ctx, end, start, color, width) {
     start = start ?? end;
     ctx.beginPath();
@@ -148,15 +153,40 @@ export function onDrawEmoji({ctx, point, emoji, emojis}) {
     ctx.font = '24px Arial';
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
+    if(emojis?.length){
     emojis.forEach(({ x, y }) => {
-        ctx.fillText('😀', x, y);
+        ctx.fillText(emoji || '😀', x, y);
       });
+    }
     ctx.fillText(emoji || '😀', point.x, point.y); // Draw the latest emoji
 }
 
-export function clearCanvas(ctx, width, height){
-    ctx.clearRect(0, 0, width, height)
-}
+export function onDrawCircle ({ ctx, center, radius, props }) {
+    if (center) {
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = props?.lineColor;
+        ctx.lineWidth = props?.wlineWidthidth;
+        ctx.stroke();
+    }
+};
+
+export const redrawCircles = ({ctx, circles, annotations, props}) => {
+    clearCanvas(ctx, props.width, props.height);
+    annotations?.forEach(annotation => {
+        const {type, ...params} = annotation;
+        if(type === 'pen'){
+            onDraw(params);
+        }else if(type === 'emoji'){
+            onDrawEmoji(params);
+        }else{
+            return;
+        }
+    })
+    circles.forEach(({ center, radius }) => {
+        onDrawCircle({ctx, center, radius, props});
+    });
+};
 
 export function computePointInCanvas(clientX, clientY, refCurrent){
     if(refCurrent){
@@ -168,4 +198,11 @@ export function computePointInCanvas(clientX, clientY, refCurrent){
     }else{
         return null;
     }
+}
+
+export const calculateCircleRadius = (startPos, currentPos) => {
+    return Math.sqrt(
+        Math.pow(currentPos.x - startPos.x, 2) +
+        Math.pow(currentPos.y - startPos.y, 2)
+    );
 }

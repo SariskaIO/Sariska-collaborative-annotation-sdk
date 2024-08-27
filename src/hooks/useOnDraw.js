@@ -5,9 +5,10 @@ export function useOnDraw(
     pushMessage,
     channel,
     setCanvasCtx,
+    setAnnotations,
     otherProps
     ){
-    const [annotations, setAnnotations] = useState([]);
+    const [annotation, setAnnotation] = useState([]);
 
     const canvasRef = useRef(null);
     const prevPointRef = useRef()
@@ -56,19 +57,20 @@ export function useOnDraw(
     //   };
     
     useEffect(()=>{
-        const ctx = canvasRef.current?.getContext('2d');
+        const ctx = canvasRef?.current?.getContext('2d');
         const {parentCanvasRef, ...props} = otherProps;
-        parentCanvasRef.current = canvasRef.current;
+        parentCanvasRef.current = canvasRef?.current;
         setCanvasCtx(ctx);
         
         function initMouseMoveListener(){
             const mouseMoveListener = (e) => {
                 if(isDrawingRef.current){
-                    const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
+                    const point = computePointInCanvas(e.clientX, e.clientY, canvasRef?.current);
                     let prevPoint = prevPointRef.current;
                     if(onDraw) {
                         onDraw({ctx, point, prevPoint, props});
-                        setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
+                        setAnnotation(annotation => ([...annotation, {ctx, point, prevPoint, props}]));
+                        setAnnotations(annotations => ([...annotations, {type: 'pen', ctx, point, prevPoint, props}]));
                     }
                     if(channel) {
                         pushMessage(JSON.stringify({ctx, point, prevPoint, props}), channel);
@@ -111,7 +113,7 @@ export function useOnDraw(
         }
 
         if(props.isImageSaved){
-            props.saveImage(annotations);
+            props.saveImage(annotation);
         }
         return ()=>{
             if(props.isParticipantAccess){
@@ -138,13 +140,14 @@ export function useOnDraw(
     }
     
     function onMouseDown(e){
-        if(!canvasRef.current) return;
+        if(!canvasRef?.current) return;
         const {parentCanvasRef, ...props} = otherProps;
         isDrawingRef.current = true;
-        const ctx = canvasRef.current?.getContext('2d');
-        const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
+        const ctx = canvasRef?.current?.getContext('2d');
+        const point = computePointInCanvas(e.clientX, e.clientY, canvasRef?.current);
         let prevPoint = prevPointRef.current;
-        setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
+        setAnnotation(annotation => ([...annotation, {ctx, point, prevPoint, props}]));
+        setAnnotations(annotations => ([...annotations, {type: 'pen', ctx, point, prevPoint, props}]));
     }
     
     return {
