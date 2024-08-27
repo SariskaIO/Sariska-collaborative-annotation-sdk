@@ -153,9 +153,11 @@ export function onDrawEmoji({ctx, point, emoji, emojis}) {
     ctx.font = '24px Arial';
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
+    if(emojis?.length){
     emojis.forEach(({ x, y }) => {
-        ctx.fillText('😀', x, y);
+        ctx.fillText(emoji || '😀', x, y);
       });
+    }
     ctx.fillText(emoji || '😀', point.x, point.y); // Draw the latest emoji
 }
 
@@ -170,8 +172,18 @@ export function onDrawCircle ({ ctx, center, radius, props }) {
     }
 };
 
-export const redrawCircles = ({ctx, circles, props}) => {
+export const redrawCircles = ({ctx, circles, annotations, props}) => {
     clearCanvas(ctx, props.width, props.height);
+    annotations?.forEach(annotation => {
+        const {type, ...params} = annotation;
+        if(type === 'pen'){
+            onDraw(params);
+        }else if(type === 'pen'){
+            onDrawEmoji(params);
+        }else{
+            return;
+        }
+    })
     circles.forEach(({ center, radius }) => {
         onDrawCircle({ctx, center, radius, props});
     });

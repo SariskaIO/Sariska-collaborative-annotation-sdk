@@ -24,7 +24,7 @@ console.log('first circles', circles, annotations);
                     const currentPoint = computePointInCanvas(e.clientX, e.clientY, canvasRef?.current);
                     const startPoint = startPointRef.current;
                     const radius = calculateCircleRadius(startPoint, currentPoint);
-                    redrawCircles({ctx, circles, props});
+                    redrawCircles({ctx, circles, annotations, props});
                     onDrawCircle({ ctx, center: startPoint, radius, props});
                     console.log('onDrawCircle before', ctx, currentPoint, startPoint, props);
                 }
