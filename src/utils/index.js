@@ -165,7 +165,7 @@ export function onDrawCircle ({ ctx, center, radius, props }) {
     if (center) {
         ctx.beginPath();
         ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
-        ctx.strokeStyle = "#565656";
+        ctx.strokeStyle = '#565656';
         ctx.lineWidth = 2;
         ctx.stroke();
     }
