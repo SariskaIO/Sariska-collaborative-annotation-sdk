@@ -153,6 +153,7 @@ export function onDrawEmoji({ctx, point, emoji, emojis}) {
     ctx.font = '24px Arial';
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
+    ctx.fillStyle = 'red';
     if(emojis?.length){
     emojis.forEach(({ x, y }) => {
         ctx.fillText(emoji || '😀', x, y);
@@ -165,8 +166,8 @@ export function onDrawCircle ({ ctx, center, radius, props }) {
     if (center) {
         ctx.beginPath();
         ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
-        ctx.strokeStyle = '#565656';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = props?.lineColor;
+        ctx.lineWidth = props?.lineWidth;
         ctx.stroke();
     }
 };
