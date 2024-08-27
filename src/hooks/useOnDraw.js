@@ -1,266 +1,154 @@
 import { useEffect, useRef, useState } from "react";
-import { clearCanvas, computePointInCanvas, onDrawCircle, onDrawEmoji, onDraw } from "../utils";
+import { clearCanvas, computePointInCanvas, onDraw } from "../utils";
 
-export function useOnDraw(pushMessage, channel, setCanvasCtx, otherProps) {
+export function useOnDraw(
+    pushMessage,
+    channel,
+    setCanvasCtx,
+    otherProps
+    ){
     const [annotations, setAnnotations] = useState([]);
 
     const canvasRef = useRef(null);
-    const prevPointRef = useRef(null);
+    const prevPointRef = useRef()
     const isDrawingRef = useRef(false);
 
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
 
-    useEffect(() => {
+    // const saveImage = () => {
+    //     console.log('saveImage')
+    //     const context = canvasRef.current.getContext('2d');
+    //     const image = new Image();
+    //     image.src = otherProps.imageUrl;
+    //     image.onload = () => {
+    //       // Draw the image onto the canvas
+    //       context.drawImage(image, 0, 0, 800, 600);
+    
+    //       // Draw the annotations onto the canvas
+    //       context.strokeStyle = otherProps?.lineColor;
+    //       context.lineWidth = otherProps?.lineWidth;
+    //       annotations.forEach((annotation, index) => {
+    //         if (index === 0) {
+    //           context.beginPath();
+    //           context.moveTo(annotation.x, annotation.y);
+    //         } else {
+    //           context.lineTo(annotation.x, annotation.y);
+    //           context.stroke();
+    //         }
+    //       });
+    
+    //       // Convert the canvas to an image and open it in a new tab
+    //       const imageDataUrl = canvasRef.current.toDataURL('image/png');
+    //       console.log('first imageDataUrl', imageDataUrl)
+    //       const newWindow = window.open('about:blank', 'image from canvas');
+    //       newWindow.document.write('<img src="' + imageDataUrl + '" alt="Saved Annotation" />');
+    //     };
+    //     // const canvas = canvasRef.current;
+    //     // const link = document.createElement('a');
+    //     // link.download = 'image_with_drawing.png';
+    //     // canvas.toBlob((blob) => {
+    //     //   const url = URL.createObjectURL(blob);
+    //     //   setDownloadUrl(url);
+    //     //   link.href = url;
+    //     //   link.click();
+    //     // });
+    //   };
+    
+    useEffect(()=>{
         const ctx = canvasRef.current?.getContext('2d');
-        const { parentCanvasRef, ...props } = otherProps;
+        const {parentCanvasRef, ...props} = otherProps;
         parentCanvasRef.current = canvasRef.current;
         setCanvasCtx(ctx);
-
-        function initMouseMoveListener() {
+        
+        function initMouseMoveListener(){
             const mouseMoveListener = (e) => {
-                if (isDrawingRef.current) {
+                if(isDrawingRef.current){
                     const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
                     let prevPoint = prevPointRef.current;
-
-                    if (props.annotationTool === 'pen') {
-                        onDraw({ ctx, point, prevPoint, props });
-                    } else if (props.annotationTool === 'circle') {
-                        onDrawCircle({ ctx, point, prevPoint, props });
-                    } else if (props.annotationTool === 'emoji') {
-                        onDrawEmoji({ ctx, point, props });
+                    if(onDraw) {
+                        onDraw({ctx, point, prevPoint, props});
+                        setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
                     }
-
-                    setAnnotations(annotations => ([...annotations, { tool: props.annotationTool, point, prevPoint, props }]));
-
-                    if (channel) {
-                        pushMessage(JSON.stringify({ ctx, point, prevPoint, props }), channel);
+                    if(channel) {
+                        pushMessage(JSON.stringify({ctx, point, prevPoint, props}), channel);
                     }
-
                     prevPointRef.current = point;
                 }
-            };
+            }
             mouseMoveListenerRef.current = mouseMoveListener;
             window.addEventListener("mousemove", mouseMoveListener);
         }
-
-        function initMouseUpListener() {
-            const mouseUpListener = () => {
+        function initMouseUpListener(){
+            const mouseUpListener=()=>{
                 isDrawingRef.current = false;
                 prevPointRef.current = null;
-            };
+            }
             mouseUpListenerRef.current = mouseUpListener;
             window.addEventListener('mouseup', mouseUpListener);
         }
-
-        function removeMouseEventListeners() {
-            if (mouseMoveListenerRef.current) {
+        function removeMouseEventListeners(){
+            if(mouseMoveListenerRef.current){
                 window.removeEventListener('mousemove', mouseMoveListenerRef.current);
             }
-            if (mouseUpListenerRef.current) {
+            if(mouseUpListenerRef.current){
                 window.removeEventListener('mouseup', mouseUpListenerRef.current);
             }
         }
 
-        if (props.isParticipantAccess || props.isModerator) {
+        if(props.isParticipantAccess){
             initMouseMoveListener();
             initMouseUpListener();
+        }else{
+            if(props.isModerator){
+                initMouseMoveListener();
+                initMouseUpListener();
+            }
+        }
+        
+        if(props.isCanvasClear){
+            clearCanvas( ctx, props.width, props.height );
         }
 
-        if (props.isCanvasClear) {
-            clearCanvas(ctx, props.width, props.height);
-        }
-
-        if (props.isImageSaved) {
+        if(props.isImageSaved){
             props.saveImage(annotations);
         }
-
-        return () => {
-            removeMouseEventListeners();
-        };
-    }, [
-        onDrawCircle,
-        onDraw,
-        onDrawEmoji,
+        return ()=>{
+            if(props.isParticipantAccess){
+                removeMouseEventListeners();
+            }else{
+                if(props.isModerator){
+                    removeMouseEventListeners();
+                }
+            }
+        }
+    },[
+        onDraw, 
         channel,
         otherProps.isCanvasClear,
         otherProps.isImageSaved,
         otherProps.lineColor,
         otherProps,
+
     ]);
 
-    function setCanvasRef(ref) {
-        if (!ref) return;
+    function setCanvasRef(ref){
+        if(!ref) return;
         canvasRef.current = ref;
     }
-
-    function onMouseDown(e) {
-        if (!canvasRef.current) return;
-        const { parentCanvasRef, ...props } = otherProps;
+    
+    function onMouseDown(e){
+        if(!canvasRef.current) return;
+        const {parentCanvasRef, ...props} = otherProps;
         isDrawingRef.current = true;
         const ctx = canvasRef.current?.getContext('2d');
         const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
         let prevPoint = prevPointRef.current;
-        setAnnotations(annotations => ([...annotations, { tool: props.annotationTool, point, prevPoint, props }]));
+        setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
     }
-
+    
     return {
         setCanvasRef,
         onMouseDown
     };
 }
-
-// import { useEffect, useRef, useState } from "react";
-// import { clearCanvas, computePointInCanvas, onDraw } from "../utils";
-
-// export function useOnDraw(
-//     pushMessage,
-//     channel,
-//     setCanvasCtx,
-//     otherProps
-//     ){
-//     const [annotations, setAnnotations] = useState([]);
-
-//     const canvasRef = useRef(null);
-//     const prevPointRef = useRef()
-//     const isDrawingRef = useRef(false);
-
-//     const mouseMoveListenerRef = useRef(null);
-//     const mouseUpListenerRef = useRef(null);
-
-//     // const saveImage = () => {
-//     //     console.log('saveImage')
-//     //     const context = canvasRef.current.getContext('2d');
-//     //     const image = new Image();
-//     //     image.src = otherProps.imageUrl;
-//     //     image.onload = () => {
-//     //       // Draw the image onto the canvas
-//     //       context.drawImage(image, 0, 0, 800, 600);
-    
-//     //       // Draw the annotations onto the canvas
-//     //       context.strokeStyle = otherProps?.lineColor;
-//     //       context.lineWidth = otherProps?.lineWidth;
-//     //       annotations.forEach((annotation, index) => {
-//     //         if (index === 0) {
-//     //           context.beginPath();
-//     //           context.moveTo(annotation.x, annotation.y);
-//     //         } else {
-//     //           context.lineTo(annotation.x, annotation.y);
-//     //           context.stroke();
-//     //         }
-//     //       });
-    
-//     //       // Convert the canvas to an image and open it in a new tab
-//     //       const imageDataUrl = canvasRef.current.toDataURL('image/png');
-//     //       console.log('first imageDataUrl', imageDataUrl)
-//     //       const newWindow = window.open('about:blank', 'image from canvas');
-//     //       newWindow.document.write('<img src="' + imageDataUrl + '" alt="Saved Annotation" />');
-//     //     };
-//     //     // const canvas = canvasRef.current;
-//     //     // const link = document.createElement('a');
-//     //     // link.download = 'image_with_drawing.png';
-//     //     // canvas.toBlob((blob) => {
-//     //     //   const url = URL.createObjectURL(blob);
-//     //     //   setDownloadUrl(url);
-//     //     //   link.href = url;
-//     //     //   link.click();
-//     //     // });
-//     //   };
-    
-//     useEffect(()=>{
-//         const ctx = canvasRef.current?.getContext('2d');
-//         const {parentCanvasRef, ...props} = otherProps;
-//         parentCanvasRef.current = canvasRef.current;
-//         setCanvasCtx(ctx);
-        
-//         function initMouseMoveListener(){
-//             const mouseMoveListener = (e) => {
-//                 if(isDrawingRef.current){
-//                     const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
-//                     let prevPoint = prevPointRef.current;
-//                     if(onDraw) {
-//                         onDraw({ctx, point, prevPoint, props});
-//                         setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
-//                     }
-//                     if(channel) {
-//                         pushMessage(JSON.stringify({ctx, point, prevPoint, props}), channel);
-//                     }
-//                     prevPointRef.current = point;
-//                 }
-//             }
-//             mouseMoveListenerRef.current = mouseMoveListener;
-//             window.addEventListener("mousemove", mouseMoveListener);
-//         }
-//         function initMouseUpListener(){
-//             const mouseUpListener=()=>{
-//                 isDrawingRef.current = false;
-//                 prevPointRef.current = null;
-//             }
-//             mouseUpListenerRef.current = mouseUpListener;
-//             window.addEventListener('mouseup', mouseUpListener);
-//         }
-//         function removeMouseEventListeners(){
-//             if(mouseMoveListenerRef.current){
-//                 window.removeEventListener('mousemove', mouseMoveListenerRef.current);
-//             }
-//             if(mouseUpListenerRef.current){
-//                 window.removeEventListener('mouseup', mouseUpListenerRef.current);
-//             }
-//         }
-
-//         if(props.isParticipantAccess){
-//             initMouseMoveListener();
-//             initMouseUpListener();
-//         }else{
-//             if(props.isModerator){
-//                 initMouseMoveListener();
-//                 initMouseUpListener();
-//             }
-//         }
-        
-//         if(props.isCanvasClear){
-//             clearCanvas( ctx, props.width, props.height );
-//         }
-
-//         if(props.isImageSaved){
-//             props.saveImage(annotations);
-//         }
-//         return ()=>{
-//             if(props.isParticipantAccess){
-//                 removeMouseEventListeners();
-//             }else{
-//                 if(props.isModerator){
-//                     removeMouseEventListeners();
-//                 }
-//             }
-//         }
-//     },[
-//         onDraw, 
-//         channel,
-//         otherProps.isCanvasClear,
-//         otherProps.isImageSaved,
-//         otherProps.lineColor,
-//         otherProps,
-
-//     ]);
-
-//     function setCanvasRef(ref){
-//         if(!ref) return;
-//         canvasRef.current = ref;
-//     }
-    
-//     function onMouseDown(e){
-//         if(!canvasRef.current) return;
-//         const {parentCanvasRef, ...props} = otherProps;
-//         isDrawingRef.current = true;
-//         const ctx = canvasRef.current?.getContext('2d');
-//         const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
-//         let prevPoint = prevPointRef.current;
-//         setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
-//     }
-    
-//     return {
-//         setCanvasRef,
-//         onMouseDown
-//     };
-// }
