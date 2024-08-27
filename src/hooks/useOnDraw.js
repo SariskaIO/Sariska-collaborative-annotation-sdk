@@ -5,9 +5,10 @@ export function useOnDraw(
     pushMessage,
     channel,
     setCanvasCtx,
-    otherProps
+    otherProps,
+    setAnnotations
     ){
-    const [annotations, setAnnotations] = useState([]);
+    const [annotation, setAnnotation] = useState([]);
 
     const canvasRef = useRef(null);
     const prevPointRef = useRef()
@@ -68,7 +69,8 @@ export function useOnDraw(
                     let prevPoint = prevPointRef.current;
                     if(onDraw) {
                         onDraw({ctx, point, prevPoint, props});
-                        setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
+                        setAnnotation(annotation => ([...annotation, {ctx, point, prevPoint, props}]));
+                        setAnnotations(annotations => ([...annotations, {type: 'pen', ctx, point, prevPoint, props}]));
                     }
                     if(channel) {
                         pushMessage(JSON.stringify({ctx, point, prevPoint, props}), channel);
@@ -111,7 +113,7 @@ export function useOnDraw(
         }
 
         if(props.isImageSaved){
-            props.saveImage(annotations);
+            props.saveImage(annotation);
         }
         return ()=>{
             if(props.isParticipantAccess){
@@ -144,7 +146,8 @@ export function useOnDraw(
         const ctx = canvasRef.current?.getContext('2d');
         const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
         let prevPoint = prevPointRef.current;
-        setAnnotations(annotations => ([...annotations, {ctx, point, prevPoint, props}]));
+        setAnnotation(annotation => ([...annotation, {ctx, point, prevPoint, props}]));
+        setAnnotations(annotations => ([...annotations, {type: 'pen', ctx, point, prevPoint, props}]));
     }
     
     return {

@@ -5,7 +5,8 @@ export function useOnEmoji(
     pushMessage,
     channel,
     setCanvasCtx,
-    otherProps
+    otherProps,
+    setAnnotations
 ) {
     const [emojis, setEmojis] = useState([]);
 
@@ -43,6 +44,7 @@ const onMouseDown = useCallback((event) => {
     const point = computePointInCanvas(event.clientX, event.clientY, canvasRef.current);
 
     setEmojis((prevEmojis) => [...prevEmojis, { point, emoji: props.emojiType }]);
+    setAnnotations((annotations) => [...annotations, { type: 'emoji', point, emoji: props.emojiType }]);
 
     // Draw the emoji on the canvas
     ctx.font = '24px Arial';

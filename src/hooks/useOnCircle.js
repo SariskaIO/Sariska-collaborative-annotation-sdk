@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { calculateCircleRadius, clearCanvas, computePointInCanvas, onDrawCircle, redrawCircles } from "../utils";
 
-export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
+export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, otherProps) {
     const canvasRef = useRef(null);
     const startPointRef = useRef(null);
     const isDrawingRef = useRef(false);
@@ -9,7 +9,7 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, otherProps) {
 
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
-console.log('first circles', circles);
+console.log('first circles', circles, annotations);
     useEffect(() => {
         const ctx = canvasRef.current?.getContext('2d');
         const { parentCanvasRef, ...props } = otherProps;
