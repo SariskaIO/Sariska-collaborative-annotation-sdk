@@ -181,12 +181,12 @@ export const redrawCircles = ({ctx, circles, annotations, props}) => {
         }else if(type === 'emoji'){
             onDrawEmoji(params);
         }else{
-            return;
+            onDrawCircle();
         }
     })
-    circles.forEach(({ center, radius }) => {
-        onDrawCircle({ctx, center, radius, props});
-    });
+    // circles.forEach(({ center, radius }) => {
+    //     onDrawCircle({ctx, center, radius, props});
+    // });
 };
 
 export function computePointInCanvas(clientX, clientY, refCurrent){

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { calculateCircleRadius, clearCanvas, computePointInCanvas, onDrawCircle, redrawCircles } from "../utils";
 
-export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, otherProps) {
+export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps) {
     const canvasRef = useRef(null);
     const startPointRef = useRef(null);
     const isDrawingRef = useRef(false);
@@ -36,6 +36,7 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, oth
                     const startPoint = startPointRef.current;
                     const radius = calculateCircleRadius(startPoint, currentPoint);
                     setCircles([...circles, { center: startPoint, radius }]);
+                    setAnnotations(annotations => ([...annotations, {type: 'circle', ctx, center: startPoint, radius}]))
                     pushMessage(JSON.stringify({ ctx, center: startPoint, radius, props }), channel);
                     isDrawingRef.current = false;
                     startPointRef.current = null;
