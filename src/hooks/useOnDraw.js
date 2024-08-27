@@ -5,8 +5,8 @@ export function useOnDraw(
     pushMessage,
     channel,
     setCanvasCtx,
-    otherProps,
-    setAnnotations
+    setAnnotations,
+    otherProps
     ){
     const [annotation, setAnnotation] = useState([]);
 
@@ -57,15 +57,15 @@ export function useOnDraw(
     //   };
     
     useEffect(()=>{
-        const ctx = canvasRef.current?.getContext('2d');
+        const ctx = canvasRef?.current?.getContext('2d');
         const {parentCanvasRef, ...props} = otherProps;
-        parentCanvasRef.current = canvasRef.current;
+        parentCanvasRef.current = canvasRef?.current;
         setCanvasCtx(ctx);
         
         function initMouseMoveListener(){
             const mouseMoveListener = (e) => {
                 if(isDrawingRef.current){
-                    const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
+                    const point = computePointInCanvas(e.clientX, e.clientY, canvasRef?.current);
                     let prevPoint = prevPointRef.current;
                     if(onDraw) {
                         onDraw({ctx, point, prevPoint, props});
@@ -140,11 +140,11 @@ export function useOnDraw(
     }
     
     function onMouseDown(e){
-        if(!canvasRef.current) return;
+        if(!canvasRef?.current) return;
         const {parentCanvasRef, ...props} = otherProps;
         isDrawingRef.current = true;
-        const ctx = canvasRef.current?.getContext('2d');
-        const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
+        const ctx = canvasRef?.current?.getContext('2d');
+        const point = computePointInCanvas(e.clientX, e.clientY, canvasRef?.current);
         let prevPoint = prevPointRef.current;
         setAnnotation(annotation => ([...annotation, {ctx, point, prevPoint, props}]));
         setAnnotations(annotations => ([...annotations, {type: 'pen', ctx, point, prevPoint, props}]));

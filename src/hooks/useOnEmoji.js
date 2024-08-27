@@ -5,8 +5,8 @@ export function useOnEmoji(
     pushMessage,
     channel,
     setCanvasCtx,
-    otherProps,
-    setAnnotations
+    setAnnotations,
+    otherProps
 ) {
     const [emojis, setEmojis] = useState([]);
 
@@ -18,9 +18,9 @@ export function useOnEmoji(
     }, []);
     
     useEffect(() => {
-        const ctx = canvasRef.current?.getContext('2d');
+        const ctx = canvasRef?.current?.getContext('2d');
          const { parentCanvasRef, ...props } = otherProps;
-        parentCanvasRef.current = canvasRef.current;
+        parentCanvasRef.current = canvasRef?.current;
         setCanvasCtx(ctx);
 
         if (props.isCanvasClear) {
@@ -38,10 +38,10 @@ const onMouseDown = useCallback((event) => {
         return ;
     }
     let emojiType = '😎';
-    const ctx = canvasRef.current?.getContext('2d');
+    const ctx = canvasRef?.current?.getContext('2d');
     const { parentCanvasRef, ...props } = otherProps;
 
-    const point = computePointInCanvas(event.clientX, event.clientY, canvasRef.current);
+    const point = computePointInCanvas(event.clientX, event.clientY, canvasRef?.current);
 
     setEmojis((prevEmojis) => [...prevEmojis, { point, emoji: props.emojiType }]);
     setAnnotations((annotations) => [...annotations, { type: 'emoji', point, emoji: props.emojiType }]);

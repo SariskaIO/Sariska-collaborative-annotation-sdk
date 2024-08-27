@@ -11,9 +11,9 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, oth
     const mouseUpListenerRef = useRef(null);
 console.log('first circles', circles, annotations);
     useEffect(() => {
-        const ctx = canvasRef.current?.getContext('2d');
+        const ctx = canvasRef?.current?.getContext('2d');
         const { parentCanvasRef, ...props } = otherProps;
-        parentCanvasRef.current = canvasRef.current;
+        parentCanvasRef.current = canvasRef?.current;
         setCanvasCtx(ctx);
 
         function initMouseMoveListener() {
@@ -21,7 +21,7 @@ console.log('first circles', circles, annotations);
             const mouseMoveListener = (e) => {
                 console.log('mouseMoveListener e is', e);
                 if (isDrawingRef.current) {
-                    const currentPoint = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
+                    const currentPoint = computePointInCanvas(e.clientX, e.clientY, canvasRef?.current);
                     const startPoint = startPointRef.current;
                     const radius = calculateCircleRadius(startPoint, currentPoint);
                     redrawCircles({ctx, circles, props});
@@ -37,7 +37,7 @@ console.log('first circles', circles, annotations);
             console.log('initMouseUpListener');
             const mouseUpListener = (event) => {
                 if (isDrawingRef.current) {
-                    const currentPoint = computePointInCanvas(event.clientX, event.clientY, canvasRef.current);
+                    const currentPoint = computePointInCanvas(event.clientX, event.clientY, canvasRef?.current);
                     const startPoint = startPointRef.current;
                     const radius = calculateCircleRadius(startPoint, currentPoint);
                     setCircles([...circles, { center: startPoint, radius }]);
@@ -90,11 +90,11 @@ console.log('first circles', circles, annotations);
 
     function onMouseDown(e) {
         console.log('onMouseDown', e);
-        if (!canvasRef.current) return;
+        if (!canvasRef?.current) return;
         console.log('in canvasRef.current')
         isDrawingRef.current = true;
-        const ctx = canvasRef.current.getContext('2d');
-        const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
+        const ctx = canvasRef?.current.getContext('2d');
+        const point = computePointInCanvas(e.clientX, e.clientY, canvasRef?.current);
         const startPoint = startPointRef.current;
         startPointRef.current = point; // Initialize the previous point with the current point
        // onDrawCircle({ ctx, point, startPoint, otherProps });
