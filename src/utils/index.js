@@ -162,12 +162,11 @@ export function onDrawEmoji({ctx, point, emoji, emojis}) {
 }
 
 export function onDrawCircle ({ ctx, center, radius, props }) {
-    console.log('onDrawCircle def', radius, center, ctx)
     if (center) {
         ctx.beginPath();
         ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
-        ctx.strokeStyle = 'black';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = props?.lineColor;
+        ctx.lineWidth = props?.wlineWidthidth;
         ctx.stroke();
     }
 };

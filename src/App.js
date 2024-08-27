@@ -24,7 +24,7 @@ const App = (props)=> {
   UseEventHandler(rtcChannel, 'ping', setLoading, message => {
     console.info('ping', message)
   })
-console.log('all props', props)
+  
   UseEventHandler(rtcChannel, 'user_joined', setLoading, async (response) => {
     const {room, user} = response;
     let userDetails = {id : user.id, name: user.name};
@@ -43,12 +43,10 @@ console.log('all props', props)
 
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
     let content = JSON.parse(message.content);
-    console.log('new_message', message);
       if(content?.ctx && Object.keys(content?.ctx)?.length){
         if(props.annotationTool === ANNOTATION_TOOLS.pen){
           onDraw(content);
         }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
-          console.log('props in cirle wo ctx', content);
           content.props = {width: props.width, height: props.height};
           onDrawCircle(content);
         }else{
@@ -61,7 +59,6 @@ console.log('all props', props)
           if(props.annotationTool === ANNOTATION_TOOLS.pen){
             onDraw(content);
           }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
-            console.log('props in cirle', content)
             content.props = {width: props.width, height: props.height};
             onDrawCircle(content);
           }else{
@@ -76,7 +73,6 @@ console.log('all props', props)
   
 
   const pushMessage = ( content, channel )=>{
-    console.log('pushed content', content)
     const new_message = {
       created_by_name: users.user.name,  
       x: "uu", 
