@@ -21,6 +21,7 @@ export function useOnEmoji(
         const ctx = canvasRef?.current?.getContext('2d');
          const { parentCanvasRef, ...props } = otherProps;
         parentCanvasRef.current = canvasRef?.current;
+        console.log('emoji ctx', ctx, canvasRef?.current)
         setCanvasCtx(ctx);
 
         if (props.isCanvasClear) {

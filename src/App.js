@@ -58,8 +58,11 @@ const App = (props)=> {
         }
       }else{
         content.ctx = canvasCtx;
+        console.log('else ctx');
         if(content.ctx){
+          console.log('else content.ctx');
           if(props.annotationTool === ANNOTATION_TOOLS.pen){
+            console.log('else content.ctx pen');
             onDraw(content);
           }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
             console.log('ctxANNOTATION_TOOLS.circle', content);

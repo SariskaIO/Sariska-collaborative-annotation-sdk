@@ -13,6 +13,7 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, set
         const ctx = canvasRef?.current?.getContext('2d');
         const { parentCanvasRef, ...props } = otherProps;
         parentCanvasRef.current = canvasRef?.current;
+        console.log('circle ctx', ctx, canvasRef?.current)
         setCanvasCtx(ctx);
 
         function initMouseMoveListener() {

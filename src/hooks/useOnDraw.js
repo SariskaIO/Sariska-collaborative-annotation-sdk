@@ -60,6 +60,7 @@ export function useOnDraw(
         const ctx = canvasRef?.current?.getContext('2d');
         const {parentCanvasRef, ...props} = otherProps;
         parentCanvasRef.current = canvasRef?.current;
+        console.log('draw ctx', ctx, canvasRef?.current)
         setCanvasCtx(ctx);
         
         function initMouseMoveListener(){
