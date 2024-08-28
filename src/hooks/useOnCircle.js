@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { calculateCircleRadius, clearCanvas, computePointInCanvas, onDrawCircle, redrawCircles } from "../utils";
+import { calculateCircleRadius, clearCanvas, computePointInCanvas, onDrawCircle, redrawAnnotations, redrawCircles } from "../utils";
 
 export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps) {
     const canvasRef = useRef(null);
@@ -22,7 +22,7 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, set
                     const currentPoint = computePointInCanvas(e.clientX, e.clientY, canvasRef?.current);
                     const startPoint = startPointRef.current;
                     const radius = calculateCircleRadius(startPoint, currentPoint);
-                    redrawCircles({ctx, circles, annotations, props});
+                    redrawAnnotations({ctx, annotations, props});
                     onDrawCircle({ ctx, center: startPoint, radius, props});
                 }
             };

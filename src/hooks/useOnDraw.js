@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { clearCanvas, computePointInCanvas, onDraw } from "../utils";
+import { clearCanvas, computePointInCanvas, onDraw, redrawAnnotations } from "../utils";
 
 export function useOnDraw(
     pushMessage,
     channel,
     setCanvasCtx,
+    annotations,
     setAnnotations,
     otherProps
     ){
@@ -72,6 +73,7 @@ export function useOnDraw(
                         onDraw({ctx, point, prevPoint, props});
                         setAnnotation(annotation => ([...annotation, {ctx, point, prevPoint, props}]));
                         setAnnotations(annotations => ([...annotations, {type: 'pen', ctx, point, prevPoint, props}]));
+                        redrawAnnotations({ctx, annotations, props});
                     }
                     if(channel) {
                         pushMessage(JSON.stringify({ctx, point, prevPoint, props}), channel);

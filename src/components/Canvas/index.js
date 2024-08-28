@@ -14,9 +14,9 @@ const Canvas = ({
   }) => {
     const {children, annotationTool, ...otherProps} = inputProps;
     const [annotations, setAnnotations] = useState([]);
-    const emojiHook = useOnEmoji(pushMessage, channel, setCanvasCtx, setAnnotations, otherProps);
+    const emojiHook = useOnEmoji(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
     const circleHook = useOnCircle(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
-    const drawHook = useOnDraw(pushMessage, channel, setCanvasCtx, setAnnotations, otherProps);
+    const drawHook = useOnDraw(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
     console.log('annotaiotnsa', annotations);
   // Use logic to select the correct hook result
   const { setCanvasRef, onMouseDown } = 

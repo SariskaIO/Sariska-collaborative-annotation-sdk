@@ -175,7 +175,7 @@ export function onDrawCircle ({ ctx, center, radius, props }) {
     }
 };
 
-export const redrawCircles = ({ctx, circles, annotations, props}) => {
+export const redrawAnnotations = ({ctx, annotations, props}) => {
     if(!ctx) return;
     clearCanvas(ctx, props.width, props.height);
     annotations?.forEach(annotation => {

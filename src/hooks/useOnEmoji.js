@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { clearCanvas, computePointInCanvas } from "../utils"; // Assume these utils are predefined
+import { clearCanvas, computePointInCanvas, redrawAnnotations } from "../utils"; // Assume these utils are predefined
 
 export function useOnEmoji(
     pushMessage,
     channel,
     setCanvasCtx,
+    annotations,
     setAnnotations,
     otherProps
 ) {
@@ -45,18 +46,20 @@ const onMouseDown = useCallback((event) => {
     const point = computePointInCanvas(event.clientX, event.clientY, canvasRef?.current);
 
     setEmojis((prevEmojis) => [...prevEmojis, { ctx, point, emoji: props.emojiType }]);
-    setAnnotations((annotations) => [...annotations, { type: 'emoji', ctx, point, emoji: props.emojiType }]);
+    setAnnotations((annotations) => [...annotations, { type: 'emoji', ctx, point, emoji: props.emojiType,
+                                     emojis:  [...emojis, { ctx, point, emoji: props.emojiType }]}]);
 
     // Draw the emoji on the canvas
-    ctx.font = '24px Arial';
-    ctx.textBaseline = 'middle';
-    ctx.textAlign = 'center';
-    ctx.clearRect(0, 0, ctx.width, ctx.height);
-    emojis.forEach(({ x, y }) => {
-      ctx.fillText(props.emojiType || '😀', x, y);
-    });
+    // ctx.font = '24px Arial';
+    // ctx.textBaseline = 'middle';
+    // ctx.textAlign = 'center';
+    // ctx.clearRect(0, 0, ctx.width, ctx.height);
+    // emojis.forEach(({ x, y }) => {
+    //   ctx.fillText(props.emojiType || '😀', x, y);
+    // });
 
-    ctx.fillText(props.emojiType || '😀', point.x, point.y); // Draw the latest emoji
+    // ctx.fillText(props.emojiType || '😀', point.x, point.y); // Draw the latest emoji
+    redrawAnnotations({ctx, annotations, props});
     if (channel) {
         console.log('push messaeg emo')
         pushMessage(JSON.stringify({ point, emoji: props.emojiType }), channel);
