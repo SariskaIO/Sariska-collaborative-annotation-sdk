@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { clearCanvas, computePointInCanvas, redrawAnnotations } from "../utils"; // Assume these utils are predefined
+import { clearCanvas, computePointInCanvas, onDrawEmoji, redrawAnnotations } from "../utils"; // Assume these utils are predefined
 
 export function useOnEmoji(
     pushMessage,
@@ -60,6 +60,7 @@ const onMouseDown = useCallback((event) => {
 
     // ctx.fillText(props.emojiType || '😀', point.x, point.y); // Draw the latest emoji
     redrawAnnotations({ctx, annotations, props});
+    onDrawEmoji({ctx, point, emoji: props.emojiType})
     if (channel) {
         console.log('push messaeg emo')
         pushMessage(JSON.stringify({ point, emoji: props.emojiType }), channel);
