@@ -42,15 +42,18 @@ const App = (props)=> {
   })
 
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
+    console.log('new_message', message);
     let content = JSON.parse(message.content);
       if(content?.ctx && Object.keys(content?.ctx)?.length){
         if(props.annotationTool === ANNOTATION_TOOLS.pen){
           onDraw(content);
         }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
+          console.log('ANNOTATION_TOOLS.circle', content);
           content.props = {width: props.width, height: props.height};
           onDrawCircle(content);
         }else{
           content.emojis = [...messages];
+          console.log('ANNOTATION_TOOLS.emoji', content);
           onDrawEmoji(content);
         }
       }else{
@@ -59,10 +62,12 @@ const App = (props)=> {
           if(props.annotationTool === ANNOTATION_TOOLS.pen){
             onDraw(content);
           }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
+            console.log('ctxANNOTATION_TOOLS.circle', content);
             content.props = {width: props.width, height: props.height};
             onDrawCircle(content);
           }else{
               content.emojis = [...messages];
+              console.log('ctxANNOTATION_TOOLS.emoji', content);
               onDrawEmoji(content);
             }
           }
@@ -73,6 +78,7 @@ const App = (props)=> {
   
 
   const pushMessage = ( content, channel )=>{
+    console.log('first pushMessage', content, channel)
     const new_message = {
       created_by_name: users.user.name,  
       x: "uu", 

@@ -57,6 +57,7 @@ const onMouseDown = useCallback((event) => {
 
     ctx.fillText(props.emojiType || '😀', point.x, point.y); // Draw the latest emoji
     if (channel) {
+        console.log('push messaeg emo')
         pushMessage(JSON.stringify({ point, emoji: props.emojiType }), channel);
     }
   }, [emojis?.length, channel]);
