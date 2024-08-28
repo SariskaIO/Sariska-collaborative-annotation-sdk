@@ -185,7 +185,7 @@ export const redrawCircles = ({ctx, circles, annotations, props}) => {
         }else if(type === 'emoji'){
             onDrawEmoji(params);
         }else{
-            onDrawCircle();
+            onDrawCircle({ ctx, center: annotation.center, radius: annotation.radius, props });
         }
     })
     // circles.forEach(({ center, radius }) => {
