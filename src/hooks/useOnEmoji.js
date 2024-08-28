@@ -24,6 +24,7 @@ export function useOnEmoji(
         parentCanvasRef.current = canvasRef?.current;
         console.log('emoji ctx', ctx, canvasRef?.current)
         setCanvasCtx(ctx);
+        setAnnotations([...annotations]);
 
         if (props.isCanvasClear) {
             clearCanvas(ctx, props.width, props.height);
