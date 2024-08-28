@@ -131,6 +131,7 @@ export function clearCanvas(ctx, width, height){
 }
 
 export function drawLine(ctx, end, start, color, width) {
+    if(!ctx) return;
     start = start ?? end;
     ctx.beginPath();
     ctx.lineWidth= width;
@@ -150,6 +151,7 @@ export function onDraw (data) {
 }
 
 export function onDrawEmoji({ctx, point, emoji, emojis}) {
+    if(!ctx) return;
     ctx.font = '24px Arial';
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
@@ -163,6 +165,7 @@ export function onDrawEmoji({ctx, point, emoji, emojis}) {
 }
 
 export function onDrawCircle ({ ctx, center, radius, props }) {
+    if(!ctx) return;
     if (center) {
         ctx.beginPath();
         ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
@@ -173,6 +176,7 @@ export function onDrawCircle ({ ctx, center, radius, props }) {
 };
 
 export const redrawCircles = ({ctx, circles, annotations, props}) => {
+    if(!ctx) return;
     clearCanvas(ctx, props.width, props.height);
     annotations?.forEach(annotation => {
         const {type, ...params} = annotation;
