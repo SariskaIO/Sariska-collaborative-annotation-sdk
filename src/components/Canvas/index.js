@@ -41,7 +41,7 @@ const Canvas = ({
             ref={setCanvasRef}
             onMouseDown={onMouseDown}
         />
-        {textboxes.map((textbox) => (
+        {textboxes?.length ? textboxes?.map((textbox) => (
                 <textarea
                     key={textbox.id}
                     style={{
@@ -61,7 +61,7 @@ const Canvas = ({
                     onChange={(e) => handleTextChange(e, textbox.id)}
                     autoFocus
                 />
-            ))}
+            )) : null}
           {children}
         </>
   )
