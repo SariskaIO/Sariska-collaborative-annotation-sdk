@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { clearCanvas, redrawAnnotations } from '../utils';
 
-export function useTextBoxHook(
+export function useOnTextBox(
     pushMessage,
     channel,
     setCanvasCtx,

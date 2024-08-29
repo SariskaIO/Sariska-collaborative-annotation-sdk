@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { calculateCircleRadius, clearCanvas, computePointInCanvas, onDrawCircle, redrawAnnotations, redrawCircles } from "../utils";
+import { calculateCircleRadius, clearCanvas, computePointInCanvas, onDrawCircle, redrawAnnotations } from "../utils";
 
 export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps) {
     const canvasRef = useRef(null);
