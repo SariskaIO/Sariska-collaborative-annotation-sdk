@@ -136,13 +136,13 @@ export function drawLine(ctx, end, start, color, width) {
     ctx.beginPath();
     ctx.lineWidth= width;
     ctx.strokeStyle = color;
-    ctx.moveTo(start.x, start.y);
-    ctx.lineTo(end.x, end.y);
+    ctx.moveTo(start?.x, start?.y);
+    ctx.lineTo(end?.x, end?.y);
     ctx.stroke();
 
     ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.arc(start.x, start.y, 2, 0, 2 * Math.PI);
+    ctx.arc(start?.x, start?.y, 2, 0, 2 * Math.PI);
     ctx.fill();
 }
 
@@ -161,7 +161,7 @@ export function onDrawEmoji({ctx, point, emoji, emojis}) {
         ctx.fillText(emoji || '😀', x, y);
       });
     }
-    ctx.fillText(emoji || '😀', point.x, point.y); // Draw the latest emoji
+    ctx.fillText(emoji || '😀', point?.x, point?.y); // Draw the latest emoji
 }
 
 export function onDrawCircle ({ ctx, center, radius, props }) {
