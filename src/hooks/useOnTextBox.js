@@ -11,25 +11,25 @@ export function useOnTextBox(
     const [textboxes, setTextboxes] = useState([]);
     const canvasRef = useRef(null);
 console.log('textcanvasRef')
-    // useEffect(() => {
-    //     const ctx = canvasRef?.current?.getContext('2d');
-    //      const { parentCanvasRef, ...props } = otherProps;
-    //     parentCanvasRef.current = canvasRef?.current;
-    //     console.log('text ctx', ctx, canvasRef?.current)
-    //     setCanvasCtx(ctx);
-    //     setAnnotations([...annotations]);
+    useEffect(() => {
+        const ctx = canvasRef?.current?.getContext('2d');
+         const { parentCanvasRef, ...props } = otherProps;
+        parentCanvasRef.current = canvasRef?.current;
+        console.log('text ctx', ctx, canvasRef?.current)
+        setCanvasCtx(ctx);
+        setAnnotations([...annotations]);
 
-    //     if (props.isCanvasClear) {
-    //         clearCanvas(ctx, props.width, props.height);
-    //     }
-    // }, [
+        if (props.isCanvasClear) {
+            clearCanvas(ctx, props.width, props.height);
+        }
+    }, [
     //     channel,
     //     otherProps.isCanvasClear,
     //     setCanvasCtx,
     //     otherProps,
     //    // annotations,
     //     setAnnotations
-    // ]);
+    ]);
 
 
     const handleCanvasClick = (e) => {
@@ -54,7 +54,7 @@ console.log('textcanvasRef')
         };
 
         setTextboxes([...textboxes, newTextbox]);
-        redrawAnnotations({ctx, annotations, otherProps});
+        redrawAnnotations({ctx, annotations, props: otherProps});
         setAnnotations((annotations) => [...annotations, { type: 'textbox', ctx, textbox: newTextbox }])
     };
 
@@ -74,11 +74,11 @@ console.log('textcanvasRef')
                         width: newWidth,
                         height: newHeight,
                     }
-                    redrawAnnotations({ctx, annotations, otherProps});
+                    redrawAnnotations({ctx, annotations, props: otherProps});
                     setAnnotations(annotations => ([...annotations, {type: 'textbox', ctx, textbox: newTextbox }]))
                     return newTextbox;
                 }
-                redrawAnnotations({ctx, annotations, otherProps});
+                redrawAnnotations({ctx, annotations, props: otherProps});
                 setAnnotations(annotations => ([...annotations, {type: 'textbox', ctx, textbox}]))
                 return textbox;
             })
