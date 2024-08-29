@@ -27,8 +27,7 @@ console.log('textcanvasRef')
        //  otherProps.isCanvasClear,
          setCanvasCtx,
        //  otherProps,
-    //    // annotations,
-    //     setAnnotations
+        setAnnotations
     ]);
 
 

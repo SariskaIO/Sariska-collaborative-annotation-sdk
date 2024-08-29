@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-//import { useOnDraw } from '../../hooks/useOnDraw';
+import { useOnDraw } from '../../hooks/useOnDraw';
  import { ANNOTATION_TOOLS } from '../../constants';
  //import { useOnEmoji } from '../../hooks/useOnEmoji';
  //import { useOnCircle } from '../../hooks/useOnCircle';
@@ -18,14 +18,14 @@ const Canvas = ({
    // const emojiHook = useOnEmoji(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
    // const circleHook = useOnCircle(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
     const textBoxHook = useOnTextBox(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
-   // const drawHook = useOnDraw(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
+    const drawHook = useOnDraw(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
     console.log('annotaiotnsa', annotations);
   // Use logic to select the correct hook result
   const { setCanvasRef, onMouseDown, handleTextChange, textboxes } = 
  // annotationTool === ANNOTATION_TOOLS.emoji ? emojiHook : 
  // annotationTool === ANNOTATION_TOOLS.circle ? circleHook :
-  annotationTool === ANNOTATION_TOOLS.textBox ? textBoxHook : null
- // drawHook;
+  annotationTool === ANNOTATION_TOOLS.textBox ? textBoxHook : 
+  drawHook;
       
     const canvasStyle={
       position: 'absolute', 
