@@ -19,7 +19,7 @@ const Canvas = ({
     const drawHook = useOnDraw(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
     console.log('annotaiotnsa', annotations);
   // Use logic to select the correct hook result
-  const { setCanvasRef, onMouseDown } = 
+  const { setCanvasRef, onMouseDown, handleTextChange, textboxes } = 
   annotationTool === ANNOTATION_TOOLS.emoji ? emojiHook : 
   annotationTool === ANNOTATION_TOOLS.circle ? circleHook :
   drawHook;
@@ -38,6 +38,27 @@ const Canvas = ({
             ref={setCanvasRef}
             onMouseDown={onMouseDown}
         />
+        {textboxes.map((textbox) => (
+                <textarea
+                    key={textbox.id}
+                    style={{
+                        position: 'absolute',
+                        top: textbox.y + 'px',
+                        left: textbox.x + 'px',
+                        width: textbox.width + 'px',
+                        height: textbox.height + 'px',
+                        resize: 'none',
+                        overflow: 'hidden',
+                        boxSizing: 'border-box',
+                        maxWidth: `${Math.min(200, 600 - textbox.x)}px`,
+                        maxHeight: `${Math.min(96, 500 - textbox.y)}px`,
+                        zIndex: otherProps.zIndex,
+                    }}
+                    value={textbox.text}
+                    onChange={(e) => handleTextChange(e, textbox.id)}
+                    autoFocus
+                />
+            ))}
           {children}
         </>
   )
