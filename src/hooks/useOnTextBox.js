@@ -10,7 +10,7 @@ export function useOnTextBox(
     otherProps) {
     const [textboxes, setTextboxes] = useState([]);
     const canvasRef = useRef(null);
-
+console.log('textcanvasRef')
     useEffect(() => {
         const ctx = canvasRef?.current?.getContext('2d');
          const { parentCanvasRef, ...props } = otherProps;
@@ -27,7 +27,8 @@ export function useOnTextBox(
         otherProps.isCanvasClear,
         setCanvasCtx,
         otherProps,
-        annotations?.length
+       // annotations,
+        setAnnotations
     ]);
 
 
