@@ -23,10 +23,10 @@ console.log('textcanvasRef')
             clearCanvas(ctx, props.width, props.height);
         }
     }, [
-    //     channel,
-    //     otherProps.isCanvasClear,
-    //     setCanvasCtx,
-    //     otherProps,
+         channel,
+         otherProps.isCanvasClear,
+         setCanvasCtx,
+         otherProps,
     //    // annotations,
     //     setAnnotations
     ]);
@@ -56,6 +56,7 @@ console.log('textcanvasRef')
         setTextboxes([...textboxes, newTextbox]);
         redrawAnnotations({ctx, annotations, props: otherProps});
         setAnnotations((annotations) => [...annotations, { type: 'textbox', ctx, textbox: newTextbox }])
+        pushMessage(JSON.stringify({ctx, textbox: newTextbox }), channel);
     };
 
     const handleTextChange = (e, id) => {
@@ -76,10 +77,12 @@ console.log('textcanvasRef')
                     }
                     redrawAnnotations({ctx, annotations, props: otherProps});
                     setAnnotations(annotations => ([...annotations, {type: 'textbox', ctx, textbox: newTextbox }]))
+                    pushMessage(JSON.stringify({ctx, textbox: newTextbox }), channel);
                     return newTextbox;
                 }
                 redrawAnnotations({ctx, annotations, props: otherProps});
                 setAnnotations(annotations => ([...annotations, {type: 'textbox', ctx, textbox}]))
+                pushMessage(JSON.stringify({ctx, textbox }), channel);
                 return textbox;
             })
         );

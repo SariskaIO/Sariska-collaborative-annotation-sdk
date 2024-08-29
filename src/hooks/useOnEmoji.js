@@ -65,7 +65,7 @@ const onMouseDown = useCallback((event) => {
     onDrawEmoji({ctx, point, emoji: props.emojiType})
     if (channel) {
         console.log('push messaeg emo')
-        pushMessage(JSON.stringify({ point, emoji: props.emojiType }), channel);
+        pushMessage(JSON.stringify({ ctx, point, emoji: props.emojiType }), channel);
     }
   }, [emojis?.length, channel]);
 
