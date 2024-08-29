@@ -24,9 +24,9 @@ console.log('textcanvasRef')
         }
     }, [
          channel,
-         otherProps.isCanvasClear,
+       //  otherProps.isCanvasClear,
          setCanvasCtx,
-         otherProps,
+       //  otherProps,
     //    // annotations,
     //     setAnnotations
     ]);
