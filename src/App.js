@@ -75,14 +75,19 @@ const App = (props)=> {
           }else if(props.annotationTool === ANNOTATION_TOOLS.textBox){
             console.log('ctxANNOTATION_TOOLS.textbox', content);
 
-            if(content?.textBox){
+            if(content?.textbox){
               const {textbox} = content;
+              console.log('first textbox', textbox)
               if(remoteTextboxes?.length){
+                console.log('remoteTextboxes?.length', remoteTextboxes);
                 setRemoteTextboxes((remoteTextbox) => {
+                  console.log('setRemoteTextboxes', remoteTextbox)
                   if (remoteTextbox.id === textbox.id) { 
+                    console.log('remoteTextbox.id === textbox.id', remoteTextbox, textbox)
                     remoteTextbox = {...textbox};
                   }})
               }else{
+                console.log('els setRemoteTextboxes', textbox)
                   setRemoteTextboxes([...textbox]);
                 }
               }
