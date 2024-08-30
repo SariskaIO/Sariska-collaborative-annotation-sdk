@@ -243,3 +243,29 @@ export const measureText = (text, maxWidth, canvasRef) => {
         height: height,
     };
 };
+
+export const getAllRemoteTextBoxes =(remoteTextboxes, textbox) => {
+    let allRemoteTextBoxes = remoteTextboxes?.map((remoteTextbox) => {
+        if (remoteTextbox.id === textbox.id) { 
+          return {...textbox};
+        }else{
+          return {...remoteTextbox};
+        }
+      });
+      if(!allRemoteTextBoxes?.some(remoteTextbox =>remoteTextbox.id === textbox.id )){
+        allRemoteTextBoxes.push(textbox);
+      }
+      return allRemoteTextBoxes;
+}
+
+export const setAllRemoteTextBoxes = (content, remoteTextboxes, setRemoteTextboxes) => {
+    if(content?.textbox){
+        const {textbox} = content;
+        if(remoteTextboxes?.length){
+          let allRemoteTextBoxes = getAllRemoteTextBoxes(remoteTextboxes, textbox);
+          setRemoteTextboxes(allRemoteTextBoxes)
+        }else{
+            setRemoteTextboxes([{...textbox}]);
+        }
+    }
+}

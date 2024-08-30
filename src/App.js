@@ -8,7 +8,7 @@ import { useStore } from './store';
 import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
-import { clearCanvas, onDraw, onDrawCircle, onDrawEmoji } from './utils';
+import { clearCanvas, getAllRemoteTextBoxes, onDraw, onDrawCircle, onDrawEmoji, setAllRemoteTextBoxes } from './utils';
 import Message from './components/Message';
 import { ANNOTATION_TOOLS } from './constants';
 
@@ -54,56 +54,24 @@ const App = (props)=> {
           onDrawCircle(content);
         }else if(props.annotationTool === ANNOTATION_TOOLS.textBox){
           console.log('ANNOTATION_TOOLS.textbox', content);
-         // onDrawCircle(content);
+         setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
         }else{
           content.emojis = [...messages];
-          console.log('ANNOTATION_TOOLS.emoji', content);
           onDrawEmoji(content);
         }
       }else{
         content.ctx = canvasCtx;
-        console.log('else ctx');
         if(content.ctx){
-          console.log('else content.ctx');
           if(props.annotationTool === ANNOTATION_TOOLS.pen){
-            console.log('else content.ctx pen');
             onDraw(content);
           }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
-            console.log('ctxANNOTATION_TOOLS.circle', content);
             content.props = {width: props.width, height: props.height};
             onDrawCircle(content);
           }else if(props.annotationTool === ANNOTATION_TOOLS.textBox){
-            console.log('ctxANNOTATION_TOOLS.textbox', content);
-
-            if(content?.textbox){
-              const {textbox} = content;
-              console.log('first textbox', textbox)
-              if(remoteTextboxes?.length){
-                console.log('remoteTextboxes?.length', remoteTextboxes);
-                let allRemoteTextBoxes = remoteTextboxes.map((remoteTextbox) => {
-                  console.log('setRemoteTextboxes', remoteTextbox)
-                  if (remoteTextbox.id === textbox.id) { 
-                    console.log('remoteTextbox.id === textbox.id', remoteTextbox, textbox)
-                    return {...textbox};
-                  }else{
-                    return {...remoteTextbox};
-                  }
-                });
-                if(!allRemoteTextBoxes?.some(remoteTextbox =>remoteTextbox.id === textbox.id )){
-                  allRemoteTextBoxes.push(textbox);
-                }
-                setRemoteTextboxes(allRemoteTextBoxes)
-              }else{
-                console.log('els setRemoteTextboxes', textbox)
-                  setRemoteTextboxes([{...textbox}]);
-                }
-              }
-            }
-            // content.props = {width: props.width, height: props.height};
-            // onDrawCircle(content);
+            setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
+          }
           }else{
               content.emojis = [...messages];
-              console.log('ctxANNOTATION_TOOLS.emoji', content);
               onDrawEmoji(content);
             }
           }
@@ -113,7 +81,6 @@ const App = (props)=> {
   console.log('remotetextbox', remoteTextboxes);
 
   const pushMessage = ( content, channel )=>{
-    console.log('first pushMessage', content, channel)
     const new_message = {
       created_by_name: users.user.name,  
       x: "uu", 
