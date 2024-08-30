@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { clearCanvas, redrawAnnotations } from '../utils';
+import { clearCanvas, measureText, redrawAnnotations } from '../utils';
 
 export function useOnTextBox(
     pushMessage,
@@ -64,7 +64,7 @@ console.log('textcanvasRef')
         setTextboxes((prevTextboxes) =>
             prevTextboxes.map((textbox) => {
                 if (textbox.id === id) {
-                    const textMetrics = measureText(newText, textbox.width);
+                    const textMetrics = measureText(newText, textbox.width, canvasRef);
                     let newWidth = Math.min(200, canvasRef.current.width - textbox.x);
                     let newHeight = Math.max(textMetrics.height, 32);
                     newHeight = Math.min(newHeight, 96);
@@ -85,39 +85,6 @@ console.log('textcanvasRef')
                 return textbox;
             })
         );
-    };
-
-    const measureText = (text, maxWidth) => {
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        context.font = '16px Arial';
-
-        const words = text.split(' ');
-        let line = '';
-        let height = 32; // Start with min height
-        let width = 0;
-
-        words.forEach((word, index) => {
-            let testLine = line + word;
-            if (index < words.length - 1) {
-                testLine += ' ';
-            }
-            const testWidth = context.measureText(testLine).width;
-
-            if (testWidth > maxWidth && line.length > 0) {
-                line = word + ' ';
-                height += 16;
-            } else {
-                line = testLine;
-            }
-
-            width = Math.max(width, testWidth);
-        });
-
-        return {
-            width: Math.min(width, maxWidth),
-            height: height,
-        };
     };
 
     function setCanvasRef(ref) {

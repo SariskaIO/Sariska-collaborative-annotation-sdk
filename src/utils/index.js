@@ -211,3 +211,35 @@ export const calculateCircleRadius = (startPos, currentPos) => {
         Math.pow(currentPos.y - startPos.y, 2)
     );
 }
+
+export const measureText = (text, maxWidth, canvasRef) => {
+    const ctx = canvasRef?.current?.getContext('2d');
+    ctx.font = '16px Arial';
+
+    const words = text.split(' ');
+    let line = '';
+    let height = 32; // Start with min height
+    let width = 0;
+
+    words.forEach((word, index) => {
+        let testLine = line + word;
+        if (index < words.length - 1) {
+            testLine += ' ';
+        }
+        const testWidth = ctx.measureText(testLine).width;
+
+        if (testWidth > maxWidth && line.length > 0) {
+            line = word + ' ';
+            height += 16;
+        } else {
+            line = testLine;
+        }
+
+        width = Math.max(width, testWidth);
+    });
+
+    return {
+        width: Math.min(width, maxWidth),
+        height: height,
+    };
+};

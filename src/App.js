@@ -51,6 +51,9 @@ const App = (props)=> {
           console.log('ANNOTATION_TOOLS.circle', content);
           content.props = {width: props.width, height: props.height};
           onDrawCircle(content);
+        }else if(props.annotationTool === ANNOTATION_TOOLS.textBox){
+          console.log('ANNOTATION_TOOLS.textbox', content);
+         // onDrawCircle(content);
         }else{
           content.emojis = [...messages];
           console.log('ANNOTATION_TOOLS.emoji', content);
@@ -68,6 +71,10 @@ const App = (props)=> {
             console.log('ctxANNOTATION_TOOLS.circle', content);
             content.props = {width: props.width, height: props.height};
             onDrawCircle(content);
+          }else if(props.annotationTool === ANNOTATION_TOOLS.textBox){
+            console.log('ctxANNOTATION_TOOLS.textbox', content);
+            // content.props = {width: props.width, height: props.height};
+            // onDrawCircle(content);
           }else{
               content.emojis = [...messages];
               console.log('ctxANNOTATION_TOOLS.emoji', content);
