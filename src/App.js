@@ -88,7 +88,7 @@ const App = (props)=> {
                   }})
               }else{
                 console.log('els setRemoteTextboxes', textbox)
-                  setRemoteTextboxes([...textbox]);
+                  setRemoteTextboxes({...textbox});
                 }
               }
             }
