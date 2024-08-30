@@ -26,7 +26,7 @@ const Canvas = ({
  // annotationTool === ANNOTATION_TOOLS.circle ? circleHook :
   annotationTool === ANNOTATION_TOOLS.textBox ? textBoxHook : 
   drawHook;
-      
+      console.log('textboxescnavesmre', textboxes);
     const canvasStyle={
       position: 'absolute', 
       zIndex: otherProps.zIndex,
