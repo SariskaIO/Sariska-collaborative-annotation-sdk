@@ -31,9 +31,9 @@ export function useOnEmoji(
         }
     }, [
         channel,
-        otherProps.isCanvasClear,
+      //  otherProps.isCanvasClear,
         setCanvasCtx,
-        otherProps,
+      //  otherProps,
         annotations?.length
     ]);
 

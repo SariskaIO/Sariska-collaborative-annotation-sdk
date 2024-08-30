@@ -130,10 +130,10 @@ export function useOnDraw(
     },[
         onDraw, 
         channel,
-        otherProps.isCanvasClear,
-        otherProps.isImageSaved,
-        otherProps.lineColor,
-        otherProps,
+     //   otherProps.isCanvasClear,
+      //  otherProps.isImageSaved,
+      //  otherProps.lineColor,
+      //  otherProps,
 
     ]);
 
