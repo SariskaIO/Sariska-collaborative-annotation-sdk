@@ -89,7 +89,7 @@ const App = (props)=> {
                     return [...remoteTextboxes, {...textbox}];
                   }
                 });
-                setRemoteTextboxes([...allRemoteTextBoxes])
+                setRemoteTextboxes(allRemoteTextBoxes)
               }else{
                 console.log('els setRemoteTextboxes', textbox)
                   setRemoteTextboxes([{...textbox}]);
