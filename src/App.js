@@ -86,7 +86,7 @@ const App = (props)=> {
                     console.log('remoteTextbox.id === textbox.id', remoteTextbox, textbox)
                     return {...textbox};
                   }else{
-                    return [...remoteTextboxes, {...textbox}];
+                    return {...textbox};
                   }
                 });
                 setRemoteTextboxes(allRemoteTextBoxes)
