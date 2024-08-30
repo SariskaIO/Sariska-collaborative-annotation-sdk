@@ -6,6 +6,7 @@ const DrawingBoard = ({
     pushMessage,
     channel,
     setCanvasCtx,
+    remoteTextboxes,
     loading,
     inputProps
 }) => {
@@ -23,6 +24,7 @@ const DrawingBoard = ({
             channel={channel}
             setCanvasCtx={setCanvasCtx}
             inputProps={inputProps}
+            remoteTextboxes={remoteTextboxes}
         />
     )
 }

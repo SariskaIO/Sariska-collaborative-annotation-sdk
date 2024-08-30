@@ -11,7 +11,8 @@ const Canvas = ({
     pushMessage,
     channel,
     setCanvasCtx,
-    inputProps
+    inputProps,
+    remoteTextboxes
   }) => {
     const {children, annotationTool, ...otherProps} = inputProps;
     const [annotations, setAnnotations] = useState([]);
@@ -32,6 +33,8 @@ const Canvas = ({
       zIndex: otherProps.zIndex,
       background: 'none'
     }
+  let textboxList = textboxes?.length ? textboxes : remoteTextboxes?.length ? remoteTextboxes : [];
+  console.log('textboxList', textboxList, textboxes, remoteTextboxes)
   return (
         <>
         <canvas 
@@ -41,7 +44,7 @@ const Canvas = ({
             ref={setCanvasRef}
             onMouseDown={onMouseDown}
         />
-        {textboxes?.length ? textboxes?.map((textbox) => (
+        {textboxList?.length ? textboxList?.map((textbox) => (
                 <textarea
                     key={textbox.id}
                     style={{

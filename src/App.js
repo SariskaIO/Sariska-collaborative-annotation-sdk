@@ -16,6 +16,7 @@ const App = (props)=> {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [canvasCtx, setCanvasCtx] = useState(null);
+  const [remoteTextboxes, setRemoteTextboxes] = useState([]);
   const roomName = 'sariska1';
   const {users, dispatch} = useStore();
   
@@ -73,6 +74,19 @@ const App = (props)=> {
             onDrawCircle(content);
           }else if(props.annotationTool === ANNOTATION_TOOLS.textBox){
             console.log('ctxANNOTATION_TOOLS.textbox', content);
+
+            if(content?.textBox){
+              const {textbox} = content;
+              if(remoteTextboxes?.length){
+                setRemoteTextboxes((remoteTextbox) => {
+                  if (remoteTextbox.id === textbox.id) { 
+                    remoteTextbox = {...textbox};
+                  }})
+              }else{
+                  setRemoteTextboxes([...textbox]);
+                }
+              }
+            }
             // content.props = {width: props.width, height: props.height};
             // onDrawCircle(content);
           }else{
@@ -81,11 +95,10 @@ const App = (props)=> {
               onDrawEmoji(content);
             }
           }
-      }
       setMessages(messages => [...messages, message])
     //}
   });
-  
+  console.log('remotetextbox', remoteTextboxes);
 
   const pushMessage = ( content, channel )=>{
     console.log('first pushMessage', content, channel)
@@ -111,6 +124,7 @@ const App = (props)=> {
               loading={loading}
               channel={rtcChannel}
               setCanvasCtx={setCanvasCtx}
+              remoteTextboxes={remoteTextboxes}
             />
       //   }
       // </>
