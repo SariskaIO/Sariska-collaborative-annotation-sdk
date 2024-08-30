@@ -52,7 +52,7 @@ const App = (props)=> {
           console.log('ANNOTATION_TOOLS.circle', content);
           content.props = {width: props.width, height: props.height};
           onDrawCircle(content);
-        }else if(props.annotationTool === ANNOTATION_TOOLS.textBox){
+        }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
           console.log('ANNOTATION_TOOLS.textbox', content);
          setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
         }else{
@@ -67,7 +67,7 @@ const App = (props)=> {
           }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
             content.props = {width: props.width, height: props.height};
             onDrawCircle(content);
-          }else if(props.annotationTool === ANNOTATION_TOOLS.textBox){
+          }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
             setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
           }
           }else{
