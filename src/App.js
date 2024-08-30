@@ -80,16 +80,16 @@ const App = (props)=> {
               console.log('first textbox', textbox)
               if(remoteTextboxes?.length){
                 console.log('remoteTextboxes?.length', remoteTextboxes);
-                setRemoteTextboxes(prevTextboxes => {
-                  prevTextboxes.map((remoteTextbox) => {
+                let allRemoteTextBoxes = remoteTextboxes.map((remoteTextbox) => {
                   console.log('setRemoteTextboxes', remoteTextbox)
                   if (remoteTextbox.id === textbox.id) { 
                     console.log('remoteTextbox.id === textbox.id', remoteTextbox, textbox)
                     return {...textbox};
                   }else{
-                    return [...prevTextboxes, {...textbox}];
+                    return [...remoteTextboxes, {...textbox}];
                   }
-                })})
+                });
+                setRemoteTextboxes([...allRemoteTextBoxes])
               }else{
                 console.log('els setRemoteTextboxes', textbox)
                   setRemoteTextboxes([{...textbox}]);
