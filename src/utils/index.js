@@ -177,8 +177,11 @@ export function onDrawCircle ({ ctx, center, radius, props }) {
 };
 
 export const redrawAnnotations = ({ctx, annotations, props}) => {
+    console.log('b4redrawAnnotations pen')
     if(!ctx) return;
+    console.log('afredrawAnnotations pen')
     clearCanvas(ctx, props.width, props.height);
+    console.log('clear canvas')
     annotations?.forEach(annotation => {
         const {type, ...params} = annotation;
         if(type === 'pen'){

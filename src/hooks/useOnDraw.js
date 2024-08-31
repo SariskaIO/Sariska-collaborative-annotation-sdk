@@ -69,7 +69,9 @@ export function useOnDraw(
                 if(isDrawingRef.current){
                     const point = computePointInCanvas(e.clientX, e.clientY, canvasRef?.current);
                     let prevPoint = prevPointRef.current;
+                    console.log('mouseMoveListener');
                     if(onDraw) {
+                        console.log('ondmouseMoveListener');
                         onDraw({ctx, point, prevPoint, props});
                         setAnnotation(annotation => ([...annotation, {ctx, point, prevPoint, props}]));
                         setAnnotations(annotations => ([...annotations, {type: 'pen', ctx, point, prevPoint, props}]));
@@ -133,7 +135,7 @@ export function useOnDraw(
      //   otherProps.isCanvasClear,
       //  otherProps.isImageSaved,
       //  otherProps.lineColor,
-      //  otherProps,
+        otherProps
 
     ]);
 
