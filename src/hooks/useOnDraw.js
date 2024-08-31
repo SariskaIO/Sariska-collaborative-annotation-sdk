@@ -151,6 +151,7 @@ export function useOnDraw(
         let prevPoint = prevPointRef.current;
         setAnnotation(annotation => ([...annotation, {ctx, point, prevPoint, props}]));
         setAnnotations(annotations => ([...annotations, {type: 'pen', ctx, point, prevPoint, props}]));
+        console.log('setAnnotations draw', ctx, point, prevPoint, props)
         onDraw({ctx, point, prevPoint, props});
     }
     

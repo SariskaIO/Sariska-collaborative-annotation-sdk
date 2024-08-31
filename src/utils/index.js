@@ -132,6 +132,7 @@ export function clearCanvas(ctx, width, height){
 
 export function drawLine(ctx, end, start, color, width) {
     if(!ctx) return;
+    console.log('drawLine', ctx, end, start, color, width)
     start = start ?? end;
     ctx.beginPath();
     ctx.lineWidth= width;
@@ -181,6 +182,7 @@ export const redrawAnnotations = ({ctx, annotations, props}) => {
     annotations?.forEach(annotation => {
         const {type, ...params} = annotation;
         if(type === 'pen'){
+            console.log('redrawAnnotations pen', params)
             onDraw(params);
         }else if(type === 'emoji'){
             onDrawEmoji(params);
