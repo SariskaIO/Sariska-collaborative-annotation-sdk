@@ -52,9 +52,9 @@ const App = (props)=> {
           console.log('ANNOTATION_TOOLS.circle', content);
           content.props = {width: props.width, height: props.height};
           onDrawCircle(content);
-        }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
-          console.log('ANNOTATION_TOOLS.textbox', content);
-         setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
+        // }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
+        //   console.log('ANNOTATION_TOOLS.textbox', content);
+        //  setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
         }else{
           content.emojis = [...messages];
           onDrawEmoji(content);
@@ -69,14 +69,13 @@ const App = (props)=> {
             onDrawCircle(content);
           }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
             setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
-          }
           }else{
               content.emojis = [...messages];
               onDrawEmoji(content);
             }
           }
+        }
       setMessages(messages => [...messages, message])
-    //}
   });
   console.log('remotetextbox', remoteTextboxes);
 
