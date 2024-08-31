@@ -22,7 +22,6 @@ export function useOnEmoji(
         const ctx = canvasRef?.current?.getContext('2d');
          const { parentCanvasRef, ...props } = otherProps;
         parentCanvasRef.current = canvasRef?.current;
-        console.log('emoji ctx', ctx, canvasRef?.current)
         setCanvasCtx(ctx);
         setAnnotations([...annotations]);
 
@@ -64,7 +63,6 @@ const onMouseDown = useCallback((event) => {
     redrawAnnotations({ctx, annotations, props});
     onDrawEmoji({ctx, point, emoji: props.emojiType})
     if (channel) {
-        console.log('push messaeg emo')
         pushMessage(JSON.stringify({ ctx, point, emoji: props.emojiType }), channel);
     }
   }, [emojis?.length, channel]);

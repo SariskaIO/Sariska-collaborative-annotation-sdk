@@ -49,7 +49,6 @@ const App = (props)=> {
         if(props.annotationTool === ANNOTATION_TOOLS.pen){
           onDraw(content);
         }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
-          console.log('ANNOTATION_TOOLS.circle', content);
           content.props = {width: props.width, height: props.height};
           onDrawCircle(content);
         // }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
@@ -77,7 +76,7 @@ const App = (props)=> {
         }
       setMessages(messages => [...messages, message])
   });
-  console.log('remotetextbox', remoteTextboxes);
+  
 
   const pushMessage = ( content, channel )=>{
     const new_message = {

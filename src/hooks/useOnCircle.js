@@ -13,7 +13,6 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, set
         const ctx = canvasRef?.current?.getContext('2d');
         const { parentCanvasRef, ...props } = otherProps;
         parentCanvasRef.current = canvasRef?.current;
-        console.log('circle ctx', ctx, canvasRef?.current)
         setCanvasCtx(ctx);
 
         function initMouseMoveListener() {
@@ -39,7 +38,6 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, set
                     setCircles([...circles, { center: startPoint, radius }]);
                     setAnnotations(annotations => ([...annotations, {type: 'circle', ctx, center: startPoint, radius}]))
 
-        console.log('push messaeg cir')
                     pushMessage(JSON.stringify({ ctx, center: startPoint, radius, props }), channel);
                     isDrawingRef.current = false;
                     startPointRef.current = null;

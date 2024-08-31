@@ -27,14 +27,14 @@ const Canvas = ({
   annotationTool === ANNOTATION_TOOLS.circle ? circleHook :
   //annotationTool === ANNOTATION_TOOLS.textbox ? textboxHook : 
   drawHook;
-      console.log('textboxescnavesmre', textboxes);
+  
     const canvasStyle={
       position: 'absolute', 
       zIndex: otherProps.zIndex,
       background: 'none'
     }
   let textboxList = textboxes?.length ? textboxes : remoteTextboxes?.length ? remoteTextboxes : [];
-  console.log('textboxList', textboxList, textboxes, remoteTextboxes)
+  
   return (
         <>
         <canvas 

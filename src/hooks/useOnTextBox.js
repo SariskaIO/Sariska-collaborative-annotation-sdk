@@ -10,12 +10,11 @@ export function useOnTextBox(
     otherProps) {
     const [textboxes, setTextboxes] = useState([]);
     const canvasRef = useRef(null);
-console.log('textcanvasRef')
+    
     useEffect(() => {
         const ctx = canvasRef?.current?.getContext('2d');
          const { parentCanvasRef, ...props } = otherProps;
         parentCanvasRef.current = canvasRef?.current;
-        console.log('text ctx', ctx, canvasRef?.current)
         setCanvasCtx(ctx);
         setAnnotations([...annotations]);
 
