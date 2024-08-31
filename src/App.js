@@ -67,8 +67,8 @@ const App = (props)=> {
           }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
             content.props = {width: props.width, height: props.height};
             onDrawCircle(content);
-          }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
-            setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
+          // }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
+          //   setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
           }else{
               content.emojis = [...messages];
               onDrawEmoji(content);
