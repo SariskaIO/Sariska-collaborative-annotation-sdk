@@ -33,7 +33,7 @@ const Canvas = ({
       zIndex: otherProps.zIndex,
       background: 'none'
     }
-  let drawnTextboxes = annotations?.length && annotations?.filter(annotation => annotation.type === ANNOTATION_TOOLS.textbox.toLowerCase());
+  let drawnTextboxes = annotations?.length && annotations?.filter(annotation => annotation.type === ANNOTATION_TOOLS.textbox.toLowerCase())?.map(annotation => annotation.textbox);
   let textboxList = textboxes?.length ? textboxes : remoteTextboxes?.length ? remoteTextboxes : drawnTextboxes?.length ? drawnTextboxes : [];
   console.log('drawnTextboxes', drawnTextboxes, textboxList)
   return (
