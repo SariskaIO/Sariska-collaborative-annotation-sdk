@@ -266,7 +266,7 @@ export const redrawAnnotations = ({ctx, annotations, props}) => {
         }else if(type === 'circle'){
             onDrawCircle({ ctx, center: annotation.center, radius: annotation.radius, props });
         }else{
-            console.log('textbox')
+            return;
         }
     })
 };

@@ -79,13 +79,8 @@ export function useOnTextBox(
                         height: newHeight,
                     }
                     redrawAnnotations({ctx, annotations, props: otherProps});
-                   // setAnnotations(annotations => ([...annotations, {type: 'textbox', ctx, textbox: newTextbox }]))
-                   setAnnotations((annotations) =>
-                    annotations.map((annotation) =>
-                        annotation.textbox?.id === id ? { ...annotation, textbox: newTextbox } : annotation
-                    )
-                ); 
-                   pushMessage(JSON.stringify({ctx, textbox: newTextbox }), channel);
+                    setAnnotations(annotations => ([...annotations, {type: 'textbox', ctx, textbox: newTextbox }]))
+                    pushMessage(JSON.stringify({ctx, textbox: newTextbox }), channel);
                     return newTextbox;
                 }
                 redrawAnnotations({ctx, annotations, props: otherProps});
