@@ -81,7 +81,7 @@ const onMouseDown = useCallback((event) => {
 
     setEmojis((prevEmojis) => [...prevEmojis, { ctx, point, emoji: props.emojiType }]);
     setAnnotations((annotations) => [...annotations, { type: 'emoji', ctx, point, emoji: props.emojiType,
-                                     emojis:  [...annotations.emojis, { ctx, point, emoji: props.emojiType }]}]);
+                                     emojis:  [...emojis, { ctx, point, emoji: props.emojiType }]}]);
 
     // Draw the emoji on the canvas
     // ctx.font = '24px Arial';
