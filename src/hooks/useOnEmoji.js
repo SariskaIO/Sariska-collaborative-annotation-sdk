@@ -15,28 +15,20 @@ export function useOnEmoji(
     const canvasRef = useRef(null);
     
     const setCanvasRef = useCallback((ref) => {
-        console.log('emsetCanvasRef', ref, otherProps);
         if(otherProps.annotationTool !== ANNOTATION_TOOLS.emoji){
-            console.log('inemsetCanvasRef' )
             return;
         }
-        console.log('midinemsetCanvasRef' )
         if (!ref) return;
-        console.log('afinemsetCanvasRef' )
         canvasRef.current = ref;
     }, [otherProps.annotationTool]);
     
     useEffect(() => {
-        console.log('stuseeffect', otherProps);
         if(otherProps.annotationTool !== ANNOTATION_TOOLS.emoji){
             return;
         }
-        console.log('midstuseeffect');
         const canvas = canvasRef?.current;
 
-        console.log('afuseeffectcavn', canvas);
         if(canvas){
-            console.log('inuseeffectcavn', canvas);
             const ctx = canvas.getContext('2d');
             const { parentCanvasRef, isCanvasClear, width, height } = otherProps;
             parentCanvasRef.current = canvas;
@@ -50,7 +42,6 @@ export function useOnEmoji(
                 setAnnotations([...annotations]);
             }
 
-            console.log('emoji ctx', otherProps)
             if (isCanvasClear) {
                 clearCanvas(ctx, width, height);
             }
@@ -65,15 +56,12 @@ export function useOnEmoji(
     ]);
 
 const onMouseDown = useCallback((event) => {
-    console.log('stonMouseDown', otherProps)
     if(otherProps.annotationTool !== ANNOTATION_TOOLS.emoji){
         return;
     }
-    console.log('midonMouseDown', otherProps)
     if(!otherProps.isModerator){
         return ;
     }
-    console.log('afonMouseDown', otherProps)
     const ctx = canvasRef?.current?.getContext('2d');
     const { parentCanvasRef, ...props } = otherProps;
 
@@ -93,7 +81,6 @@ const onMouseDown = useCallback((event) => {
     // });
 
     // ctx.fillText(props.emojiType || '😀', point.x, point.y); // Draw the latest emoji
-    console.log('onmousedown emoji', ctx, props)
     redrawAnnotations({ctx, annotations, props});
     onDrawEmoji({ctx, point, emoji: props.emojiType})
     if (channel) {

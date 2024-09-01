@@ -16,7 +16,6 @@ export function useOnTextBox(
         if(otherProps.annotationTool !== ANNOTATION_TOOLS.textbox){
             return;
         }
-        console.log('texttextuse')
         const ctx = canvasRef?.current?.getContext('2d');
          const { parentCanvasRef, ...props } = otherProps;
         parentCanvasRef.current = canvasRef?.current;
@@ -34,8 +33,6 @@ export function useOnTextBox(
         setAnnotations
     ]);
 
-
-    console.log('aftertexttextuse');
     const handleCanvasClick = (e) => {
         if(!otherProps.isModerator){
             return ;

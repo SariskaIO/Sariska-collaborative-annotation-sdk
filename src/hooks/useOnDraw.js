@@ -59,15 +59,12 @@ export function useOnDraw(
     //   };
     
     useEffect(()=>{
-        console.log('ANNOTATION_TOOLS.pen', otherProps.annotationTool, ANNOTATION_TOOLS.pen);
         if(otherProps.annotationTool !== ANNOTATION_TOOLS.pen){
             return;
         }
-        console.log('retANNOTATION_TOOLS.pen', otherProps.annotationTool, ANNOTATION_TOOLS.pen);
         const ctx = canvasRef?.current?.getContext('2d');
         const {parentCanvasRef, ...props} = otherProps;
         parentCanvasRef.current = canvasRef?.current;
-        console.log('draw ctx', ctx, canvasRef?.current, props);
         setCanvasCtx(ctx);
         
         function initMouseMoveListener(){
@@ -75,9 +72,7 @@ export function useOnDraw(
                 if(isDrawingRef.current){
                     const point = computePointInCanvas(e.clientX, e.clientY, canvasRef?.current);
                     let prevPoint = prevPointRef.current;
-                    console.log('mouseMoveListener');
                     if(onDraw) {
-                        console.log('ondmouseMoveListener');
                         onDraw({ctx, point, prevPoint, props});
                         setAnnotation(annotation => ([...annotation, {ctx, point, prevPoint, props}]));
                         setAnnotations(annotations => ([...annotations, {type: 'pen', ctx, point, prevPoint, props}]));
@@ -149,9 +144,7 @@ export function useOnDraw(
     ]);
 
     function setCanvasRef(ref){
-        console.log('drawsetCanvasRef', ref);
         if(!ref) return;
-        console.log('afdrawsetCanvasRef');
         canvasRef.current = ref;
     }
     
@@ -164,7 +157,6 @@ export function useOnDraw(
         let prevPoint = prevPointRef.current;
         setAnnotation(annotation => ([...annotation, {ctx, point, prevPoint, props}]));
         setAnnotations(annotations => ([...annotations, {type: 'pen', ctx, point, prevPoint, props}]));
-        console.log('setAnnotations draw', ctx, point, prevPoint, props)
         onDraw({ctx, point, prevPoint, props});
         if(channel) {
             pushMessage(JSON.stringify({ctx, point, prevPoint, props}), channel);

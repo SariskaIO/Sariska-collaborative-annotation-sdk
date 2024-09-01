@@ -10,11 +10,6 @@ const DrawingBoard = ({
     loading,
     inputProps
 }) => {
-    const [point, setPoint] = useState({});
-    const {
-      users: { user },
-      rooms: { room },
-    } = useStore();
     
     return (
         <Canvas 
