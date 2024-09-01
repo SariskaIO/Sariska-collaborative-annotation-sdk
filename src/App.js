@@ -52,7 +52,7 @@ const App = (props)=> {
           content.props = {width: props.width, height: props.height};
           onDrawCircle(content);
         }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
-         setAllRemoteTextBoxes(content?.textbox, remoteTextboxes, setRemoteTextboxes)
+         setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
         }else{
           content.emojis = [...messages];
           onDrawEmoji(content);
@@ -66,7 +66,7 @@ const App = (props)=> {
             content.props = {width: props.width, height: props.height};
             onDrawCircle(content);
           }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
-            setAllRemoteTextBoxes(content?.textbox, remoteTextboxes, setRemoteTextboxes)
+            setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
           }else{
               content.emojis = [...messages];
               onDrawEmoji(content);

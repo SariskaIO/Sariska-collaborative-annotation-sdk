@@ -254,7 +254,7 @@ export const setAllRemoteTextBoxes = (content, remoteTextboxes, setRemoteTextbox
 
 export const redrawAnnotations = ({ctx, annotations, props}) => {
     if(!ctx) return;
-    if(props.annotationTools !== ANNOTATION_TOOLS.emoji || props.annotationTools !== ANNOTATION_TOOLS.textbox){
+    if(props.annotationTools !== ANNOTATION_TOOLS.emoji){
         clearCanvas(ctx, props.width, props.height);
     }
     annotations?.forEach(annotation => {

@@ -29,7 +29,7 @@ export function useOnTextBox(
          channel,
        //  otherProps.isCanvasClear,
          setCanvasCtx,
-       //  otherProps,
+         otherProps,
         setAnnotations
     ]);
 
