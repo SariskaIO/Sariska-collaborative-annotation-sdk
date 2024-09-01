@@ -56,31 +56,23 @@ export function useOnEmoji(
     ]);
 
 const onMouseDown = useCallback((event) => {
+    console.log('bonMouseDown')
     if(otherProps.annotationTool !== ANNOTATION_TOOLS.emoji){
         return;
     }
+    console.log('inonMouseDown')
     if(!otherProps.isModerator){
         return ;
     }
+    console.log('aonMouseDown')
     const ctx = canvasRef?.current?.getContext('2d');
     const { parentCanvasRef, ...props } = otherProps;
 
     const point = computePointInCanvas(event.clientX, event.clientY, canvasRef?.current);
-
+console.log('emojis', emojis, ctx, point )
     setEmojis((prevEmojis) => [...prevEmojis, { ctx, point, emoji: props.emojiType }]);
     setAnnotations((annotations) => [...annotations, { type: 'emoji', ctx, point, emoji: props.emojiType,
                                      emojis:  [...emojis, { ctx, point, emoji: props.emojiType }]}]);
-
-    // Draw the emoji on the canvas
-    // ctx.font = '24px Arial';
-    // ctx.textBaseline = 'middle';
-    // ctx.textAlign = 'center';
-    // ctx.clearRect(0, 0, ctx.width, ctx.height);
-    // emojis.forEach(({ x, y }) => {
-    //   ctx.fillText(props.emojiType || '😀', x, y);
-    // });
-
-    // ctx.fillText(props.emojiType || '😀', point.x, point.y); // Draw the latest emoji
     redrawAnnotations({ctx, annotations, props});
     onDrawEmoji({ctx, point, emoji: props.emojiType})
     if (channel) {
@@ -88,28 +80,7 @@ const onMouseDown = useCallback((event) => {
     }
   }, [emojis?.length, channel, otherProps, setAnnotations]);
 
-    // function onMouseDown(e) {
-    //     if (!canvasRef.current) return;
-    //     console.log('onMouseDown')
-    //     const { parentCanvasRef, ...props } = otherProps;
-    //     const ctx = canvasRef.current.getContext('2d');
-    //     const point = computePointInCanvas(e.clientX, e.clientY, canvasRef.current);
-
-    //     // Add emoji to state
-    //     setEmojis((prevEmojis) => [...prevEmojis, { point, emoji: props.emojiType }]);
-
-    //     // Draw the emoji on the canvas
-    //     ctx.font = '24px Arial';
-    //     ctx.textBaseline = 'middle';
-    //     ctx.textAlign = 'center';
-    //     ctx.fillText(props.emojiType || '😀', point.x, point.y);
-
-    //     // Push the emoji placement to the channel
-    //     if (channel) {
-    //         pushMessage(JSON.stringify({ point, emoji: props.emojiType }), channel);
-    //     }
-    // }
-
+console.log('emojies', emojis)
     return {
         setCanvasRef,
         onMouseDown

@@ -35,7 +35,6 @@ const Canvas = ({
     }
   let drawnTextboxes = annotations?.length && annotations?.filter(annotation => annotation.type === ANNOTATION_TOOLS.textbox.toLowerCase())?.map(annotation => annotation.textbox);
   let textboxList = textboxes?.length ? textboxes : remoteTextboxes?.length ? remoteTextboxes : drawnTextboxes?.length ? drawnTextboxes : [];
-  console.log('drawnTextboxes', drawnTextboxes, textboxList)
   return (
         <>
         <canvas 
@@ -47,7 +46,7 @@ const Canvas = ({
         />
         {textboxList?.length ? textboxList?.map((textbox) => (
                 <textarea
-                    key={textbox.id}
+                    key={textbox.id + textbox.text}
                     style={{
                         position: 'absolute',
                         top: textbox.y + 'px',
