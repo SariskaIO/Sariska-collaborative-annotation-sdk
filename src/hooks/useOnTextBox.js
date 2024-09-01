@@ -30,9 +30,9 @@ export function useOnTextBox(
          channel,
        //  otherProps.isCanvasClear,
          setCanvasCtx,
-       //  otherProps,
+         otherProps.annotationTool,
        // setAnnotations,
-        annotations?.length
+       // annotations?.length
     ]);
 
     const handleCanvasClick = (e) => {
