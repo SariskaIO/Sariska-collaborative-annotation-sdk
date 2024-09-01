@@ -11,7 +11,7 @@ export function useOnTextBox(
     otherProps) {
     const [textboxes, setTextboxes] = useState([]);
     const canvasRef = useRef(null);
-    
+    console.log('textboxes f', textboxes, annotations);
     useEffect(() => {
         if(otherProps.annotationTool !== ANNOTATION_TOOLS.textbox){
             return;
@@ -20,7 +20,7 @@ export function useOnTextBox(
          const { parentCanvasRef, ...props } = otherProps;
         parentCanvasRef.current = canvasRef?.current;
         setCanvasCtx(ctx);
-        setAnnotations([...annotations]);
+        setAnnotations(annotations => ([...annotations]));
 
         if (props.isCanvasClear) {
             clearCanvas(ctx, props.width, props.height);
