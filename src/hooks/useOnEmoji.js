@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { clearCanvas, computePointInCanvas, onDrawEmoji, redrawAnnotations } from "../utils"; // Assume these utils are predefined
+import { ANNOTATION_TOOLS } from "../constants";
 
 export function useOnEmoji(
     pushMessage,
@@ -13,16 +14,18 @@ export function useOnEmoji(
 
     const canvasRef = useRef(null);
     
-    // const setCanvasRef = useCallback((ref) => {
-    //     if (!ref) return;
-    //     canvasRef.current = ref;
-    // }, []);
-    function setCanvasRef(ref) {
+    const setCanvasRef = useCallback((ref) => {
+        if(otherProps.annotationTools !== ANNOTATION_TOOLS.emoji){
+            return;
+        }
         if (!ref) return;
         canvasRef.current = ref;
-    }
+    }, []);
     
     useEffect(() => {
+        if(otherProps.annotationTools !== ANNOTATION_TOOLS.emoji){
+            return;
+        }
         const canvas = canvasRef?.current;
         if(canvas){
             const ctx = canvas.getContext('2d');
@@ -34,7 +37,7 @@ export function useOnEmoji(
                 }
                 return prevCtx;
             });
-            if (annotations && annotations?.length !== 0) {
+            if (annotations?.length !== 0) {
                 setAnnotations([...annotations]);
             }
 
@@ -48,10 +51,14 @@ export function useOnEmoji(
         channel,
         otherProps,
       //  isCanvasClear,
-        setCanvasCtx
+        setCanvasCtx,
+        annotations?.length
     ]);
 
 const onMouseDown = useCallback((event) => {
+    if(otherProps.annotationTools !== ANNOTATION_TOOLS.emoji){
+        return;
+    }
     if(!otherProps.isModerator){
         return ;
     }

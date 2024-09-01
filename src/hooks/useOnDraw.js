@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { clearCanvas, computePointInCanvas, onDraw, redrawAnnotations } from "../utils";
+import { ANNOTATION_TOOLS } from "../constants";
 
 export function useOnDraw(
     pushMessage,
@@ -58,6 +59,9 @@ export function useOnDraw(
     //   };
     
     useEffect(()=>{
+        if(otherProps.annotationTools !== ANNOTATION_TOOLS.pen){
+            return;
+        }
         const ctx = canvasRef?.current?.getContext('2d');
         const {parentCanvasRef, ...props} = otherProps;
         parentCanvasRef.current = canvasRef?.current;

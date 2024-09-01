@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { clearCanvas, measureText, redrawAnnotations } from '../utils';
+import { ANNOTATION_TOOLS } from '../constants';
 
 export function useOnTextBox(
     pushMessage,
@@ -12,6 +13,10 @@ export function useOnTextBox(
     const canvasRef = useRef(null);
     
     useEffect(() => {
+        if(otherProps.annotationTools !== ANNOTATION_TOOLS.textbox){
+            return;
+        }
+        console.log('texttextuse')
         const ctx = canvasRef?.current?.getContext('2d');
          const { parentCanvasRef, ...props } = otherProps;
         parentCanvasRef.current = canvasRef?.current;
@@ -30,6 +35,7 @@ export function useOnTextBox(
     ]);
 
 
+    console.log('aftertexttextuse');
     const handleCanvasClick = (e) => {
         if(!otherProps.isModerator){
             return ;

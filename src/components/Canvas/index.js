@@ -3,7 +3,7 @@ import { useOnDraw } from '../../hooks/useOnDraw';
  import { ANNOTATION_TOOLS } from '../../constants';
  import { useOnEmoji } from '../../hooks/useOnEmoji';
  import { useOnCircle } from '../../hooks/useOnCircle';
-import { useOnTextBox } from '../../hooks/useOnTextBox';
+//import { useOnTextBox } from '../../hooks/useOnTextBox';
 
 const Canvas = ({
     width, 
@@ -16,44 +16,17 @@ const Canvas = ({
   }) => {
     const {children, ...otherProps} = inputProps;
     const [annotations, setAnnotations] = useState([]);
-    const getHook = (tool) => {
-      switch (tool) {
-          case ANNOTATION_TOOLS.emoji:
-              return useOnEmoji;
-          case ANNOTATION_TOOLS.circle:
-              return useOnCircle;
-          case ANNOTATION_TOOLS.textbox:
-              return useOnTextBox;
-          default:
-              return useOnDraw;
-      }
-  };
-  
-  const useAnnotationHook = (tool, pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps) => {
-      const hook = getHook(tool);
-      return hook(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
-  };
-  
-  const { setCanvasRef, onMouseDown, handleTextChange, textboxes } = useAnnotationHook(
-      inputProps.annotationTool,
-      pushMessage,
-      channel,
-      setCanvasCtx,
-      annotations,
-      setAnnotations,
-      otherProps
-  );
-  //   const emojiHook = useOnEmoji(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
-  //   const circleHook = useOnCircle(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
-  //  // const textboxHook = useOnTextBox(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
-  //   const drawHook = useOnDraw(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
-  //   console.log('annotaiotnsa', annotations, inputProps);
-  // // Use logic to select the correct hook result
-  // const { setCanvasRef, onMouseDown, handleTextChange, textboxes } = 
-  // inputProps.annotationTool === ANNOTATION_TOOLS.emoji ? emojiHook : 
-  // inputProps.annotationTool === ANNOTATION_TOOLS.circle ? circleHook :
-  // //inputProps.annotationTool === ANNOTATION_TOOLS.textbox ? textboxHook : 
-  // drawHook;
+    const emojiHook = useOnEmoji(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
+    const circleHook = useOnCircle(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
+   // const textboxHook = useOnTextBox(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
+    const drawHook = useOnDraw(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
+    console.log('annotaiotnsa', annotations, inputProps);
+  // Use logic to select the correct hook result
+  const { setCanvasRef, onMouseDown, handleTextChange, textboxes } = 
+  inputProps.annotationTool === ANNOTATION_TOOLS.emoji ? emojiHook : 
+  inputProps.annotationTool === ANNOTATION_TOOLS.circle ? circleHook :
+  //inputProps.annotationTool === ANNOTATION_TOOLS.textbox ? textboxHook : 
+  drawHook;
   
     const canvasStyle={
       position: 'absolute', 

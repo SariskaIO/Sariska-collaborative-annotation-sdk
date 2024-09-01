@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { calculateCircleRadius, clearCanvas, computePointInCanvas, onDrawCircle, redrawAnnotations } from "../utils";
+import { ANNOTATION_TOOLS } from '../constants';
 
 export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps) {
     const canvasRef = useRef(null);
@@ -10,6 +11,9 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, set
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
     useEffect(() => {
+        if(otherProps.annotationTools !== ANNOTATION_TOOLS.circle){
+            return;
+        }
         const ctx = canvasRef?.current?.getContext('2d');
         const { parentCanvasRef, ...props } = otherProps;
         parentCanvasRef.current = canvasRef?.current;
