@@ -13,10 +13,14 @@ export function useOnEmoji(
 
     const canvasRef = useRef(null);
     
-    const setCanvasRef = useCallback((ref) => {
+    // const setCanvasRef = useCallback((ref) => {
+    //     if (!ref) return;
+    //     canvasRef.current = ref;
+    // }, []);
+    function setCanvasRef(ref) {
         if (!ref) return;
         canvasRef.current = ref;
-    }, []);
+    }
     
     useEffect(() => {
         const canvas = canvasRef?.current;
