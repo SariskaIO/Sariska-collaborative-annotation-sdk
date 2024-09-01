@@ -24,7 +24,7 @@ export function useOnEmoji(
         if (!ref) return;
         console.log('afinemsetCanvasRef' )
         canvasRef.current = ref;
-    }, []);
+    }, [otherProps.annotationTool]);
     
     useEffect(() => {
         console.log('stuseeffect', otherProps);
@@ -81,7 +81,7 @@ const onMouseDown = useCallback((event) => {
 
     setEmojis((prevEmojis) => [...prevEmojis, { ctx, point, emoji: props.emojiType }]);
     setAnnotations((annotations) => [...annotations, { type: 'emoji', ctx, point, emoji: props.emojiType,
-                                     emojis:  [...emojis, { ctx, point, emoji: props.emojiType }]}]);
+                                     emojis:  [...annotations.emojis, { ctx, point, emoji: props.emojiType }]}]);
 
     // Draw the emoji on the canvas
     // ctx.font = '24px Arial';
@@ -99,7 +99,7 @@ const onMouseDown = useCallback((event) => {
     if (channel) {
         pushMessage(JSON.stringify({ ctx, point, emoji: props.emojiType }), channel);
     }
-  }, [emojis?.length, channel, otherProps, setEmojis, setAnnotations]);
+  }, [emojis?.length, channel, otherProps, setAnnotations]);
 
     // function onMouseDown(e) {
     //     if (!canvasRef.current) return;
