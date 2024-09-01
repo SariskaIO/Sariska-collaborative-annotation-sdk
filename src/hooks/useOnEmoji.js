@@ -34,7 +34,7 @@ export function useOnEmoji(
                 }
                 return prevCtx;
             });
-            if (annotations?.length !== 0) {
+            if (annotations && annotations?.length !== 0) {
                 setAnnotations([...annotations]);
             }
 
@@ -48,8 +48,7 @@ export function useOnEmoji(
         channel,
         otherProps,
       //  isCanvasClear,
-        setCanvasCtx,
-        annotations?.length
+        setCanvasCtx
     ]);
 
 const onMouseDown = useCallback((event) => {
