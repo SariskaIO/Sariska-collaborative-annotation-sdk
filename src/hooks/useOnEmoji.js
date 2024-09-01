@@ -24,8 +24,15 @@ export function useOnEmoji(
             const ctx = canvas.getContext('2d');
             const { parentCanvasRef, isCanvasClear, width, height } = otherProps;
             parentCanvasRef.current = canvas;
-            setCanvasCtx(ctx);
-            setAnnotations([...annotations]);
+            setCanvasCtx(prevCtx => {
+                if (prevCtx !== ctx) {
+                    return ctx;
+                }
+                return prevCtx;
+            });
+            if (annotations?.length !== 0) {
+                setAnnotations([...annotations]);
+            }
 
             console.log('emoji ctx', otherProps)
             if (isCanvasClear) {
@@ -37,7 +44,6 @@ export function useOnEmoji(
         channel,
         otherProps,
       //  isCanvasClear,
-        setCanvasCtx,
         annotations?.length
     ]);
 
