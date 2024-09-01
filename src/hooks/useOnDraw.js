@@ -61,7 +61,7 @@ export function useOnDraw(
         const ctx = canvasRef?.current?.getContext('2d');
         const {parentCanvasRef, ...props} = otherProps;
         parentCanvasRef.current = canvasRef?.current;
-        console.log('draw ctx', ctx, canvasRef?.current, props)
+        console.log('draw ctx', ctx, canvasRef?.current, props);
         setCanvasCtx(ctx);
         
         function initMouseMoveListener(){
@@ -155,6 +155,9 @@ export function useOnDraw(
         setAnnotations(annotations => ([...annotations, {type: 'pen', ctx, point, prevPoint, props}]));
         console.log('setAnnotations draw', ctx, point, prevPoint, props)
         onDraw({ctx, point, prevPoint, props});
+        if(channel) {
+            pushMessage(JSON.stringify({ctx, point, prevPoint, props}), channel);
+        }
     }
     
     return {
