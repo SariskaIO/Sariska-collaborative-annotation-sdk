@@ -31,7 +31,7 @@ export function useOnTextBox(
        //  otherProps.isCanvasClear,
          setCanvasCtx,
        //  otherProps,
-        setAnnotations,
+       // setAnnotations,
         annotations?.length
     ]);
 
