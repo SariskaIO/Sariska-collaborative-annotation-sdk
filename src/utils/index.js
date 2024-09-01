@@ -175,23 +175,6 @@ export function onDrawCircle ({ ctx, center, radius, props }) {
     }
 };
 
-export const redrawAnnotations = ({ctx, annotations, props}) => {
-    if(!ctx) return;
-    if(props.annotationTools !== ANNOTATION_TOOLS.emoji){
-        clearCanvas(ctx, props.width, props.height);
-    }
-    annotations?.forEach(annotation => {
-        const {type, ...params} = annotation;
-        if(type === 'pen'){
-            onDraw(params);
-        }else if(type === 'emoji'){
-            onDrawEmoji(params);
-        }else{
-            onDrawCircle({ ctx, center: annotation.center, radius: annotation.radius, props });
-        }
-    })
-};
-
 export function computePointInCanvas(clientX, clientY, refCurrent){
     if(refCurrent){
         const boundingRect = refCurrent.getBoundingClientRect();
@@ -268,3 +251,22 @@ export const setAllRemoteTextBoxes = (content, remoteTextboxes, setRemoteTextbox
         }
     }
 }
+
+export const redrawAnnotations = ({ctx, annotations, props}) => {
+    if(!ctx) return;
+    if(props.annotationTools !== ANNOTATION_TOOLS.emoji || props.annotationTools !== ANNOTATION_TOOLS.textbox){
+        clearCanvas(ctx, props.width, props.height);
+    }
+    annotations?.forEach(annotation => {
+        const {type, ...params} = annotation;
+        if(type === 'pen'){
+            onDraw(params);
+        }else if(type === 'emoji'){
+            onDrawEmoji(params);
+        }else if(type === 'circle'){
+            onDrawCircle({ ctx, center: annotation.center, radius: annotation.radius, props });
+        }else{
+            console.log('textbox')
+        }
+    })
+};
