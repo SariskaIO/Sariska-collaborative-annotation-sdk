@@ -1,5 +1,5 @@
 import { SARISKA_API_KEY } from "../config";
-import { GENERATE_TOKEN_URL } from "../constants";
+import { ANNOTATION_TOOLS, GENERATE_TOKEN_URL } from "../constants";
 
 export function getUserId() {
     let storedUserId = JSON.parse((localStorage.getItem('sariska-collaborative-userId')));
@@ -177,10 +177,11 @@ export function onDrawCircle ({ ctx, center, radius, props }) {
 };
 
 export const redrawAnnotations = ({ctx, annotations, props}) => {
-    console.log('b4redrawAnnotations pen')
+    console.log('b4redrawAnnotations pen', props)
     if(!ctx) return;
     console.log('afredrawAnnotations pen')
-    if(props.annotationTools !== 'emoji'){
+    if(props.annotationTools !== ANNOTATION_TOOLS.emoji){
+        console.log('first ANNOTATION_TOOLS.emoji')
         clearCanvas(ctx, props.width, props.height);
     }
     console.log('clear canvas')
