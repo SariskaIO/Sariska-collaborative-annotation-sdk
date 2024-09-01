@@ -177,11 +177,11 @@ export function onDrawCircle ({ ctx, center, radius, props }) {
 };
 
 export const redrawAnnotations = ({ctx, annotations, props}) => {
-    console.log('b4redrawAnnotations pen', props)
+    console.log('b4redrawAnnotations', props, annotations)
     if(!ctx) return;
-    console.log('afredrawAnnotations pen')
+    console.log('afredrawAnnotations')
     if(props.annotationTools !== ANNOTATION_TOOLS.emoji){
-        console.log('first ANNOTATION_TOOLS.emoji')
+        console.log('first ANNOTATION_TOOLS.emoji', props.annotationTools !== ANNOTATION_TOOLS.emoji, props.annotationTools, ANNOTATION_TOOLS.emoji)
         clearCanvas(ctx, props.width, props.height);
     }
     console.log('clear canvas')
@@ -191,6 +191,7 @@ export const redrawAnnotations = ({ctx, annotations, props}) => {
             console.log('redrawAnnotations pen', params)
             onDraw(params);
         }else if(type === 'emoji'){
+            console.log('redrawAnnotations emoji', params)
             onDrawEmoji(params);
         }else{
             onDrawCircle({ ctx, center: annotation.center, radius: annotation.radius, props });

@@ -25,6 +25,7 @@ export function useOnEmoji(
         setCanvasCtx(ctx);
         setAnnotations([...annotations]);
 
+        console.log('emoji ctx', props)
         if (props.isCanvasClear) {
             clearCanvas(ctx, props.width, props.height);
         }
@@ -60,6 +61,7 @@ const onMouseDown = useCallback((event) => {
     // });
 
     // ctx.fillText(props.emojiType || '😀', point.x, point.y); // Draw the latest emoji
+    console.log('onmousedown emoji', ctx, props)
     redrawAnnotations({ctx, annotations, props});
     onDrawEmoji({ctx, point, emoji: props.emojiType})
     if (channel) {
