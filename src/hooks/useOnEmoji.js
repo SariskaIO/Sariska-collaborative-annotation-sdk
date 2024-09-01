@@ -19,21 +19,25 @@ export function useOnEmoji(
     }, []);
     
     useEffect(() => {
-        const ctx = canvasRef?.current?.getContext('2d');
-         const { parentCanvasRef, ...props } = otherProps;
-        parentCanvasRef.current = canvasRef?.current;
-        setCanvasCtx(ctx);
-        setAnnotations([...annotations]);
+        const canvas = canvasRef?.current;
+        if(canvas){
+            const ctx = canvas.getContext('2d');
+            const { parentCanvasRef, isCanvasClear, width, height } = otherProps;
+            parentCanvasRef.current = canvas;
+            setCanvasCtx(ctx);
+            setAnnotations([...annotations]);
 
-        console.log('emoji ctx', props)
-        if (props.isCanvasClear) {
-            clearCanvas(ctx, props.width, props.height);
+            console.log('emoji ctx', otherProps)
+            if (isCanvasClear) {
+                clearCanvas(ctx, width, height);
+            }
         }
     }, [
+        canvasRef,
         channel,
-      //  otherProps.isCanvasClear,
-        setCanvasCtx,
         otherProps,
+      //  isCanvasClear,
+        setCanvasCtx,
         annotations?.length
     ]);
 
