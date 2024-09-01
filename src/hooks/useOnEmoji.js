@@ -44,6 +44,7 @@ export function useOnEmoji(
         channel,
         otherProps,
       //  isCanvasClear,
+        setCanvasCtx,
         annotations?.length
     ]);
 
