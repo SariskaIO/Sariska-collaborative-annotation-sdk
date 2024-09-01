@@ -13,7 +13,7 @@ export function useOnTextBox(
     const canvasRef = useRef(null);
     
     useEffect(() => {
-        if(otherProps.annotationTools !== ANNOTATION_TOOLS.textbox){
+        if(otherProps.annotationTool !== ANNOTATION_TOOLS.textbox){
             return;
         }
         console.log('texttextuse')

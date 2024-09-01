@@ -11,7 +11,7 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, set
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
     useEffect(() => {
-        if(otherProps.annotationTools !== ANNOTATION_TOOLS.circle){
+        if(otherProps.annotationTool !== ANNOTATION_TOOLS.circle){
             return;
         }
         const ctx = canvasRef?.current?.getContext('2d');
@@ -74,13 +74,13 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, set
             removeMouseEventListeners();
         };
     }, [
+        canvasRef,
         onDrawCircle,
         channel,
         circles,
-        otherProps.isCanvasClear,
-        otherProps.isImageSaved,
-        otherProps.lineColor,
-        otherProps
+        otherProps,
+        setCanvasCtx,
+        annotations?.length
     ]);
 
     function setCanvasRef(ref) {

@@ -15,7 +15,7 @@ export function useOnEmoji(
     const canvasRef = useRef(null);
     
     const setCanvasRef = useCallback((ref) => {
-        if(otherProps.annotationTools !== ANNOTATION_TOOLS.emoji){
+        if(otherProps.annotationTool !== ANNOTATION_TOOLS.emoji){
             return;
         }
         if (!ref) return;
@@ -23,7 +23,7 @@ export function useOnEmoji(
     }, []);
     
     useEffect(() => {
-        if(otherProps.annotationTools !== ANNOTATION_TOOLS.emoji){
+        if(otherProps.annotationTool !== ANNOTATION_TOOLS.emoji){
             return;
         }
         const canvas = canvasRef?.current;
@@ -56,7 +56,7 @@ export function useOnEmoji(
     ]);
 
 const onMouseDown = useCallback((event) => {
-    if(otherProps.annotationTools !== ANNOTATION_TOOLS.emoji){
+    if(otherProps.annotationTool !== ANNOTATION_TOOLS.emoji){
         return;
     }
     if(!otherProps.isModerator){

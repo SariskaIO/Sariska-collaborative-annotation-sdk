@@ -59,9 +59,11 @@ export function useOnDraw(
     //   };
     
     useEffect(()=>{
-        if(otherProps.annotationTools !== ANNOTATION_TOOLS.pen){
+        console.log('ANNOTATION_TOOLS.pen', otherProps.annotationTool, ANNOTATION_TOOLS.pen);
+        if(otherProps.annotationTool !== ANNOTATION_TOOLS.pen){
             return;
         }
+        console.log('retANNOTATION_TOOLS.pen', otherProps.annotationTool, ANNOTATION_TOOLS.pen);
         const ctx = canvasRef?.current?.getContext('2d');
         const {parentCanvasRef, ...props} = otherProps;
         parentCanvasRef.current = canvasRef?.current;
@@ -134,12 +136,15 @@ export function useOnDraw(
             }
         }
     },[
+        canvasRef,
         onDraw, 
         channel,
      //   otherProps.isCanvasClear,
       //  otherProps.isImageSaved,
       //  otherProps.lineColor,
-        otherProps
+        otherProps,
+        setCanvasCtx,
+        annotations?.length
 
     ]);
 
