@@ -33,7 +33,7 @@ export function useOnEmoji(
         channel,
       //  otherProps.isCanvasClear,
         setCanvasCtx,
-      //  otherProps,
+        otherProps,
         annotations?.length
     ]);
 
