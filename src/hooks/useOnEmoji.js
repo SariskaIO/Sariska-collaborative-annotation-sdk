@@ -15,10 +15,14 @@ export function useOnEmoji(
     const canvasRef = useRef(null);
     
     const setCanvasRef = useCallback((ref) => {
+        console.log('emsetCanvasRef', ref, otherProps);
         if(otherProps.annotationTool !== ANNOTATION_TOOLS.emoji){
+            console.log('inemsetCanvasRef' )
             return;
         }
+        console.log('midinemsetCanvasRef' )
         if (!ref) return;
+        console.log('afinemsetCanvasRef' )
         canvasRef.current = ref;
     }, []);
     

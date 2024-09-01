@@ -149,7 +149,9 @@ export function useOnDraw(
     ]);
 
     function setCanvasRef(ref){
+        console.log('drawsetCanvasRef', ref);
         if(!ref) return;
+        console.log('afdrawsetCanvasRef');
         canvasRef.current = ref;
     }
     
