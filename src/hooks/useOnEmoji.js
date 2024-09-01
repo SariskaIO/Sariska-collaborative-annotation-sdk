@@ -23,11 +23,16 @@ export function useOnEmoji(
     }, []);
     
     useEffect(() => {
+        console.log('stuseeffect', otherProps);
         if(otherProps.annotationTool !== ANNOTATION_TOOLS.emoji){
             return;
         }
+        console.log('midstuseeffect');
         const canvas = canvasRef?.current;
+
+        console.log('afuseeffectcavn', canvas);
         if(canvas){
+            console.log('inuseeffectcavn', canvas);
             const ctx = canvas.getContext('2d');
             const { parentCanvasRef, isCanvasClear, width, height } = otherProps;
             parentCanvasRef.current = canvas;
@@ -50,19 +55,21 @@ export function useOnEmoji(
         canvasRef,
         channel,
         otherProps,
-      //  isCanvasClear,
+      //  isCanvasClear
         setCanvasCtx,
         annotations?.length
     ]);
 
 const onMouseDown = useCallback((event) => {
+    console.log('stonMouseDown', otherProps)
     if(otherProps.annotationTool !== ANNOTATION_TOOLS.emoji){
         return;
     }
+    console.log('midonMouseDown', otherProps)
     if(!otherProps.isModerator){
         return ;
     }
-    let emojiType = '😎';
+    console.log('afonMouseDown', otherProps)
     const ctx = canvasRef?.current?.getContext('2d');
     const { parentCanvasRef, ...props } = otherProps;
 
@@ -88,7 +95,7 @@ const onMouseDown = useCallback((event) => {
     if (channel) {
         pushMessage(JSON.stringify({ ctx, point, emoji: props.emojiType }), channel);
     }
-  }, [emojis?.length, channel]);
+  }, [emojis?.length, channel, otherProps, setEmojis, setAnnotations]);
 
     // function onMouseDown(e) {
     //     if (!canvasRef.current) return;
