@@ -26,11 +26,13 @@ export function useOnTextBox(
             clearCanvas(ctx, props.width, props.height);
         }
     }, [
+        canvasRef,
          channel,
        //  otherProps.isCanvasClear,
          setCanvasCtx,
-         otherProps,
-        setAnnotations
+       //  otherProps,
+        setAnnotations,
+        annotations?.length
     ]);
 
     const handleCanvasClick = (e) => {
