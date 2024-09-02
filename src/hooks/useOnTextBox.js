@@ -78,12 +78,12 @@ export function useOnTextBox(
                         width: newWidth,
                         height: newHeight,
                     }
-                    redrawAnnotations({ctx, annotations, props: otherProps});
+                   // redrawAnnotations({ctx, annotations, props: otherProps});
                     setAnnotations(annotations => ([...annotations, {type: 'textbox', ctx, textbox: newTextbox }]))
                     pushMessage(JSON.stringify({ctx, textbox: newTextbox }), channel);
                     return newTextbox;
                 }
-                redrawAnnotations({ctx, annotations, props: otherProps});
+              //  redrawAnnotations({ctx, annotations, props: otherProps});
                 setAnnotations(annotations => ([...annotations, {type: 'textbox', ctx, textbox}]))
                 pushMessage(JSON.stringify({ctx, textbox }), channel);
                 return textbox;
