@@ -47,7 +47,7 @@ const Canvas = ({
         />
         {textboxList?.length ? textboxList?.map((textbox) => (
                 <textarea
-                    key={textbox.id + textbox.text}
+                    key={textbox.id}
                     style={{
                         position: 'absolute',
                         top: textbox.y + 'px',
