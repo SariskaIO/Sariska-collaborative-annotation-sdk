@@ -43,7 +43,6 @@ const App = (props)=> {
   })
 
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
-    console.log('new_message', message);
     let content = JSON.parse(message.content);
       if(content?.ctx && Object.keys(content?.ctx)?.length){
         if(props.annotationTool === ANNOTATION_TOOLS.pen){
