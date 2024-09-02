@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { calculateCircleRadius, clearCanvas, computePointInCanvas, onDrawCircle, redrawCircles } from "../utils";
+import { calculateCircleRadius, clearCanvas, computePointInCanvas, onDrawCircle, redrawAnnotations } from "../utils";
+import { ANNOTATION_TOOLS } from '../constants';
 
-export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, otherProps) {
+export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps) {
     const canvasRef = useRef(null);
     const startPointRef = useRef(null);
     const isDrawingRef = useRef(false);
@@ -10,6 +11,9 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, oth
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
     useEffect(() => {
+        if(otherProps.annotationTool !== ANNOTATION_TOOLS.circle){
+            return;
+        }
         const ctx = canvasRef?.current?.getContext('2d');
         const { parentCanvasRef, ...props } = otherProps;
         parentCanvasRef.current = canvasRef?.current;
@@ -21,7 +25,7 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, oth
                     const currentPoint = computePointInCanvas(e.clientX, e.clientY, canvasRef?.current);
                     const startPoint = startPointRef.current;
                     const radius = calculateCircleRadius(startPoint, currentPoint);
-                    redrawCircles({ctx, circles, annotations, props});
+                    redrawAnnotations({ctx, annotations, props});
                     onDrawCircle({ ctx, center: startPoint, radius, props});
                 }
             };
@@ -36,6 +40,8 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, oth
                     const startPoint = startPointRef.current;
                     const radius = calculateCircleRadius(startPoint, currentPoint);
                     setCircles([...circles, { center: startPoint, radius }]);
+                    setAnnotations(annotations => ([...annotations, {type: 'circle', ctx, center: startPoint, radius}]))
+
                     pushMessage(JSON.stringify({ ctx, center: startPoint, radius, props }), channel);
                     isDrawingRef.current = false;
                     startPointRef.current = null;
@@ -68,13 +74,13 @@ export function useOnCircle(pushMessage, channel, setCanvasCtx, annotations, oth
             removeMouseEventListeners();
         };
     }, [
+        canvasRef,
         onDrawCircle,
         channel,
         circles,
-        otherProps.isCanvasClear,
-        otherProps.isImageSaved,
-        otherProps.lineColor,
-        otherProps
+        otherProps,
+        setCanvasCtx,
+        annotations?.length
     ]);
 
     function setCanvasRef(ref) {

@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { clearCanvas, computePointInCanvas, onDraw } from "../utils";
+import { clearCanvas, computePointInCanvas, onDraw, redrawAnnotations } from "../utils";
+import { ANNOTATION_TOOLS } from "../constants";
 
 export function useOnDraw(
     pushMessage,
     channel,
     setCanvasCtx,
+    annotations,
     setAnnotations,
     otherProps
     ){
@@ -57,6 +59,9 @@ export function useOnDraw(
     //   };
     
     useEffect(()=>{
+        if(otherProps.annotationTool !== ANNOTATION_TOOLS.pen){
+            return;
+        }
         const ctx = canvasRef?.current?.getContext('2d');
         const {parentCanvasRef, ...props} = otherProps;
         parentCanvasRef.current = canvasRef?.current;
@@ -71,6 +76,7 @@ export function useOnDraw(
                         onDraw({ctx, point, prevPoint, props});
                         setAnnotation(annotation => ([...annotation, {ctx, point, prevPoint, props}]));
                         setAnnotations(annotations => ([...annotations, {type: 'pen', ctx, point, prevPoint, props}]));
+                        redrawAnnotations({ctx, annotations, props});
                     }
                     if(channel) {
                         pushMessage(JSON.stringify({ctx, point, prevPoint, props}), channel);
@@ -125,12 +131,15 @@ export function useOnDraw(
             }
         }
     },[
+        canvasRef,
         onDraw, 
         channel,
-        otherProps.isCanvasClear,
-        otherProps.isImageSaved,
-        otherProps.lineColor,
+     //   otherProps.isCanvasClear,
+      //  otherProps.isImageSaved,
+      //  otherProps.lineColor,
         otherProps,
+        setCanvasCtx,
+        annotations?.length
 
     ]);
 
@@ -148,6 +157,10 @@ export function useOnDraw(
         let prevPoint = prevPointRef.current;
         setAnnotation(annotation => ([...annotation, {ctx, point, prevPoint, props}]));
         setAnnotations(annotations => ([...annotations, {type: 'pen', ctx, point, prevPoint, props}]));
+        onDraw({ctx, point, prevPoint, props});
+        if(channel) {
+            pushMessage(JSON.stringify({ctx, point, prevPoint, props}), channel);
+        }
     }
     
     return {

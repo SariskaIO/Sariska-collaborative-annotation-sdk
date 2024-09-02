@@ -8,7 +8,7 @@ import { useStore } from './store';
 import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
-import { clearCanvas, onDraw, onDrawCircle, onDrawEmoji } from './utils';
+import { clearCanvas, getAllRemoteTextBoxes, onDraw, onDrawCircle, onDrawEmoji, setAllRemoteTextBoxes } from './utils';
 import Message from './components/Message';
 import { ANNOTATION_TOOLS } from './constants';
 
@@ -16,6 +16,7 @@ const App = (props)=> {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [canvasCtx, setCanvasCtx] = useState(null);
+  const [remoteTextboxes, setRemoteTextboxes] = useState([]);
   const roomName = 'sariska1';
   const {users, dispatch} = useStore();
   
@@ -42,6 +43,7 @@ const App = (props)=> {
   })
 
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
+    console.log('new_message', message);
     let content = JSON.parse(message.content);
       if(content?.ctx && Object.keys(content?.ctx)?.length){
         if(props.annotationTool === ANNOTATION_TOOLS.pen){
@@ -49,6 +51,8 @@ const App = (props)=> {
         }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
           content.props = {width: props.width, height: props.height};
           onDrawCircle(content);
+        }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
+         setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
         }else{
           content.emojis = [...messages];
           onDrawEmoji(content);
@@ -61,14 +65,15 @@ const App = (props)=> {
           }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
             content.props = {width: props.width, height: props.height};
             onDrawCircle(content);
+          }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
+            setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
           }else{
               content.emojis = [...messages];
               onDrawEmoji(content);
             }
           }
-      }
+        }
       setMessages(messages => [...messages, message])
-    //}
   });
   
 
@@ -83,21 +88,14 @@ const App = (props)=> {
   };
 
   return (
-      // <>
-      //   {
-      //     props.content ?
-      //       <Message pushMessage={pushMessage} content={props.content} />
-      //       :
-
             <DrawingBoard
               inputProps={props}
               pushMessage={pushMessage} 
               loading={loading}
               channel={rtcChannel}
               setCanvasCtx={setCanvasCtx}
+              remoteTextboxes={remoteTextboxes}
             />
-      //   }
-      // </>
   );
 }
 

@@ -1,5 +1,5 @@
 import { SARISKA_API_KEY } from "../config";
-import { GENERATE_TOKEN_URL } from "../constants";
+import { ANNOTATION_TOOLS, GENERATE_TOKEN_URL } from "../constants";
 
 export function getUserId() {
     let storedUserId = JSON.parse((localStorage.getItem('sariska-collaborative-userId')));
@@ -131,17 +131,18 @@ export function clearCanvas(ctx, width, height){
 }
 
 export function drawLine(ctx, end, start, color, width) {
+    if(!ctx) return;
     start = start ?? end;
     ctx.beginPath();
     ctx.lineWidth= width;
     ctx.strokeStyle = color;
-    ctx.moveTo(start.x, start.y);
-    ctx.lineTo(end.x, end.y);
+    ctx.moveTo(start?.x, start?.y);
+    ctx.lineTo(end?.x, end?.y);
     ctx.stroke();
 
     ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.arc(start.x, start.y, 2, 0, 2 * Math.PI);
+    ctx.arc(start?.x, start?.y, 2, 0, 2 * Math.PI);
     ctx.fill();
 }
 
@@ -150,42 +151,28 @@ export function onDraw (data) {
 }
 
 export function onDrawEmoji({ctx, point, emoji, emojis}) {
+    if(!ctx) return;
     ctx.font = '24px Arial';
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
+    ctx.fillStyle = 'red';
     if(emojis?.length){
     emojis.forEach(({ x, y }) => {
         ctx.fillText(emoji || '😀', x, y);
       });
     }
-    ctx.fillText(emoji || '😀', point.x, point.y); // Draw the latest emoji
+    ctx.fillText(emoji || '😀', point?.x, point?.y); // Draw the latest emoji
 }
 
 export function onDrawCircle ({ ctx, center, radius, props }) {
+    if(!ctx) return;
     if (center) {
         ctx.beginPath();
         ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
-        ctx.strokeStyle = '#565656';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = props?.lineColor;
+        ctx.lineWidth = props?.lineWidth;
         ctx.stroke();
     }
-};
-
-export const redrawCircles = ({ctx, circles, annotations, props}) => {
-    clearCanvas(ctx, props.width, props.height);
-    annotations?.forEach(annotation => {
-        const {type, ...params} = annotation;
-        if(type === 'pen'){
-            onDraw(params);
-        }else if(type === 'emoji'){
-            onDrawEmoji(params);
-        }else{
-            return;
-        }
-    })
-    circles.forEach(({ center, radius }) => {
-        onDrawCircle({ctx, center, radius, props});
-    });
 };
 
 export function computePointInCanvas(clientX, clientY, refCurrent){
@@ -206,3 +193,80 @@ export const calculateCircleRadius = (startPos, currentPos) => {
         Math.pow(currentPos.y - startPos.y, 2)
     );
 }
+
+export const measureText = (text, maxWidth, canvasRef) => {
+    const ctx = canvasRef?.current?.getContext('2d');
+    ctx.font = '16px Arial';
+
+    const words = text.split(' ');
+    let line = '';
+    let height = 32; // Start with min height
+    let width = 0;
+
+    words.forEach((word, index) => {
+        let testLine = line + word;
+        if (index < words.length - 1) {
+            testLine += ' ';
+        }
+        const testWidth = ctx.measureText(testLine).width;
+
+        if (testWidth > maxWidth && line.length > 0) {
+            line = word + ' ';
+            height += 16;
+        } else {
+            line = testLine;
+        }
+
+        width = Math.max(width, testWidth);
+    });
+
+    return {
+        width: Math.min(width, maxWidth),
+        height: height,
+    };
+};
+
+export const getAllRemoteTextBoxes =(remoteTextboxes, textbox) => {
+    let allRemoteTextBoxes = remoteTextboxes?.map((remoteTextbox) => {
+        if (remoteTextbox.id === textbox.id) { 
+          return {...textbox};
+        }else{
+          return {...remoteTextbox};
+        }
+      });
+      if(!allRemoteTextBoxes?.some(remoteTextbox =>remoteTextbox.id === textbox.id )){
+        allRemoteTextBoxes.push(textbox);
+      }
+      return allRemoteTextBoxes;
+}
+
+export const setAllRemoteTextBoxes = (content, remoteTextboxes, setRemoteTextboxes) => {
+    if(content?.textbox){
+        const {textbox} = content;
+        if(remoteTextboxes?.length){
+          let allRemoteTextBoxes = getAllRemoteTextBoxes(remoteTextboxes, textbox);
+          setRemoteTextboxes(allRemoteTextBoxes)
+        }else{
+            setRemoteTextboxes([{...textbox}]);
+        }
+    }
+}
+
+export const redrawAnnotations = ({ctx, annotations, props}) => {
+    if(!ctx) return;
+    if(props.annotationTools !== ANNOTATION_TOOLS.emoji){
+        clearCanvas(ctx, props.width, props.height);
+    }
+    annotations?.forEach(annotation => {
+        const {type, ...params} = annotation;
+        if(type === 'pen'){
+            onDraw(params);
+        }else if(type === 'emoji'){
+            onDrawEmoji(params);
+        }else if(type === 'circle'){
+            onDrawCircle({ ctx, center: annotation.center, radius: annotation.radius, props });
+        }else{
+            return;
+        }
+    })
+};

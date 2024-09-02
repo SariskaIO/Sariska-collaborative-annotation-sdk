@@ -6,14 +6,10 @@ const DrawingBoard = ({
     pushMessage,
     channel,
     setCanvasCtx,
+    remoteTextboxes,
     loading,
     inputProps
 }) => {
-    const [point, setPoint] = useState({});
-    const {
-      users: { user },
-      rooms: { room },
-    } = useStore();
     
     return (
         <Canvas 
@@ -23,6 +19,7 @@ const DrawingBoard = ({
             channel={channel}
             setCanvasCtx={setCanvasCtx}
             inputProps={inputProps}
+            remoteTextboxes={remoteTextboxes}
         />
     )
 }
