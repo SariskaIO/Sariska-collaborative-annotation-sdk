@@ -56,20 +56,17 @@ export function useOnEmoji(
     ]);
 
 const onMouseDown = useCallback((event) => {
-    console.log('bonMouseDown')
     if(otherProps.annotationTool !== ANNOTATION_TOOLS.emoji){
         return;
     }
-    console.log('inonMouseDown')
     if(!otherProps.isModerator){
         return ;
     }
-    console.log('aonMouseDown')
     const ctx = canvasRef?.current?.getContext('2d');
     const { parentCanvasRef, ...props } = otherProps;
 
     const point = computePointInCanvas(event.clientX, event.clientY, canvasRef?.current);
-console.log('emojis', emojis, ctx, point )
+    
     setEmojis((prevEmojis) => [...prevEmojis, { ctx, point, emoji: props.emojiType }]);
     setAnnotations((annotations) => [...annotations, { type: 'emoji', ctx, point, emoji: props.emojiType,
                                      emojis:  [...emojis, { ctx, point, emoji: props.emojiType }]}]);
@@ -80,7 +77,6 @@ console.log('emojis', emojis, ctx, point )
     }
   }, [emojis?.length, channel, otherProps, setAnnotations]);
 
-console.log('emojies', emojis)
     return {
         setCanvasRef,
         onMouseDown

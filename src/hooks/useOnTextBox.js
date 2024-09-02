@@ -11,7 +11,6 @@ export function useOnTextBox(
     otherProps) {
     const [textboxes, setTextboxes] = useState([]);
     const canvasRef = useRef(null);
-    console.log('textboxes f', textboxes, annotations);
     useEffect(() => {
         if(otherProps.annotationTool !== ANNOTATION_TOOLS.textbox){
             return;

@@ -20,7 +20,7 @@ const Canvas = ({
     const circleHook = useOnCircle(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
     const textboxHook = useOnTextBox(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
     const drawHook = useOnDraw(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
-    console.log('annotaiotnsa', annotations, inputProps);
+    
   // Use logic to select the correct hook result
   const { setCanvasRef, onMouseDown, handleTextChange, textboxes } = 
   inputProps.annotationTool === ANNOTATION_TOOLS.emoji ? emojiHook : 
@@ -35,7 +35,7 @@ const Canvas = ({
     }
   let drawnTextboxes = annotations?.length && annotations?.filter(annotation => annotation.type === ANNOTATION_TOOLS.textbox.toLowerCase())?.map(annotation => annotation.textbox);
   let textboxList = textboxes?.length ? textboxes : remoteTextboxes?.length ? remoteTextboxes : drawnTextboxes?.length ? drawnTextboxes : [];
-  console.log('textboxList', textboxList, drawnTextboxes)
+  
   return (
         <>
         <canvas 
