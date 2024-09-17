@@ -17,7 +17,6 @@ const App = (props)=> {
   const [remoteTextboxes, setRemoteTextboxes] = useState([]);
   const roomName = props.roomName || getRoomName();
   const {users, dispatch} = useStore();
-  console.log('roomName', roomName, users, props)
   const rtcChannel = CreateChannel(`rtc:${roomName}`, {});
   
   UseEventHandler(rtcChannel, 'ping', setLoading, message => {
@@ -26,7 +25,6 @@ const App = (props)=> {
   
   UseEventHandler(rtcChannel, 'user_joined', setLoading, async (response) => {
     const {room, user} = response;
-    console.log('room, user', room, user)
     let userDetails = {id : user.id, name: user.name};
     let roomDetails = {session_id : room.session_id, created_by: room.created_by, inserted_at: room.inserted_at};
     dispatch(setRoom(SET_ROOM, roomDetails));
