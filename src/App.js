@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './App.css';
-import SocketProvider from './context/socket/SocketProvider';
 import CreateChannel from './channel/CreateChannel';
 import UseEventHandler from './hooks/UseEventHandler';
 import DrawingBoard from './components/DrawingBoard';
@@ -8,8 +7,7 @@ import { useStore } from './store';
 import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
-import { clearCanvas, getAllRemoteTextBoxes, onDraw, onDrawCircle, onDrawEmoji, setAllRemoteTextBoxes } from './utils';
-import Message from './components/Message';
+import { getRoomName, onDraw, onDrawCircle, onDrawEmoji, setAllRemoteTextBoxes } from './utils';
 import { ANNOTATION_TOOLS } from './constants';
 
 const App = (props)=> {
@@ -17,7 +15,7 @@ const App = (props)=> {
   const [loading, setLoading] = useState(false);
   const [canvasCtx, setCanvasCtx] = useState(null);
   const [remoteTextboxes, setRemoteTextboxes] = useState([]);
-  const roomName = 'sariska1';
+  const roomName = props.meetingTitle || getRoomName();
   const {users, dispatch} = useStore();
   
   const rtcChannel = CreateChannel(`rtc:${roomName}`, {});
