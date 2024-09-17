@@ -8,7 +8,6 @@ const SocketProvider = ({children}) => {
   const [socket, setSocket] = useState(null);
   let userName =  getUserName();
   let userId = getUserId();
-console.log('username uerid,', userName, userId);
   useEffect(()=>{
     const fetchData = async() => {
         const token = await getToken(userName, userId);
