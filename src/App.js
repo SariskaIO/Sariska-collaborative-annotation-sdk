@@ -15,9 +15,9 @@ const App = (props)=> {
   const [loading, setLoading] = useState(false);
   const [canvasCtx, setCanvasCtx] = useState(null);
   const [remoteTextboxes, setRemoteTextboxes] = useState([]);
-  const roomName = props.meetingTitle || getRoomName();
+  const roomName = props.roomName || getRoomName();
   const {users, dispatch} = useStore();
-  console.log('roomName', roomName, users)
+  console.log('roomName', roomName, users, props)
   const rtcChannel = CreateChannel(`rtc:${roomName}`, {});
   
   UseEventHandler(rtcChannel, 'ping', setLoading, message => {
