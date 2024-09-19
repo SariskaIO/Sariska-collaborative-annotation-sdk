@@ -10,7 +10,8 @@
 
 # production
 /build
-/src
+
+src/
 
 package-lock.json
 yarn.lock
