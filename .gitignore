@@ -11,8 +11,11 @@
 # production
 /build
 
+# src/
+
 package-lock.json
 yarn.lock
+index.js
 
 # misc
 .DS_Store
