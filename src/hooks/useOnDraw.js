@@ -18,46 +18,22 @@ export function useOnDraw(
 
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
+    
+    // Function to handle window resize and persist annotations
+    function handleResize() {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
-    // const saveImage = () => {
-    //     console.log('saveImage')
-    //     const context = canvasRef.current.getContext('2d');
-    //     const image = new Image();
-    //     image.src = otherProps.imageUrl;
-    //     image.onload = () => {
-    //       // Draw the image onto the canvas
-    //       context.drawImage(image, 0, 0, 800, 600);
-    
-    //       // Draw the annotations onto the canvas
-    //       context.strokeStyle = otherProps?.lineColor;
-    //       context.lineWidth = otherProps?.lineWidth;
-    //       annotations.forEach((annotation, index) => {
-    //         if (index === 0) {
-    //           context.beginPath();
-    //           context.moveTo(annotation.x, annotation.y);
-    //         } else {
-    //           context.lineTo(annotation.x, annotation.y);
-    //           context.stroke();
-    //         }
-    //       });
-    
-    //       // Convert the canvas to an image and open it in a new tab
-    //       const imageDataUrl = canvasRef.current.toDataURL('image/png');
-    //       console.log('first imageDataUrl', imageDataUrl)
-    //       const newWindow = window.open('about:blank', 'image from canvas');
-    //       newWindow.document.write('<img src="' + imageDataUrl + '" alt="Saved Annotation" />');
-    //     };
-    //     // const canvas = canvasRef.current;
-    //     // const link = document.createElement('a');
-    //     // link.download = 'image_with_drawing.png';
-    //     // canvas.toBlob((blob) => {
-    //     //   const url = URL.createObjectURL(blob);
-    //     //   setDownloadUrl(url);
-    //     //   link.href = url;
-    //     //   link.click();
-    //     // });
-    //   };
-    
+        const ctx = canvas.getContext("2d");
+        const { width, height } = canvas.getBoundingClientRect();
+
+        // Clear the canvas
+        clearCanvas(ctx, width, height);
+
+        // Redraw annotations after clearing
+        redrawAnnotations({ ctx, annotations, props: otherProps });
+    }
+
     useEffect(()=>{
         if(otherProps.annotationTool !== ANNOTATION_TOOLS.pen){
             return;
@@ -67,6 +43,9 @@ export function useOnDraw(
         parentCanvasRef.current = canvasRef?.current;
         setCanvasCtx(ctx);
         
+        // Initialize window resize listener
+        window.addEventListener('resize', handleResize);
+
         function initMouseMoveListener(){
             const mouseMoveListener = (e) => {
                 if(isDrawingRef.current){
@@ -122,6 +101,7 @@ export function useOnDraw(
             props.saveImage(annotation);
         }
         return ()=>{
+            window.removeEventListener('resize', handleResize); // Clean up resize listener
             if(props.isParticipantAccess){
                 removeMouseEventListeners();
             }else{
@@ -146,6 +126,7 @@ export function useOnDraw(
     function setCanvasRef(ref){
         if(!ref) return;
         canvasRef.current = ref;
+        handleResize(); // Ensure annotations are redrawn if the canvas size has changed
     }
     
     function onMouseDown(e){
