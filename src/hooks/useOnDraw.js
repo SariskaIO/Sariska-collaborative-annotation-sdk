@@ -11,6 +11,8 @@ export function useOnDraw(
     otherProps
     ){
     const [annotation, setAnnotation] = useState([]);
+    const [initialCanvasSize, setInitialCanvasSize] = useState({ width: 0, height: 0 });
+
 
     const canvasRef = useRef(null);
     const prevPointRef = useRef()
@@ -27,11 +29,15 @@ export function useOnDraw(
         const ctx = canvas.getContext("2d");
         const { width, height } = canvas.getBoundingClientRect();
 
+        // Calculate the scale factors based on initial canvas size
+        const scaleX = width / initialCanvasSize.width;
+        const scaleY = height / initialCanvasSize.height;
+
         // Clear the canvas
         clearCanvas(ctx, width, height);
 
         // Redraw annotations after clearing
-        redrawAnnotations({ ctx, annotations, props: otherProps });
+        redrawAnnotations({ ctx, annotations, props: otherProps, scaleX, scaleY });
     }
 
     useEffect(()=>{
@@ -42,6 +48,11 @@ export function useOnDraw(
         const {parentCanvasRef, ...props} = otherProps;
         parentCanvasRef.current = canvasRef?.current;
         setCanvasCtx(ctx);
+        
+        // Store initial canvas dimensions
+        const { width, height } = canvasRef?.current.getBoundingClientRect();
+        setInitialCanvasSize({ width, height });
+
         
         // Initialize window resize listener
         window.addEventListener('resize', handleResize);
@@ -130,9 +141,9 @@ export function useOnDraw(
     }
     
     function onMouseDown(e){
-        console.log('onMouseDown', !canvasRef?.current, !otherProps.isModerator, !otherProps.isModeratorLocal, !canvasRef?.current && !otherProps.isModerator)
+        console.log('onMouseDown', canvasRef?.current, !otherProps.isModerator, !otherProps.isModeratorLocal, !canvasRef?.current && !otherProps.isModerator)
         if(!canvasRef?.current && !otherProps.isModerator) return;
-        console.log('after onMouseDown')
+        console.log('onMouseDown')
         const {parentCanvasRef, ...props} = otherProps;
         isDrawingRef.current = true;
         const ctx = canvasRef?.current?.getContext('2d');
