@@ -131,7 +131,7 @@ export function useOnDraw(
     
     function onMouseDown(e){
         console.log('onMouseDown', !canvasRef?.current, !otherProps.isModerator, !otherProps.isModeratorLocal, !canvasRef?.current && !otherProps.isModerator)
-        if(!canvasRef?.current && !otherProps.isModerator) return;
+        if(canvasRef?.current && !otherProps.isModerator) return;
         console.log('after onMouseDown')
         const {parentCanvasRef, ...props} = otherProps;
         isDrawingRef.current = true;
