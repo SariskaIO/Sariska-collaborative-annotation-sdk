@@ -12,7 +12,7 @@ export function useOnDraw(
     ){
     const [annotation, setAnnotation] = useState([]);
    // const [initialCanvasSize, setInitialCanvasSize] = useState({ width: 0, height: 0 });
-
+    const [canvasSize, setCanvasSize] = useState({ width: props.width, height: props.height });
 
     const canvasRef = useRef(null);
     const prevPointRef = useRef()
@@ -21,6 +21,35 @@ export function useOnDraw(
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
     
+    const handleResize = () => {
+        const newWidth = props.width;
+        const newHeight = props.height;
+    
+        const scaleX = newWidth / canvasSize.width;
+        const scaleY = newHeight / canvasSize.height;
+    
+        const scaledPaths = paths.map((path) =>
+          path.map(([x, y]) => [x * scaleX, y * scaleY])
+        );
+    
+        const scaledCircles = circles.map((circle) => ({
+          x: circle.x * scaleX,
+          y: circle.y * scaleY,
+          radius: circle.radius * Math.min(scaleX, scaleY),
+        }));
+    
+        const scaledEmojis = emojis.map((emoji) => ({
+          ...emoji,
+          x: emoji.x * scaleX,
+          y: emoji.y * scaleY
+        }));
+    
+        setCanvasSize({ width: newWidth, height: newHeight });
+        setPaths(scaledPaths);
+        setCircles(scaledCircles);
+        setEmojis(scaledEmojis);
+      };
+
     // Function to handle window resize and persist annotations
     // function handleResize() {
     //     const canvas = canvasRef.current;
