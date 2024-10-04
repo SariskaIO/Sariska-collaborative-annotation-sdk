@@ -95,13 +95,14 @@ const Canvas = ({
   // Start drawing, creating a circle, or placing an emoji
   const startDrawing = ({ nativeEvent }) => {
     const { offsetX, offsetY } = nativeEvent;
+    console.log('startDrawing')
     setDrawing(true);
 
-    if (mode === "freehand") {
+    if (mode === ANNOTATION_TOOLS.pen) {
       setCurrentPath([[offsetX, offsetY]]);
-    } else if (mode === "circle") {
+    } else if (mode === ANNOTATION_TOOLS.circle) {
       setStartPos({ x: offsetX, y: offsetY });
-    } else if (mode === "emoji") {
+    } else if (mode === ANNOTATION_TOOLS.emoji) {
       setEmojis((prevEmojis) => [...prevEmojis, { x: offsetX, y: offsetY, emoji: emoji }]);
     }
   };
@@ -109,12 +110,12 @@ const Canvas = ({
   // Continue drawing or update the circle radius
   const draw = ({ nativeEvent }) => {
     if (!drawing) return;
-
+console.log('draw')
     const { offsetX, offsetY } = nativeEvent;
 
-    if (mode === "freehand") {
+    if (mode === ANNOTATION_TOOLS.pen) {
       setCurrentPath((prevPath) => [...prevPath, [offsetX, offsetY]]);
-    } else if (mode === "circle" && startPos) {
+    } else if (mode === ANNOTATION_TOOLS.circle && startPos) {
       const radius = Math.sqrt(
         Math.pow(offsetX - startPos.x, 2) + Math.pow(offsetY - startPos.y, 2)
       );
@@ -125,12 +126,13 @@ const Canvas = ({
   // Stop drawing and save the path or circle
   const stopDrawing = ({ nativeEvent }) => {
     if (!drawing) return;
+    console.log('stopDrawing')
     setDrawing(false);
 
-    if (mode === "freehand") {
+    if (mode === ANNOTATION_TOOLS.pen) {
       setPaths((prevPaths) => [...prevPaths, currentPath]);
       setCurrentPath([]);
-    } else if (mode === "circle" && startPos) {
+    } else if (mode === ANNOTATION_TOOLS.circle && startPos) {
       const { offsetX, offsetY } = nativeEvent;
       const radius = Math.sqrt(
         Math.pow(offsetX - startPos.x, 2) + Math.pow(offsetY - startPos.y, 2)
