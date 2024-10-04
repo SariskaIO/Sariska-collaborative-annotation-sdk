@@ -40,15 +40,9 @@ const Canvas = ({
   const useStyles = makeStyles(() => ({
     textArea: {
       position: 'absolute',
-      top: textbox.y + 'px',
-      left: textbox.x + 'px',
-      width: textbox.width + 'px',
-      height: textbox.height + 'px',
       resize: 'none',
       overflow: 'hidden',
       boxSizing: 'border-box',
-      maxWidth: `${Math.min(200, 600 - textbox.x)}px`,
-      maxHeight: `${Math.min(96, 500 - textbox.y)}px`,
       zIndex: otherProps.zIndex,
       '&:focus-visible': {
             outlineOffset: otherProps.isModeratorLocal && '0px',
@@ -75,6 +69,14 @@ const Canvas = ({
                     onChange={(e) => handleTextChange(e, textbox.id)}
                     autoFocus={otherProps.isModeratorLocal}
                     readOnly={!otherProps.isModeratorLocal}
+                    style={{
+                      top: textbox.y + 'px',
+                      left: textbox.x + 'px',
+                      width: textbox.width + 'px',
+                      height: textbox.height + 'px',
+                      maxWidth: `${Math.min(200, 600 - textbox.x)}px`,
+                      maxHeight: `${Math.min(96, 500 - textbox.y)}px`,
+                    }}
                 />
             )) : null}
           {children}
