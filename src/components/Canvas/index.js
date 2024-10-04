@@ -60,6 +60,10 @@ const Canvas = ({
                         maxWidth: `${Math.min(200, 600 - textbox.x)}px`,
                         maxHeight: `${Math.min(96, 500 - textbox.y)}px`,
                         zIndex: otherProps.zIndex,
+                        '&:focus-visible': {
+                              outlineOffset: !otherProps.isModeratorLocal && '0px',
+                              outline: !otherProps.isModeratorLocal && '-webkit-focus-ring-color auto 1px'
+                          }
                     }}
                     value={textbox.text}
                     onChange={(e) => handleTextChange(e, textbox.id)}
