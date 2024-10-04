@@ -4,6 +4,7 @@ import { useOnDraw } from '../../hooks/useOnDraw';
  import { useOnEmoji } from '../../hooks/useOnEmoji';
  import { useOnCircle } from '../../hooks/useOnCircle';
 import { useOnTextBox } from '../../hooks/useOnTextBox';
+import { makeStyles } from '@material-ui/core';
 
 const Canvas = ({
     width, 
@@ -55,6 +56,7 @@ const Canvas = ({
       }
     }
   }))
+ const classes = useStyles();
 
   return (
         <>
@@ -68,9 +70,7 @@ const Canvas = ({
         {textboxList?.length ? textboxList?.map((textbox) => (
                 <textarea
                     key={textbox.id}
-                    style={{
-                        
-                    }}
+                    className={classes.textArea}
                     value={textbox.text}
                     onChange={(e) => handleTextChange(e, textbox.id)}
                     autoFocus={otherProps.isModeratorLocal}
