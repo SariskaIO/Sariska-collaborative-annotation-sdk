@@ -46,7 +46,10 @@ const Canvas = ({
       zIndex: otherProps.zIndex,
       '&:focus-visible': {
             outlineOffset: otherProps.isModeratorLocal && '0px',
-            outline: otherProps.isModeratorLocal && '-webkit-focus-ring-color auto 1px'
+            outline: otherProps.isModeratorLocal ? '-webkit-focus-ring-color auto 1px' : 'none'
+      },
+      '&:focus': {
+            outline: otherProps.isModeratorLocal ? '-webkit-focus-ring-color auto 1px' : 'none'
       }
     }
   }))
