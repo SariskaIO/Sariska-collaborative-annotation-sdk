@@ -64,6 +64,7 @@ const Canvas = ({
                     value={textbox.text}
                     onChange={(e) => handleTextChange(e, textbox.id)}
                     autoFocus={otherProps.isModeratorLocal}
+                    readOnly={!otherProps.isModeratorLocal}
                 />
             )) : null}
           {children}
