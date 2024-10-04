@@ -11,7 +11,7 @@ export function useOnDraw(
     otherProps
     ){
     const [annotation, setAnnotation] = useState([]);
-    const [initialCanvasSize, setInitialCanvasSize] = useState({ width: 0, height: 0 });
+   // const [initialCanvasSize, setInitialCanvasSize] = useState({ width: 0, height: 0 });
 
 
     const canvasRef = useRef(null);
@@ -22,23 +22,23 @@ export function useOnDraw(
     const mouseUpListenerRef = useRef(null);
     
     // Function to handle window resize and persist annotations
-    function handleResize() {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
+    // function handleResize() {
+    //     const canvas = canvasRef.current;
+    //     if (!canvas) return;
 
-        const ctx = canvas.getContext("2d");
-        const { width, height } = canvas.getBoundingClientRect();
+    //     const ctx = canvas.getContext("2d");
+    //     const { width, height } = canvas.getBoundingClientRect();
 
-        // Calculate the scale factors based on initial canvas size
-        const scaleX = width / initialCanvasSize.width;
-        const scaleY = height / initialCanvasSize.height;
+    //     // Calculate the scale factors based on initial canvas size
+    //     const scaleX = width / initialCanvasSize.width;
+    //     const scaleY = height / initialCanvasSize.height;
 
-        // Clear the canvas
-        clearCanvas(ctx, width, height);
+    //     // Clear the canvas
+    //     clearCanvas(ctx, width, height);
 
-        // Redraw annotations after clearing
-        redrawAnnotations({ ctx, annotations, props: otherProps, scaleX, scaleY });
-    }
+    //     // Redraw annotations after clearing
+    //     redrawAnnotations({ ctx, annotations, props: otherProps, scaleX, scaleY });
+    // }
 
     useEffect(()=>{
         if(otherProps.annotationTool !== ANNOTATION_TOOLS.pen){
@@ -55,7 +55,7 @@ export function useOnDraw(
 
         
         // Initialize window resize listener
-        window.addEventListener('resize', handleResize);
+      //  window.addEventListener('resize', handleResize);
 
         function initMouseMoveListener(){
             const mouseMoveListener = (e) => {
@@ -112,7 +112,7 @@ export function useOnDraw(
             props.saveImage(annotation);
         }
         return ()=>{
-            window.removeEventListener('resize', handleResize); // Clean up resize listener
+          //  window.removeEventListener('resize', handleResize); // Clean up resize listener
             if(props.isParticipantAccess){
                 removeMouseEventListeners();
             }else{
@@ -137,7 +137,7 @@ export function useOnDraw(
     function setCanvasRef(ref){
         if(!ref) return;
         canvasRef.current = ref;
-        handleResize(); // Ensure annotations are redrawn if the canvas size has changed
+      //  handleResize(); // Ensure annotations are redrawn if the canvas size has changed
     }
     
     function onMouseDown(e){
