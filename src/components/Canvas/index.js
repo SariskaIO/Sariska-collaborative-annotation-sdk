@@ -36,6 +36,26 @@ const Canvas = ({
   let drawnTextboxes = annotations?.length && annotations?.filter(annotation => annotation.type === ANNOTATION_TOOLS.textbox.toLowerCase())?.map(annotation => annotation.textbox);
   let textboxList = textboxes?.length ? textboxes : remoteTextboxes?.length ? remoteTextboxes : drawnTextboxes?.length ? drawnTextboxes : [];
   
+  const useStyles = makeStyles(() => ({
+    textArea: {
+      position: 'absolute',
+      top: textbox.y + 'px',
+      left: textbox.x + 'px',
+      width: textbox.width + 'px',
+      height: textbox.height + 'px',
+      resize: 'none',
+      overflow: 'hidden',
+      boxSizing: 'border-box',
+      maxWidth: `${Math.min(200, 600 - textbox.x)}px`,
+      maxHeight: `${Math.min(96, 500 - textbox.y)}px`,
+      zIndex: otherProps.zIndex,
+      '&:focus-visible': {
+            outlineOffset: otherProps.isModeratorLocal && '0px',
+            outline: otherProps.isModeratorLocal && '-webkit-focus-ring-color auto 1px'
+      }
+    }
+  }))
+
   return (
         <>
         <canvas 
@@ -49,21 +69,7 @@ const Canvas = ({
                 <textarea
                     key={textbox.id}
                     style={{
-                        position: 'absolute',
-                        top: textbox.y + 'px',
-                        left: textbox.x + 'px',
-                        width: textbox.width + 'px',
-                        height: textbox.height + 'px',
-                        resize: 'none',
-                        overflow: 'hidden',
-                        boxSizing: 'border-box',
-                        maxWidth: `${Math.min(200, 600 - textbox.x)}px`,
-                        maxHeight: `${Math.min(96, 500 - textbox.y)}px`,
-                        zIndex: otherProps.zIndex,
-                        '&:focus-visible': {
-                              outlineOffset: !otherProps.isModeratorLocal && '0px',
-                              outline: !otherProps.isModeratorLocal && '-webkit-focus-ring-color auto 1px'
-                          }
+                        
                     }}
                     value={textbox.text}
                     onChange={(e) => handleTextChange(e, textbox.id)}
