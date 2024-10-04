@@ -51,7 +51,7 @@ export function useOnDraw(
         
         // Store initial canvas dimensions
         const { width, height } = canvasRef?.current.getBoundingClientRect();
-        setInitialCanvasSize({ width, height });
+       // setInitialCanvasSize({ width, height });
 
         
         // Initialize window resize listener
