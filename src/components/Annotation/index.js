@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 
-const Annotation = ({canvasRef, imageRef, setCtx, currentTool, ctx, width, height}) => {
+const Annotation = ({canvasRef, setCtx, currentTool, ctx, width, height}) => {
   const [drawing, setDrawing] = useState(false);
   const [paths, setPaths] = useState([]); // Store freehand paths
   const [currentPath, setCurrentPath] = useState([]); // Store current freehand path

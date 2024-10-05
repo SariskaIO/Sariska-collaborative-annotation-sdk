@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useOnDraw } from '../../hooks/useOnDraw';
  import { ANNOTATION_TOOLS } from '../../constants';
  import { useOnEmoji } from '../../hooks/useOnEmoji';
