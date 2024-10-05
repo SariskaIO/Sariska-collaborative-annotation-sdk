@@ -69,6 +69,7 @@ const Canvas = ({
           setCurrentTool={setCurrentTool} 
           width={width}
           height={height}
+          zIndex={otherProps.zIndex}
         />
         {/* <canvas 
             width={width}

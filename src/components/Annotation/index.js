@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 
-const Annotation = ({canvasRef, setCtx, currentTool, ctx, width, height}) => {
+const Annotation = ({canvasRef, setCtx, currentTool, ctx, width, height, zIndex}) => {
   const [drawing, setDrawing] = useState(false);
   const [paths, setPaths] = useState([]); // Store freehand paths
   const [currentPath, setCurrentPath] = useState([]); // Store current freehand path
@@ -167,7 +167,9 @@ console.log('currenyTool', currentTool)
   return (
       <canvas
         ref={canvasRef}
-        style={{
+        style={{ 
+          zIndex,
+          background: 'none',
           position: 'absolute',
           top: 0,
           left: 0,
