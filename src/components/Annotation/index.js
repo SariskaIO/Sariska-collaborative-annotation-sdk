@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ANNOTATION_TOOLS } from '../../constants';
 
-const Annotation = ({canvasRef, setCtx, currentTool, ctx, width, height, zIndex}) => {
+const Annotation = ({canvasRef, setCtx, currentTool, ctx, width, height, zIndex, pushMessage, channel, setCanvasCtx}) => {
   const [drawing, setDrawing] = useState(false);
   const [paths, setPaths] = useState([]); // Store freehand paths
   const [currentPath, setCurrentPath] = useState([]); // Store current freehand path
