@@ -66,7 +66,6 @@ const Canvas = ({
           setCtx={setCtx} 
           currentTool={currentTool} 
           ctx={ctx} 
-          setCurrentTool={setCurrentTool} 
           width={width}
           height={height}
           zIndex={otherProps.zIndex}
