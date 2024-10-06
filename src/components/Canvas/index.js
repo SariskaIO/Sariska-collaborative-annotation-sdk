@@ -19,7 +19,7 @@ const Canvas = ({
     const {children, ...otherProps} = inputProps;
     const canvasRef = useRef(null);
     const [ctx, setCtx] = useState(null);
-    const [currentTool, setCurrentTool] = useState('freehand'); // 'freehand', 'emoji', 'circle'
+    const [currentTool, setCurrentTool] = useState(inputProps.annotationTool); // 'freehand', 'emoji', 'circle'
   //   const [annotations, setAnnotations] = useState([]);
   //   const emojiHook = useOnEmoji(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
   //   const circleHook = useOnCircle(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
@@ -32,7 +32,7 @@ const Canvas = ({
   // inputProps.annotationTool === ANNOTATION_TOOLS.circle ? circleHook :
   // inputProps.annotationTool === ANNOTATION_TOOLS.textbox ? textboxHook : 
   // drawHook;
-  
+  console.log('first currentTool ', currentTool, inputProps)
     const canvasStyle={
       position: 'absolute', 
       zIndex: otherProps.zIndex,
