@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ANNOTATION_TOOLS } from '../../constants';
 
-const Annotation = ({canvasRef, setCtx, currentTool, ctx, width, height, zIndex, pushMessage, channel, setCanvasCtx}) => {
+const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, height, zIndex, pushMessage, channel}) => {
   const [drawing, setDrawing] = useState(false);
   const [paths, setPaths] = useState([]); // Store freehand paths
   const [currentPath, setCurrentPath] = useState([]); // Store current freehand path
@@ -12,7 +12,7 @@ const Annotation = ({canvasRef, setCtx, currentTool, ctx, width, height, zIndex,
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
-    setCtx(context);
+    setCanvasCtx(context);
 
     const handleResize = () => {
       const canvas = canvasRef.current;
@@ -37,8 +37,8 @@ const Annotation = ({canvasRef, setCtx, currentTool, ctx, width, height, zIndex,
       const startXPercent = offsetX / canvas.width; // Store percentage-based coordinates
       const startYPercent = offsetY / canvas.height;
       setCurrentPath([{ x: startXPercent, y: startYPercent }]);
-      ctx.beginPath();
-      ctx.moveTo(offsetX, offsetY);
+      canvasCtx.beginPath();
+      canvasCtx.moveTo(offsetX, offsetY);
     } else if (currentTool === ANNOTATION_TOOLS.circle) {
       const { offsetX, offsetY } = getCanvasPosition(e);
       const canvas = canvasRef.current;
@@ -53,10 +53,10 @@ const Annotation = ({canvasRef, setCtx, currentTool, ctx, width, height, zIndex,
     console.log('first draw')
     if (currentTool === ANNOTATION_TOOLS.pen && drawing) {
       const { offsetX, offsetY } = getCanvasPosition(e);
-      ctx.lineTo(offsetX, offsetY);
-      ctx.strokeStyle = 'red';
-      ctx.lineWidth = 2;
-      ctx.stroke();
+      canvasCtx.lineTo(offsetX, offsetY);
+      canvasCtx.strokeStyle = 'red';
+      canvasCtx.lineWidth = 2;
+      canvasCtx.stroke();
 
       const canvas = canvasRef.current;
       const xPercent = offsetX / canvas.width;
@@ -70,14 +70,14 @@ const Annotation = ({canvasRef, setCtx, currentTool, ctx, width, height, zIndex,
         Math.pow(offsetY / canvas.height - currentCircle.y, 2)
       );
       setCurrentCircle((prevCircle) => ({ ...prevCircle, radius: radiusPercent }));
-      redraw(ctx); // Redraw everything on each mouse move to update the circle
+      redraw(canvasCtx); // Redraw everything on each mouse move to update the circle
     }
   };
 
   const stopDrawing = () => {
     if (currentTool === ANNOTATION_TOOLS.pen && drawing) {
       setDrawing(false);
-      ctx.closePath();
+      canvasCtx.closePath();
       setPaths((prevPaths) => [...prevPaths, currentPath]);
     } else if (currentTool === ANNOTATION_TOOLS.circle && currentCircle) {
       setCircles((prevCircles) => [...prevCircles, currentCircle]);
@@ -93,7 +93,7 @@ const Annotation = ({canvasRef, setCtx, currentTool, ctx, width, height, zIndex,
     const yPercent = offsetY / canvas.height;
     console.log('xPercent', xPercent)
     setEmojis((prevEmojis) => [...prevEmojis, { x: xPercent, y: yPercent, emoji: '😀' }]);
-    redraw(ctx); // Redraw to immediately show the emoji
+    redraw(canvasCtx); // Redraw to immediately show the emoji
   };
 
   const getCanvasPosition = (e) => {

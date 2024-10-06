@@ -89,6 +89,7 @@ const App = (props)=> {
               pushMessage={pushMessage} 
               loading={loading}
               channel={rtcChannel}
+              canvasCtx={canvasCtx}
               setCanvasCtx={setCanvasCtx}
               remoteTextboxes={remoteTextboxes}
             />

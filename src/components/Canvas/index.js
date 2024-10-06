@@ -12,13 +12,13 @@ const Canvas = ({
     height, 
     pushMessage,
     channel,
+    canvasCtx,
     setCanvasCtx,
     inputProps,
     remoteTextboxes
   }) => {
     const {children, ...otherProps} = inputProps;
     const canvasRef = useRef(null);
-    const [ctx, setCtx] = useState(null);
     let currentTool = inputProps.annotationTool; // 'freehand', 'emoji', 'circle'
   //   const [annotations, setAnnotations] = useState([]);
   //   const emojiHook = useOnEmoji(pushMessage, channel, setCanvasCtx, annotations, setAnnotations, otherProps);
@@ -63,15 +63,14 @@ const Canvas = ({
         <>
         <Annotation 
           canvasRef={canvasRef} 
-          setCtx={setCtx} 
           currentTool={currentTool} 
-          ctx={ctx} 
+          canvasCtx={canvasCtx} 
+          setCanvasCtx={setCanvasCtx}
           width={width}
           height={height}
           zIndex={otherProps.zIndex}
           pushMessage={pushMessage} 
           channel={channel} 
-          setCanvasCtx={setCanvasCtx}
         />
         {/* <canvas 
             width={width}

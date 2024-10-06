@@ -5,6 +5,7 @@ import Canvas from '../Canvas';
 const DrawingBoard = ({
     pushMessage,
     channel,
+    canvasCtx,
     setCanvasCtx,
     remoteTextboxes,
     loading,
@@ -17,6 +18,7 @@ const DrawingBoard = ({
             height={inputProps.height}
             pushMessage={pushMessage}
             channel={channel}
+            canvasCtx={canvasCtx}
             setCanvasCtx={setCanvasCtx}
             inputProps={inputProps}
             remoteTextboxes={remoteTextboxes}
