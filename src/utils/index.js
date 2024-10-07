@@ -272,7 +272,7 @@ export const redrawAnnotations = ({ctx, annotations, props}) => {
 };
 
 
-export const getCanvasPosition = (e) => {
+export const getCanvasPosition = (e, canvasRef) => {
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
     return {

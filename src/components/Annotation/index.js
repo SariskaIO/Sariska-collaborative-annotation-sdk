@@ -37,7 +37,7 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
   const startDrawing = (e) => {
     if (currentTool === ANNOTATION_TOOLS.pen) {
       setDrawing(true);
-      const { offsetX, offsetY } = getCanvasPosition(e);
+      const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
       const canvas = canvasRef.current;
       const startXPercent = offsetX / canvas.width; // Store percentage-based coordinates
       const startYPercent = offsetY / canvas.height;
@@ -45,7 +45,7 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
       canvasCtx.beginPath();
       canvasCtx.moveTo(offsetX, offsetY);
     } else if (currentTool === ANNOTATION_TOOLS.circle) {
-      const { offsetX, offsetY } = getCanvasPosition(e);
+      const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
       const canvas = canvasRef.current;
       const centerXPercent = offsetX / canvas.width;
       const centerYPercent = offsetY / canvas.height;
@@ -58,7 +58,7 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
   const draw = (e) => {
     console.log('first draw')
     if (currentTool === ANNOTATION_TOOLS.pen && drawing) {
-      const { offsetX, offsetY } = getCanvasPosition(e);
+      const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
       canvasCtx.lineTo(offsetX, offsetY);
       canvasCtx.strokeStyle = 'red';
       canvasCtx.lineWidth = 2;
@@ -69,7 +69,7 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
       const yPercent = offsetY / canvas.height;
       setCurrentPath((prevPath) => [...prevPath, { x: xPercent, y: yPercent }]);
     } else if (currentTool === ANNOTATION_TOOLS.circle && drawing) {
-      const { offsetX, offsetY } = getCanvasPosition(e);
+      const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
       const canvas = canvasRef.current;
       const radiusPercent = Math.sqrt(
         Math.pow(offsetX / canvas.width - currentCircle.x, 2) +
@@ -97,7 +97,7 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
   };
 
   const placeEmoji = (e) => {
-    const { offsetX, offsetY } = getCanvasPosition(e);
+    const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
     const canvas = canvasRef.current;
     const xPercent = offsetX / canvas.width;
     const yPercent = offsetY / canvas.height;
