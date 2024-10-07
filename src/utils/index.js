@@ -270,3 +270,91 @@ export const redrawAnnotations = ({ctx, annotations, props}) => {
         }
     })
 };
+
+
+export const getCanvasPosition = (e) => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    return {
+      offsetX: e.clientX - rect.left,
+      offsetY: e.clientY - rect.top,
+    };
+  };
+
+export const redraw = (context, canvasRef, type, annotation) => {
+    if(!context && !(canvasRef && canvasRef?.current)) return;
+    const canvas = canvasRef.current;
+    context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+
+    let annotationByType = annotation?.filter(item => item.type === type);
+    if(type === ANNOTATION_TOOLS.pen){
+    // Redraw freehand paths
+      annotationByType.forEach((item) => {
+        if (item.pen?.length > 0) {
+            const path = item.pen;
+            const startX = path[0].x * canvas.width;
+            const startY = path[0].y * canvas.height;
+            context.beginPath();
+            context.moveTo(startX, startY);
+
+            path.forEach((point) => {
+            const x = point.x * canvas.width;
+            const y = point.y * canvas.height;
+            context.lineTo(x, y);
+            });
+
+            context.strokeStyle = 'red';
+            context.lineWidth = 2;
+            context.stroke();
+            context.closePath();
+        }
+        });
+    }
+
+    if(type === ANNOTATION_TOOLS.circle){
+        // Redraw circles
+      annotationByType.forEach((item) => {
+        if(item?.circle){
+            const circle = item.circle;
+            const centerX = circle.x * canvas.width;
+            const centerY = circle.y * canvas.height;
+            const radius = circle.radius * canvas.width; // Using width scaling for simplicity
+            context.beginPath();
+            context.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            context.strokeStyle = 'blue';
+            context.lineWidth = 2;
+            context.stroke();
+            context.closePath();
+        }
+        });
+
+    if(type === 'currentCircle'){
+        // If currently drawing a circle, draw it
+        let currentCircle = annotationByType[0]?.circle;
+        if (currentCircle) {
+            const centerX = currentCircle.x * canvas.width;
+            const centerY = currentCircle.y * canvas.height;
+            const radius = currentCircle.radius * canvas.width;
+            context.beginPath();
+            context.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            context.strokeStyle = 'blue';
+            context.lineWidth = 2;
+            context.stroke();
+            context.closePath();
+        }
+    }
+    }
+
+    if(type === ANNOTATION_TOOLS.emoji){
+        // Redraw emojis
+      annotationByType.forEach((item) => {
+        if(item.emoji){
+            let emoji = item.emoji;
+            const x = emoji.x * canvas.width;
+            const y = emoji.y * canvas.height;
+            context.font = '30px Arial';
+            context.fillText(emoji.emoji, x-15,y+15);
+        }
+        });
+    }
+  };

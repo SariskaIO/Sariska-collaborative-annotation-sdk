@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ANNOTATION_TOOLS } from '../../constants';
+import { getCanvasPosition, redraw } from '../../utils';
 
 const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, height, zIndex, pushMessage, channel}) => {
   const [drawing, setDrawing] = useState(false);
@@ -8,6 +9,7 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
   const [emojis, setEmojis] = useState([]); // Store emoji positions
   const [circles, setCircles] = useState([]); // Store circle data
   const [currentCircle, setCurrentCircle] = useState(null); // Store current circle being drawn
+  const [annotation, setAnnotation] = useState([])
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -18,7 +20,10 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
       const canvas = canvasRef.current;
       canvas.width = width;
       canvas.height = height;
-      redraw(context); // Redraw existing drawings based on new size
+      redraw(context, canvasRef, 'currentCircle', annotation); // Redraw existing drawings based on new size
+      redraw(context, canvasRef, 'pen', annotation);
+      redraw(context, canvasRef, 'circle', annotation);
+      redraw(context, canvasRef, 'emoji', annotation);
     };
 
     window.addEventListener('resize', handleResize);
@@ -45,6 +50,7 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
       const centerXPercent = offsetX / canvas.width;
       const centerYPercent = offsetY / canvas.height;
       setCurrentCircle({ x: centerXPercent, y: centerYPercent, radius: 0 });
+      setAnnotation(prev => ([...prev, {type: 'currentCircle', ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }}]));
       setDrawing(true);
     }
   };
@@ -70,7 +76,8 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
         Math.pow(offsetY / canvas.height - currentCircle.y, 2)
       );
       setCurrentCircle((prevCircle) => ({ ...prevCircle, radius: radiusPercent }));
-      redraw(canvasCtx); // Redraw everything on each mouse move to update the circle
+      setAnnotation(prev => ([...prev, {type: 'currentCircle', ctx: canvasCtx, circle: { radius: radiusPercent }}]));
+      redraw(canvasCtx, canvasRef, 'currentCircle', annotation); // Redraw everything on each mouse move to update the circle
     }
   };
 
@@ -79,9 +86,12 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
       setDrawing(false);
       canvasCtx.closePath();
       setPaths((prevPaths) => [...prevPaths, currentPath]);
+      setAnnotation(prev => ([...prev, {type: 'pen', ctx: canvasCtx, pen: currentPath }]));
     } else if (currentTool === ANNOTATION_TOOLS.circle && currentCircle) {
       setCircles((prevCircles) => [...prevCircles, currentCircle]);
+      setAnnotation(prev => ([...prev, {type: 'circle', ctx: canvasCtx, circle: currentCircle}]));
       setCurrentCircle(null); // Reset the current circle
+      setAnnotation(prev => ([...prev, {type: 'currentCircle', ctx: canvasCtx, circle: null}]));
       setDrawing(false);
     }
   };
@@ -93,77 +103,10 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
     const yPercent = offsetY / canvas.height;
     console.log('xPercent', xPercent)
     setEmojis((prevEmojis) => [...prevEmojis, { x: xPercent, y: yPercent, emoji: '😀' }]);
-    redraw(canvasCtx); // Redraw to immediately show the emoji
+    setAnnotation(prev => ([...prev, {type: 'emoji', ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: '😀' }}]));
+    redraw(canvasCtx, canvasRef, 'emoji', annotation); // Redraw to immediately show the emoji
   };
 
-  const getCanvasPosition = (e) => {
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    return {
-      offsetX: e.clientX - rect.left,
-      offsetY: e.clientY - rect.top,
-    };
-  };
-
-  const redraw = (context) => {
-    const canvas = canvasRef.current;
-    context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-
-    // Redraw freehand paths
-    paths.forEach((path) => {
-      if (path.length > 0) {
-        const startX = path[0].x * canvas.width;
-        const startY = path[0].y * canvas.height;
-        context.beginPath();
-        context.moveTo(startX, startY);
-
-        path.forEach((point) => {
-          const x = point.x * canvas.width;
-          const y = point.y * canvas.height;
-          context.lineTo(x, y);
-        });
-
-        context.strokeStyle = 'red';
-        context.lineWidth = 2;
-        context.stroke();
-        context.closePath();
-      }
-    });
-
-    // Redraw circles
-    circles.forEach((circle) => {
-      const centerX = circle.x * canvas.width;
-      const centerY = circle.y * canvas.height;
-      const radius = circle.radius * canvas.width; // Using width scaling for simplicity
-      context.beginPath();
-      context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-      context.strokeStyle = 'blue';
-      context.lineWidth = 2;
-      context.stroke();
-      context.closePath();
-    });
-
-    // Redraw emojis
-    emojis.forEach((emoji) => {
-      const x = emoji.x * canvas.width;
-      const y = emoji.y * canvas.height;
-      context.font = '30px Arial';
-      context.fillText(emoji.emoji, x-15,y+15);
-    });
-
-    // If currently drawing a circle, draw it
-    if (currentCircle) {
-      const centerX = currentCircle.x * canvas.width;
-      const centerY = currentCircle.y * canvas.height;
-      const radius = currentCircle.radius * canvas.width;
-      context.beginPath();
-      context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-      context.strokeStyle = 'blue';
-      context.lineWidth = 2;
-      context.stroke();
-      context.closePath();
-    }
-  };
 console.log('currenyTool', currentTool)
   return (
       <canvas

@@ -13,6 +13,7 @@ import { ANNOTATION_TOOLS } from './constants';
 const App = (props)=> {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const canvasRef = useRef(null);
   const [canvasCtx, setCanvasCtx] = useState(null);
   const [remoteTextboxes, setRemoteTextboxes] = useState([]);
   const roomName = props.roomName || getRoomName();
@@ -89,6 +90,7 @@ const App = (props)=> {
               pushMessage={pushMessage} 
               loading={loading}
               channel={rtcChannel}
+              canvasRef={canvasRef}
               canvasCtx={canvasCtx}
               setCanvasCtx={setCanvasCtx}
               remoteTextboxes={remoteTextboxes}

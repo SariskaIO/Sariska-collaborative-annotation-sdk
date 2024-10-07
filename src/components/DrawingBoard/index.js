@@ -9,7 +9,8 @@ const DrawingBoard = ({
     setCanvasCtx,
     remoteTextboxes,
     loading,
-    inputProps
+    inputProps,
+    canvasRef
 }) => {
     
     return (
@@ -18,6 +19,7 @@ const DrawingBoard = ({
             height={inputProps.height}
             pushMessage={pushMessage}
             channel={channel}
+            canvasRef={canvasRef}
             canvasCtx={canvasCtx}
             setCanvasCtx={setCanvasCtx}
             inputProps={inputProps}
