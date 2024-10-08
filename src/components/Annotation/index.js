@@ -29,7 +29,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [paths, emojis, circles]);
+  }, [paths, emojis, circles, annotation]);
 
   const startDrawing = (e) => {
     if (currentTool === ANNOTATION_TOOLS.pen) {
@@ -48,19 +48,15 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       const centerYPercent = offsetY / canvas.height;
       setCurrentCircle({ x: centerXPercent, y: centerYPercent, radius: 0 });
       console.log('startDrawing', annotation);
-      setAnnotation(prev => {
-        if(prev && prev?.length) {
-          return [...prev, {type: 'currentCircle', ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }}]
-        }else{
-          return prev
-        }
-      })
+      setAnnotation(prev => [
+            ...(Array.isArray(prev) ? prev : []),
+            {type: 'currentCircle', ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }}]
+      )
       setDrawing(true);
     }
   };
 
   const draw = (e) => {
-    console.log('first draw')
     if (currentTool === ANNOTATION_TOOLS.pen && drawing) {
       const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
       canvasCtx.lineTo(offsetX, offsetY);
@@ -73,6 +69,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       const yPercent = offsetY / canvas.height;
       setCurrentPath((prevPath) => [...prevPath, { x: xPercent, y: yPercent }]);
     } else if (currentTool === ANNOTATION_TOOLS.circle && drawing) {
+      console.log('first draw', annotation)
       const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
       const canvas = canvasRef.current;
       const radiusPercent = Math.sqrt(
@@ -82,9 +79,11 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       setCurrentCircle((prevCircle) => ({ ...prevCircle, radius: radiusPercent }));
       if(annotation && annotation?.length){
         setAnnotation(prev => {
-          prev && prev?.length && prev?.filter(item => item.type === 'currentCircle')?.map(item => (
-            {...item, circle: {...item.circle, radius: radiusPercent}}
-        ))})
+            return prev.map((item) =>
+              item.type === 'currentCircle' ? { ...item, circle: { ...item.circle, radius: radiusPercent } } : item
+            );
+          }
+        )
       }
       redraw(canvasCtx, canvasRef, annotation); // Redraw everything on each mouse move to update the circle
     }
@@ -99,18 +98,11 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
     } else if (currentTool === ANNOTATION_TOOLS.circle && currentCircle) {
       setCircles((prevCircles) => [...prevCircles, currentCircle]);
       console.log('ANNOTATION_TOOLS', annotation);
-      setAnnotation(prev => {
-        if(prev && prev?.length) {
-          return [...prev, {type: 'circle', ctx: canvasCtx, circle: currentCircle}]
-        }else{
-          return prev
-        }
-      })
+      setAnnotation((prev) => [
+        ...(Array.isArray(prev) ? prev : []),
+        { type: 'circle', ctx: canvasCtx, circle: currentCircle },
+      ]);
       setCurrentCircle(null); // Reset the current circle
-      setAnnotation(prev => {
-        prev && prev?.length && prev?.filter(item => item.type === 'currentCircle')?.map(item => (
-          {...item, circle: null}
-        ))})
       setDrawing(false);
     }
   };
@@ -122,7 +114,10 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
     const yPercent = offsetY / canvas.height;
     console.log('xPercent', xPercent)
     setEmojis((prevEmojis) => [...prevEmojis, { x: xPercent, y: yPercent, emoji: '😀' }]);
-    setAnnotation(prev => ([...prev, {type: 'emoji', ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: '😀' }}]));
+    setAnnotation((prev) => [
+      ...(Array.isArray(prev) ? prev : []),
+      { type: 'emoji', ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: '😀' } },
+    ]);
     redraw(canvasCtx, canvasRef, [...annotation, {type: 'emoji', ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: '😀' }}]); // Redraw to immediately show the emoji
   };
 
