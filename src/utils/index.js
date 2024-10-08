@@ -290,7 +290,7 @@ export const redraw = (context, canvasRef, annotation) => {
         let paths = annotation?.filter(item => item.type === 'pen');
         let circles = annotation?.filter(item => item.type === 'circle');
         let emojis = annotation?.filter(item => item.type === 'emoji');
-        let currentCircle = annotation?.filter(item => item.type === 'currentCircle')[0]?.circle;
+        let currentCircle = annotation?.filter(item => item.type === 'currentCircle');
         console.log('annotationpath', annotation, paths, circles, emojis, currentCircle);
 
         // Redraw freehand paths
@@ -333,7 +333,7 @@ export const redraw = (context, canvasRef, annotation) => {
 
         // If currently drawing a circle, draw it
         
-        if (currentCircle) {
+        if (currentCircle && currentCircle?.length) {
             const centerX = currentCircle.x * canvas.width;
             const centerY = currentCircle.y * canvas.height;
             const radius = currentCircle.radius * canvas.width;
