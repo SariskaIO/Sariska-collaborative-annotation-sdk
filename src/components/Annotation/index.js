@@ -48,6 +48,10 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       const centerYPercent = offsetY / canvas.height;
       setCurrentCircle({ x: centerXPercent, y: centerYPercent, radius: 0 });
       console.log('startDrawing', annotation);
+      setAnnotation(prev => [
+            ...(Array.isArray(prev) ? prev : []),
+            {type: 'currentCircle', ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }}]
+      )
       // setAnnotation(prev => [
       //       ...(Array.isArray(prev) ? prev : []),
       //       {type: 'currentCircle', ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }}]
@@ -80,7 +84,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       if(annotation && annotation?.length){
         setAnnotation(prev => {
             return prev.map((item) =>
-              item.type === 'currentCircle' ? { ...item, circle: { x: currentCircle.x, y: currentCircle.y, radius: radiusPercent } } : item
+              item.type === 'currentCircle' ? { ...item, circle: { radius: radiusPercent } } : item
             );
           }
         )
@@ -103,6 +107,12 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
         { type: 'circle', ctx: canvasCtx, circle: currentCircle },
       ]);
       setCurrentCircle(null); // Reset the current circle
+      setAnnotation(prev => {
+          return prev.map((item) =>
+            item.type === 'currentCircle' ? { ...item, circle: null } : item
+          );
+        }
+      )
       setDrawing(false);
     }
   };
