@@ -281,15 +281,19 @@ export const getCanvasPosition = (e, canvasRef) => {
     };
   };
 
-export const redraw = (context, canvasRef, type, annotation) => {
+export const redraw = (context, canvasRef, annotation) => {
     if(!context && !(canvasRef && canvasRef?.current)) return;
     const canvas = canvasRef.current;
     context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
 
-    let annotationByType = annotation?.filter(item => item.type === type);
-    if(type === ANNOTATION_TOOLS.pen){
+    let paths = annotation?.filter(item => item.type === 'pen');
+    let circles = annotation?.filter(item => item.type === 'circle');
+    let emojis = annotation?.filter(item => item.type === 'emoji');
+    let currentCircle = annotation?.filter(item => item.type === 'currentCircle')[0]?.circle;
+    console.log('annotationpath', annotation, paths, circles, emojis, currentCircle);
+
     // Redraw freehand paths
-      annotationByType.forEach((item) => {
+    paths.forEach((item) => {
         if (item.pen?.length > 0) {
             const path = item.pen;
             const startX = path[0].x * canvas.width;
@@ -308,46 +312,40 @@ export const redraw = (context, canvasRef, type, annotation) => {
             context.stroke();
             context.closePath();
         }
-        });
+    });
+
+    // Redraw circles
+    circles.forEach((item) => {
+    if(item?.circle){
+        const circle = item.circle;
+        const centerX = circle.x * canvas.width;
+        const centerY = circle.y * canvas.height;
+        const radius = circle.radius * canvas.width; // Using width scaling for simplicity
+        context.beginPath();
+        context.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        context.strokeStyle = 'blue';
+        context.lineWidth = 2;
+        context.stroke();
+        context.closePath();
+    }
+    });
+
+    // If currently drawing a circle, draw it
+    
+    if (currentCircle) {
+        const centerX = currentCircle.x * canvas.width;
+        const centerY = currentCircle.y * canvas.height;
+        const radius = currentCircle.radius * canvas.width;
+        context.beginPath();
+        context.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        context.strokeStyle = 'blue';
+        context.lineWidth = 2;
+        context.stroke();
+        context.closePath();
     }
 
-    if(type === ANNOTATION_TOOLS.circle){
-        // Redraw circles
-      annotationByType.forEach((item) => {
-        if(item?.circle){
-            const circle = item.circle;
-            const centerX = circle.x * canvas.width;
-            const centerY = circle.y * canvas.height;
-            const radius = circle.radius * canvas.width; // Using width scaling for simplicity
-            context.beginPath();
-            context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            context.strokeStyle = 'blue';
-            context.lineWidth = 2;
-            context.stroke();
-            context.closePath();
-        }
-        });
-
-    if(type === 'currentCircle'){
-        // If currently drawing a circle, draw it
-        let currentCircle = annotationByType[0]?.circle;
-        if (currentCircle) {
-            const centerX = currentCircle.x * canvas.width;
-            const centerY = currentCircle.y * canvas.height;
-            const radius = currentCircle.radius * canvas.width;
-            context.beginPath();
-            context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            context.strokeStyle = 'blue';
-            context.lineWidth = 2;
-            context.stroke();
-            context.closePath();
-        }
-    }
-    }
-
-    if(type === ANNOTATION_TOOLS.emoji){
         // Redraw emojis
-      annotationByType.forEach((item) => {
+      emojis.forEach((item) => {
         if(item.emoji){
             let emoji = item.emoji;
             const x = emoji.x * canvas.width;
@@ -356,5 +354,4 @@ export const redraw = (context, canvasRef, type, annotation) => {
             context.fillText(emoji.emoji, x-15,y+15);
         }
         });
-    }
   };
