@@ -286,72 +286,74 @@ export const redraw = (context, canvasRef, annotation) => {
     const canvas = canvasRef.current;
     context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
 
-    let paths = annotation?.filter(item => item.type === 'pen');
-    let circles = annotation?.filter(item => item.type === 'circle');
-    let emojis = annotation?.filter(item => item.type === 'emoji');
-    let currentCircle = annotation?.filter(item => item.type === 'currentCircle')[0]?.circle;
-    console.log('annotationpath', annotation, paths, circles, emojis, currentCircle);
+    if(annotation && annotation?.length){
+        let paths = annotation?.filter(item => item.type === 'pen');
+        let circles = annotation?.filter(item => item.type === 'circle');
+        let emojis = annotation?.filter(item => item.type === 'emoji');
+        let currentCircle = annotation?.filter(item => item.type === 'currentCircle')[0]?.circle;
+        console.log('annotationpath', annotation, paths, circles, emojis, currentCircle);
 
-    // Redraw freehand paths
-    paths.forEach((item) => {
-        if (item.pen?.length > 0) {
-            const path = item.pen;
-            const startX = path[0].x * canvas.width;
-            const startY = path[0].y * canvas.height;
+        // Redraw freehand paths
+        paths.forEach((item) => {
+            if (item.pen?.length > 0) {
+                const path = item.pen;
+                const startX = path[0].x * canvas.width;
+                const startY = path[0].y * canvas.height;
+                context.beginPath();
+                context.moveTo(startX, startY);
+
+                path.forEach((point) => {
+                const x = point.x * canvas.width;
+                const y = point.y * canvas.height;
+                context.lineTo(x, y);
+                });
+
+                context.strokeStyle = 'red';
+                context.lineWidth = 2;
+                context.stroke();
+                context.closePath();
+            }
+        });
+
+        // Redraw circles
+        circles.forEach((item) => {
+        if(item?.circle){
+            const circle = item.circle;
+            const centerX = circle.x * canvas.width;
+            const centerY = circle.y * canvas.height;
+            const radius = circle.radius * canvas.width; // Using width scaling for simplicity
             context.beginPath();
-            context.moveTo(startX, startY);
-
-            path.forEach((point) => {
-            const x = point.x * canvas.width;
-            const y = point.y * canvas.height;
-            context.lineTo(x, y);
-            });
-
-            context.strokeStyle = 'red';
+            context.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            context.strokeStyle = 'blue';
             context.lineWidth = 2;
             context.stroke();
             context.closePath();
         }
-    });
-
-    // Redraw circles
-    circles.forEach((item) => {
-    if(item?.circle){
-        const circle = item.circle;
-        const centerX = circle.x * canvas.width;
-        const centerY = circle.y * canvas.height;
-        const radius = circle.radius * canvas.width; // Using width scaling for simplicity
-        context.beginPath();
-        context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-        context.strokeStyle = 'blue';
-        context.lineWidth = 2;
-        context.stroke();
-        context.closePath();
-    }
-    });
-
-    // If currently drawing a circle, draw it
-    
-    if (currentCircle) {
-        const centerX = currentCircle.x * canvas.width;
-        const centerY = currentCircle.y * canvas.height;
-        const radius = currentCircle.radius * canvas.width;
-        context.beginPath();
-        context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-        context.strokeStyle = 'blue';
-        context.lineWidth = 2;
-        context.stroke();
-        context.closePath();
-    }
-
-        // Redraw emojis
-      emojis.forEach((item) => {
-        if(item.emoji){
-            let emoji = item.emoji;
-            const x = emoji.x * canvas.width;
-            const y = emoji.y * canvas.height;
-            context.font = '30px Arial';
-            context.fillText(emoji.emoji, x-15,y+15);
-        }
         });
+
+        // If currently drawing a circle, draw it
+        
+        if (currentCircle) {
+            const centerX = currentCircle.x * canvas.width;
+            const centerY = currentCircle.y * canvas.height;
+            const radius = currentCircle.radius * canvas.width;
+            context.beginPath();
+            context.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            context.strokeStyle = 'blue';
+            context.lineWidth = 2;
+            context.stroke();
+            context.closePath();
+        }
+
+            // Redraw emojis
+        emojis.forEach((item) => {
+            if(item.emoji){
+                let emoji = item.emoji;
+                const x = emoji.x * canvas.width;
+                const y = emoji.y * canvas.height;
+                context.font = '30px Arial';
+                context.fillText(emoji.emoji, x-15,y+15);
+            }
+        });
+    }
   };
