@@ -48,10 +48,10 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       const centerYPercent = offsetY / canvas.height;
       setCurrentCircle({ x: centerXPercent, y: centerYPercent, radius: 0 });
       console.log('startDrawing', annotation);
-      setAnnotation(prev => [
-            ...(Array.isArray(prev) ? prev : []),
-            {type: 'currentCircle', ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }}]
-      )
+      // setAnnotation(prev => [
+      //       ...(Array.isArray(prev) ? prev : []),
+      //       {type: 'currentCircle', ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }}]
+      // )
       setDrawing(true);
     }
   };
@@ -69,7 +69,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       const yPercent = offsetY / canvas.height;
       setCurrentPath((prevPath) => [...prevPath, { x: xPercent, y: yPercent }]);
     } else if (currentTool === ANNOTATION_TOOLS.circle && drawing) {
-      console.log('first draw', annotation)
+      console.log('first draw', annotation, currentCircle)
       const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
       const canvas = canvasRef.current;
       const radiusPercent = Math.sqrt(
@@ -80,7 +80,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       if(annotation && annotation?.length){
         setAnnotation(prev => {
             return prev.map((item) =>
-              item.type === 'currentCircle' ? { ...item, circle: { ...item.circle, radius: radiusPercent } } : item
+              item.type === 'currentCircle' ? { ...item, circle: { x: currentCircle.x, y: currentCircle.y, radius: radiusPercent } } : item
             );
           }
         )
