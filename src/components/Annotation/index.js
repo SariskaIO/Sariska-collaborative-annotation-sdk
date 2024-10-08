@@ -106,7 +106,6 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
           return prev
         }
       })
-      setAnnotation(prev => ([...prev, {type: 'circle', ctx: canvasCtx, circle: currentCircle}]));
       setCurrentCircle(null); // Reset the current circle
       setAnnotation(prev => {
         prev && prev?.length && prev?.filter(item => item.type === 'currentCircle')?.map(item => (
