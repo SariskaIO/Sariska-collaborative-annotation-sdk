@@ -79,7 +79,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
             {...item, circle: {...item.circle, radius: radiusPercent}}
           ))})
       }
-      redraw(canvasCtx, canvasRef, [...annotation, {type: 'currentCircle', ctx: canvasCtx, circle: { radius: radiusPercent }}]); // Redraw everything on each mouse move to update the circle
+      redraw(canvasCtx, canvasRef, annotation); // Redraw everything on each mouse move to update the circle
     }
   };
 
