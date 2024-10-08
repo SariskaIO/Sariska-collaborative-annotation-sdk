@@ -21,9 +21,6 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       canvas.width = width;
       canvas.height = height;
       redraw(context, canvasRef, annotation); // Redraw existing drawings based on new size
-      redraw(context, canvasRef, annotation);
-      redraw(context, canvasRef, annotation);
-      redraw(context, canvasRef, annotation);
     };
 
     window.addEventListener('resize', handleResize);
