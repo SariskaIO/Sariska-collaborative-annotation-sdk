@@ -108,9 +108,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       ]);
       setCurrentCircle(null); // Reset the current circle
       setAnnotation(prev => {
-          return prev.map((item) =>
-            item.type === 'currentCircle' ? { ...item, circle: null } : item
-          );
+          return prev.filter((item) => item.type !== 'currentCircle');
         }
       )
       setDrawing(false);
