@@ -20,10 +20,10 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       const canvas = canvasRef.current;
       canvas.width = width;
       canvas.height = height;
-      redraw(context, canvasRef, 'currentCircle', annotation); // Redraw existing drawings based on new size
-      redraw(context, canvasRef, 'pen', annotation);
-      redraw(context, canvasRef, 'circle', annotation);
-      redraw(context, canvasRef, 'emoji', annotation);
+      redraw(context, canvasRef, annotation); // Redraw existing drawings based on new size
+      redraw(context, canvasRef, annotation);
+      redraw(context, canvasRef, annotation);
+      redraw(context, canvasRef, annotation);
     };
 
     window.addEventListener('resize', handleResize);
@@ -77,7 +77,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       );
       setCurrentCircle((prevCircle) => ({ ...prevCircle, radius: radiusPercent }));
       setAnnotation(prev => ([...prev, {type: 'currentCircle', ctx: canvasCtx, circle: { radius: radiusPercent }}]));
-      redraw(canvasCtx, canvasRef, 'currentCircle', annotation); // Redraw everything on each mouse move to update the circle
+      redraw(canvasCtx, canvasRef, [...annotation, {type: 'currentCircle', ctx: canvasCtx, circle: { radius: radiusPercent }}]); // Redraw everything on each mouse move to update the circle
     }
   };
 
@@ -104,7 +104,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
     console.log('xPercent', xPercent)
     setEmojis((prevEmojis) => [...prevEmojis, { x: xPercent, y: yPercent, emoji: '😀' }]);
     setAnnotation(prev => ([...prev, {type: 'emoji', ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: '😀' }}]));
-    redraw(canvasCtx, canvasRef, 'emoji', annotation); // Redraw to immediately show the emoji
+    redraw(canvasCtx, canvasRef, [...annotation, {type: 'emoji', ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: '😀' }}]); // Redraw to immediately show the emoji
   };
 
   return (
