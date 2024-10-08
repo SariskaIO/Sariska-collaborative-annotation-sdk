@@ -32,7 +32,6 @@ const Canvas = ({
   // inputProps.annotationTool === ANNOTATION_TOOLS.circle ? circleHook :
   // inputProps.annotationTool === ANNOTATION_TOOLS.textbox ? textboxHook : 
   // drawHook;
-  console.log('first currentTool ', currentTool, inputProps)
     const canvasStyle={
       position: 'absolute', 
       zIndex: otherProps.zIndex,

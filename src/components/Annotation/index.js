@@ -10,7 +10,7 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
   const [circles, setCircles] = useState([]); // Store circle data
   const [currentCircle, setCurrentCircle] = useState(null); // Store current circle being drawn
   const [annotation, setAnnotation] = useState([])
-
+console.log('first annotation', annotation, paths, emojis, circles, currentTool);
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
@@ -107,7 +107,6 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
     redraw(canvasCtx, canvasRef, 'emoji', annotation); // Redraw to immediately show the emoji
   };
 
-console.log('currenyTool', currentTool)
   return (
       <canvas
         ref={canvasRef}
