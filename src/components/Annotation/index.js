@@ -84,7 +84,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       if(annotation && annotation?.length){
         setAnnotation(prev => {
             return prev.map((item) =>
-              item.type === 'currentCircle' ? { ...item, circle: { radius: radiusPercent } } : item
+              item.type === 'currentCircle' ? { ...item, circle: { ...item.circle, radius: radiusPercent } } : item
             );
           }
         )
