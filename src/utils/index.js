@@ -333,7 +333,7 @@ export const redraw = (context, canvasRef, annotation) => {
 
         // If currently drawing a circle, draw it
         
-        if (currentCircle && currentCircle?.length) {
+        if (currentCircle && currentCircle?.length && currentCircle[0].circle) {
             const circle = currentCircle[0].circle
             const centerX = circle.x * canvas.width;
             const centerY = circle.y * canvas.height;
