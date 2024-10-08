@@ -47,7 +47,14 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       const centerXPercent = offsetX / canvas.width;
       const centerYPercent = offsetY / canvas.height;
       setCurrentCircle({ x: centerXPercent, y: centerYPercent, radius: 0 });
-      setAnnotation(prev => ([...prev, {type: 'currentCircle', ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }}]));
+      console.log('startDrawing', annotation);
+      setAnnotation(prev => {
+        if(prev && prev?.length) {
+          return [...prev, {type: 'currentCircle', ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }}]
+        }else{
+          return prev
+        }
+      })
       setDrawing(true);
     }
   };
