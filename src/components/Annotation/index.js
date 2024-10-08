@@ -77,7 +77,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
         setAnnotation(prev => {
           prev && prev?.length && prev?.filter(item => item.type === 'currentCircle')?.map(item => (
             {...item, circle: {...item.circle, radius: radiusPercent}}
-          ))})
+        ))})
       }
       redraw(canvasCtx, canvasRef, annotation); // Redraw everything on each mouse move to update the circle
     }
@@ -91,6 +91,14 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       setAnnotation(prev => ([...prev, {type: 'pen', ctx: canvasCtx, pen: currentPath }]));
     } else if (currentTool === ANNOTATION_TOOLS.circle && currentCircle) {
       setCircles((prevCircles) => [...prevCircles, currentCircle]);
+      console.log('ANNOTATION_TOOLS', annotation);
+      setAnnotation(prev => {
+        if(prev && prev?.length) {
+          return [...prev, {type: 'circle', ctx: canvasCtx, circle: currentCircle}]
+        }else{
+          return prev
+        }
+      })
       setAnnotation(prev => ([...prev, {type: 'circle', ctx: canvasCtx, circle: currentCircle}]));
       setCurrentCircle(null); // Reset the current circle
       setAnnotation(prev => {
