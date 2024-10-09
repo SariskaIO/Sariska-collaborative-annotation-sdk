@@ -112,8 +112,8 @@ const App = (props)=> {
     const context = canvas.getContext('2d');
     const handleResize = () => {
       const canvas = canvasRef.current;
-      canvas.width = width;
-      canvas.height = height;
+      canvas.width = props.width;
+      canvas.height = props.height;
       redraw(context, canvasRef, paths, circles, emojis, currentCircle); // Redraw existing drawings based on new size
     };
 
