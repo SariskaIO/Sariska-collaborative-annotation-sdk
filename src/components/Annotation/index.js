@@ -15,7 +15,11 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
     const context = canvas.getContext('2d');
     console.log('context getContext', context)
     setCanvasCtx(context);
+
     const handleResize = () => {
+      if(!otherProps.isModerator){
+        return ;
+      }
       const canvas = canvasRef.current;
       canvas.width = width;
       canvas.height = height;
@@ -31,6 +35,9 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
   }, [paths, emojis, circles, currentCircle]);
 
   const startDrawing = (e) => {
+    if(!otherProps.isModerator){
+      return ;
+    }
     const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
     if (currentTool === ANNOTATION_TOOLS.pen) {
       setDrawing(true);
@@ -61,6 +68,9 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
   };
 
   const draw = (e) => {
+    if(!otherProps.isModerator){
+      return ;
+    }
     if (currentTool === ANNOTATION_TOOLS.pen && drawing) {
       const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
       canvasCtx.lineTo(offsetX, offsetY);
@@ -90,6 +100,9 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
   };
 
   const stopDrawing = () => {
+    if(!otherProps.isModerator){
+      return ;
+    }
     if (currentTool === ANNOTATION_TOOLS.pen && drawing) {
       setDrawing(false);
       canvasCtx.closePath();
@@ -109,6 +122,9 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
   };
 
   const placeEmoji = (e) => {
+    if(!otherProps.isModerator){
+      return ;
+    }
     const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
     const canvas = canvasRef.current;
     const xPercent = offsetX / canvas.width;
