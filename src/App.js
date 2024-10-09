@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
 import CreateChannel from './channel/CreateChannel';
 import UseEventHandler from './hooks/UseEventHandler';
@@ -7,7 +7,7 @@ import { useStore } from './store';
 import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
-import { getRoomName, initializeAnnotation, onDraw, onDrawCircle, onDrawEmoji, setAllRemoteTextBoxes } from './utils';
+import { getRoomName, initializeAnnotation, onDraw, onDrawCircle, onDrawEmoji, redraw, setAllRemoteTextBoxes } from './utils';
 import { ANNOTATION_TOOLS } from './constants';
 
 const App = (props)=> {
@@ -16,6 +16,7 @@ const App = (props)=> {
   const canvasRef = useRef(null);
   const [canvasCtx, setCanvasCtx] = useState(null);
   const [remoteTextboxes, setRemoteTextboxes] = useState([]);
+  const [annotation, setAnnotation] = useState([]);
   const roomName = props.roomName || getRoomName();
   const {users, dispatch} = useStore();
   const rtcChannel = CreateChannel(`rtc:${roomName}`, {});
@@ -73,13 +74,19 @@ const App = (props)=> {
           }else{
               content.emojis = [...messages];
               onDrawEmoji(content);
+             // redraw(canvasCtx, canvasRef, annotation)
             }
           }
         }
-      setMessages(messages => [...messages, message])
+      setAnnotation(annotation => [...annotation, content.annotation]);
+      setMessages(messages => [...messages, content])
   });
   
-console.log('messages', messages)
+  useEffect(()=>{
+    redraw(context, canvasRef, annotation);
+  },[messages?.length])
+
+console.log('messages', messages, annotation)
   const pushMessage = ( content, channel )=>{
     const new_message = {
       created_by_name: users.user.name,  
