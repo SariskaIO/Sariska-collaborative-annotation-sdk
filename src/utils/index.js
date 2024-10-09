@@ -304,7 +304,7 @@ export const stopAnnotation = (type, canvasCtx) => {
     }
 }
 
-export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle) => {
+export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle, props) => {
     if(!context && !(canvasRef && canvasRef?.current)) return;
     const canvas = canvasRef.current;
     context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
@@ -324,8 +324,8 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
                 context.lineTo(x, y);
                 });
 
-                context.strokeStyle = 'red';
-                context.lineWidth = 2;
+                context.strokeStyle = props.lineColor;
+                context.lineWidth = props.lineWidth;
                 context.stroke();
                 context.closePath();
         });
@@ -337,8 +337,8 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
             const radius = circle.radius * canvas.width; // Using width scaling for simplicity
             context.beginPath();
             context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            context.strokeStyle = 'blue';
-            context.lineWidth = 2;
+            context.strokeStyle = props.lineColor;
+            context.lineWidth = props.lineWidth;
             context.stroke();
             context.closePath();
         });
@@ -352,8 +352,8 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
             const radius = currentCircle.radius * canvas.width;
             context.beginPath();
             context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            context.strokeStyle = 'blue';
-            context.lineWidth = 2;
+            context.strokeStyle = props.lineColor;
+            context.lineWidth = props.lineWidth;
             context.stroke();
             context.closePath();
         }
@@ -362,7 +362,7 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
         emojis?.length && emojis.forEach((emoji) => {
                 const x = emoji.x * canvas.width;
                 const y = emoji.y * canvas.height;
-                context.font = '30px Arial';
+                context.font = '20px Arial';
                 context.fillText(emoji.emoji, x-15,y+15);
         });
   };

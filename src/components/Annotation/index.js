@@ -74,8 +74,8 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
     if (currentTool === ANNOTATION_TOOLS.pen && drawing) {
       const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
       canvasCtx.lineTo(offsetX, offsetY);
-      canvasCtx.strokeStyle = 'red';
-      canvasCtx.lineWidth = 2;
+      canvasCtx.strokeStyle = otherProps.lineColor;
+      canvasCtx.lineWidth = otherProps.lineWidth;
       canvasCtx.stroke();
 
       const canvas = canvasRef.current;
