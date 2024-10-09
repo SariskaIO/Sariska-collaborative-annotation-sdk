@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { ANNOTATION_TOOLS } from '../../constants';
 import { getCanvasPosition, redraw } from '../../utils';
 
-const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, height, zIndex, pushMessage,otherProps}) => {
+const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, height, zIndex, pushMessage, channel, otherProps}) => {
   const [drawing, setDrawing] = useState(false);
   const [paths, setPaths] = useState([]); // Store freehand paths
   const [currentPath, setCurrentPath] = useState([]); // Store current freehand path
