@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { useOnDraw } from '../../hooks/useOnDraw';
- import { ANNOTATION_TOOLS } from '../../constants';
- import { useOnEmoji } from '../../hooks/useOnEmoji';
- import { useOnCircle } from '../../hooks/useOnCircle';
-import { useOnTextBox } from '../../hooks/useOnTextBox';
-import { makeStyles } from '@material-ui/core';
+// import { useOnDraw } from '../../hooks/useOnDraw';
+//  import { ANNOTATION_TOOLS } from '../../constants';
+//  import { useOnEmoji } from '../../hooks/useOnEmoji';
+//  import { useOnCircle } from '../../hooks/useOnCircle';
+// import { useOnTextBox } from '../../hooks/useOnTextBox';
+// import { makeStyles } from '@material-ui/core';
 import Annotation from '../Annotation';
 
 const Canvas = ({
