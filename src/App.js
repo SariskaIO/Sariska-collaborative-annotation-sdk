@@ -7,7 +7,7 @@ import { useStore } from './store';
 import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
-import { getRoomName, onDraw, onDrawCircle, onDrawEmoji, setAllRemoteTextBoxes } from './utils';
+import { getRoomName, initializeAnnotation, onDraw, onDrawCircle, onDrawEmoji, setAllRemoteTextBoxes } from './utils';
 import { ANNOTATION_TOOLS } from './constants';
 
 const App = (props)=> {
@@ -41,19 +41,24 @@ const App = (props)=> {
   })
 
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
-    console.log('new_message', message, canvasCtx)
     let content = JSON.parse(message.content);
+    console.log('new_message', content, canvasCtx)
       if(content?.ctx && Object.keys(content?.ctx)?.length){
         if(props.annotationTool === ANNOTATION_TOOLS.pen){
-          onDraw(content);
+          initializeAnnotation('pen', canvasCtx, canvasRef);
+          drawAnnotation('pen', canvasCtx, canvasRef)
+          stopAnnotation(type, canvasCtx)
+         // onDraw(content);
         }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
           content.props = {width: props.width, height: props.height};
-          onDrawCircle(content);
+         // onDrawCircle(content);
+          redraw(canvasCtx, canvasRef, annotation)
         }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
          setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
         }else{
           content.emojis = [...messages];
           onDrawEmoji(content);
+        redraw(canvasCtx, canvasRef, annotation)
         }
       }else{
         content.ctx = canvasCtx;
@@ -74,7 +79,7 @@ const App = (props)=> {
       setMessages(messages => [...messages, message])
   });
   
-
+console.log('messages', messages)
   const pushMessage = ( content, channel )=>{
     const new_message = {
       created_by_name: users.user.name,  

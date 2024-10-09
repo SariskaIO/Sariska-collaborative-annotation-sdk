@@ -42,7 +42,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       canvasCtx.beginPath();
       canvasCtx.moveTo(offsetX, offsetY);
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, pen: { x: offsetX, y: offsetY}, props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, pen: { x: offsetX, y: offsetY}, props: otherProps, annotation }), channel);
       }
     } else if (currentTool === ANNOTATION_TOOLS.circle) {
       const canvas = canvasRef.current;
@@ -55,7 +55,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
             {type: 'currentCircle', ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }}]
       )
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }, props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }, props: otherProps, annotation }), channel);
       }
       // setAnnotation(prev => [
       //       ...(Array.isArray(prev) ? prev : []),
@@ -78,7 +78,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       const yPercent = offsetY / canvas.height;
       setCurrentPath((prevPath) => [...prevPath, { x: xPercent, y: yPercent }]);
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, pen: { x: offsetX, y: offsetY}, props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, pen: { x: offsetX, y: offsetY}, props: otherProps, annotation }), channel);
       }
     } else if (currentTool === ANNOTATION_TOOLS.circle && drawing) {
       console.log('first draw', annotation, currentCircle)
@@ -94,7 +94,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
             return prev.map((item) => {
               if(item.type === 'currentCircle') {
               if(channel){
-                pushMessage(JSON.stringify({ ctx: canvasCtx, circle: { ...item.circle, radius: radiusPercent }, props: otherProps }), channel);
+                pushMessage(JSON.stringify({ ctx: canvasCtx, circle: { ...item.circle, radius: radiusPercent }, props: otherProps, annotation }), channel);
               }
                 return { ...item, circle: { ...item.circle, radius: radiusPercent } } 
               }else{
@@ -116,7 +116,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       setPaths((prevPaths) => [...prevPaths, currentPath]);
       setAnnotation(prev => ([...prev, {type: 'pen', ctx: canvasCtx, pen: currentPath }]));
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, pen: currentPath, props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, pen: currentPath, props: otherProps, annotation }), channel);
       }
     } else if (currentTool === ANNOTATION_TOOLS.circle && currentCircle) {
       setCircles((prevCircles) => [...prevCircles, currentCircle]);
@@ -126,7 +126,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
         { type: 'circle', ctx: canvasCtx, circle: currentCircle },
       ]);
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, circle: currentCircle, props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, circle: currentCircle, props: otherProps, annotation }), channel);
       }
       setCurrentCircle(null); // Reset the current circle
       setAnnotation(prev => {
@@ -150,7 +150,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
     ]);
     redraw(canvasCtx, canvasRef, [...annotation, {type: 'emoji', ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: '😀' }}]); // Redraw to immediately show the emoji
     if(channel){
-      pushMessage(JSON.stringify({ ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: '😀' }, props: otherProps }), channel);
+      pushMessage(JSON.stringify({ ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: '😀' }, props: otherProps, annotation }), channel);
     }
   };
 
