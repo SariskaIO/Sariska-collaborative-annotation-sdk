@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { ANNOTATION_TOOLS } from '../../constants';
 import { getCanvasPosition, redraw } from '../../utils';
 
-const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, height, zIndex, pushMessage, channel}) => {
+const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, height, zIndex, pushMessage,otherProps}) => {
   const [drawing, setDrawing] = useState(false);
   const [paths, setPaths] = useState([]); // Store freehand paths
   const [currentPath, setCurrentPath] = useState([]); // Store current freehand path
@@ -15,7 +15,7 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     setCanvasCtx(context);
-
+    console.log('test log', annotation)
     const handleResize = () => {
       const canvas = canvasRef.current;
       canvas.width = width;
@@ -32,9 +32,9 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
   }, [paths, emojis, circles, annotation]);
 
   const startDrawing = (e) => {
+    const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
     if (currentTool === ANNOTATION_TOOLS.pen) {
       setDrawing(true);
-      const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
       const canvas = canvasRef.current;
       const startXPercent = offsetX / canvas.width; // Store percentage-based coordinates
       const startYPercent = offsetY / canvas.height;
@@ -42,7 +42,6 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       canvasCtx.beginPath();
       canvasCtx.moveTo(offsetX, offsetY);
     } else if (currentTool === ANNOTATION_TOOLS.circle) {
-      const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
       const canvas = canvasRef.current;
       const centerXPercent = offsetX / canvas.width;
       const centerYPercent = offsetY / canvas.height;
@@ -52,6 +51,9 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
             ...(Array.isArray(prev) ? prev : []),
             {type: 'currentCircle', ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }}]
       )
+      if(channel){
+        pushMessage(JSON.stringify({ ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }, props: otherProps }), channel);
+      }
       // setAnnotation(prev => [
       //       ...(Array.isArray(prev) ? prev : []),
       //       {type: 'currentCircle', ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }}]
@@ -83,8 +85,16 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       setCurrentCircle((prevCircle) => ({ ...prevCircle, radius: radiusPercent }));
       if(annotation && annotation?.length){
         setAnnotation(prev => {
-            return prev.map((item) =>
-              item.type === 'currentCircle' ? { ...item, circle: { ...item.circle, radius: radiusPercent } } : item
+            return prev.map((item) => {
+              if(item.type === 'currentCircle') {
+              if(channel){
+                pushMessage(JSON.stringify({ ctx: canvasCtx, circle: { ...item.circle, radius: radiusPercent }, props: otherProps }), channel);
+              }
+                return { ...item, circle: { ...item.circle, radius: radiusPercent } } 
+              }else{
+                return item
+              }
+            }
             );
           }
         )
@@ -99,6 +109,9 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       canvasCtx.closePath();
       setPaths((prevPaths) => [...prevPaths, currentPath]);
       setAnnotation(prev => ([...prev, {type: 'pen', ctx: canvasCtx, pen: currentPath }]));
+      if(channel){
+        pushMessage(JSON.stringify({ ctx: canvasCtx, pen: currentPath, props: otherProps }), channel);
+      }
     } else if (currentTool === ANNOTATION_TOOLS.circle && currentCircle) {
       setCircles((prevCircles) => [...prevCircles, currentCircle]);
       console.log('ANNOTATION_TOOLS', annotation);
@@ -106,6 +119,9 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
         ...(Array.isArray(prev) ? prev : []),
         { type: 'circle', ctx: canvasCtx, circle: currentCircle },
       ]);
+      if(channel){
+        pushMessage(JSON.stringify({ ctx: canvasCtx, circle: currentCircle, props: otherProps }), channel);
+      }
       setCurrentCircle(null); // Reset the current circle
       setAnnotation(prev => {
           return prev.filter((item) => item.type !== 'currentCircle');

@@ -70,6 +70,7 @@ const Canvas = ({
           zIndex={otherProps.zIndex}
           pushMessage={pushMessage} 
           channel={channel} 
+          otherProps={otherProps}
         />
         {/* <canvas 
             width={width}

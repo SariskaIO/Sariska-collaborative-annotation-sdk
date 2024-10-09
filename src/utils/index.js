@@ -281,6 +281,29 @@ export const getCanvasPosition = (e, canvasRef) => {
     };
   };
 
+export const initializeAnnotation = (type, canvasCtx, canvasRef) => {
+    const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
+    if(type === 'pen'){
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(offsetX, offsetY);
+    }
+}
+
+export const drawAnnotation = (type, canvasCtx, canvasRef) => {
+    const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
+    if(type === 'pen'){
+        canvasCtx.lineTo(offsetX, offsetY);
+        canvasCtx.strokeStyle = 'red';
+        canvasCtx.lineWidth = 2;
+        canvasCtx.stroke();
+    }
+}
+export const stopAnnotation = (type, canvasCtx) => {
+    if(type === 'pen'){
+        canvasCtx.closePath();
+    }
+}
+
 export const redraw = (context, canvasRef, annotation) => {
     if(!context && !(canvasRef && canvasRef?.current)) return;
     const canvas = canvasRef.current;
