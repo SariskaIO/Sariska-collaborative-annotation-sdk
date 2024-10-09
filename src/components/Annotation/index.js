@@ -42,7 +42,7 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
       canvasCtx.moveTo(offsetX, offsetY);
       console.log('setDrawing', canvasCtx)
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, pen: [{ x: offsetX, y: offsetY}], props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, currentPath: [{ x: offsetX, y: offsetY}], props: otherProps }), channel);
       }
     } else if (currentTool === ANNOTATION_TOOLS.circle) {
       const canvas = canvasRef.current;
@@ -73,7 +73,7 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
       const yPercent = offsetY / canvas.height;
       setCurrentPath((prevPath) => [...prevPath, { x: xPercent, y: yPercent }]);
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, pen: [...currentPath, { x: offsetX, y: offsetY}], props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, currentPath: [...currentPath, { x: offsetX, y: offsetY}], props: otherProps }), channel);
       }
     } else if (currentTool === ANNOTATION_TOOLS.circle && drawing) {
       const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
@@ -95,7 +95,8 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
       canvasCtx.closePath();
       setPaths((prevPaths) => [...prevPaths, currentPath]);
       if(channel){
-       // pushMessage(JSON.stringify({ ctx: canvasCtx, pen: currentPath, props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, currentPath: [], props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, pen: currentPath, props: otherProps }), channel);
       }
     } else if (currentTool === ANNOTATION_TOOLS.circle && currentCircle) {
       setCircles((prevCircles) => [...prevCircles, currentCircle]);

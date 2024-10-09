@@ -17,6 +17,7 @@ const App = (props)=> {
   const [canvasCtx, setCanvasCtx] = useState(null);
   const [remoteTextboxes, setRemoteTextboxes] = useState([]);
   const [annotation, setAnnotation] = useState([]);
+  const [currentPath, setCurrentPath] = useState([]); // Store freehand paths
   const [paths, setPaths] = useState([]); // Store freehand paths
   const [emojis, setEmojis] = useState([]); // Store emoji positions
   const [circles, setCircles] = useState([]); // Store circle data
@@ -48,6 +49,11 @@ const App = (props)=> {
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
     let content = JSON.parse(message.content);
     console.log('new_message', content, canvasCtx);
+    if(content && content.currentPath && content.currentPath?.length){
+      setCurrentPath(prev => ([...prev, content.currentPath]));
+    }else if(content && content.currentPath && !content.currentPath?.length){
+      setCurrentPath([]);
+    }
     if(content && content.pen){
       setPaths(prev => ([...prev, content.pen]));
     }
@@ -115,6 +121,7 @@ const App = (props)=> {
       const canvas = canvasRef.current;
       canvas.width = props.width;
       canvas.height = props.height;
+
       redraw(context, canvasRef, paths, circles, emojis, currentCircle); // Redraw existing drawings based on new size
     };
 
@@ -125,6 +132,19 @@ const App = (props)=> {
       window.removeEventListener('resize', handleResize);
     };
   }, [paths, emojis, circles, currentCircle]);
+
+  useEffect(()=>{
+    console.log('first currentPath', currentPath)
+    // canvasCtx.beginPath();
+    // canvasCtx.moveTo(currentPath[0].x, currentPath[0].y);
+    // currentPath?.forEach(path => {
+    //   canvasCtx.lineTo(path.x, path.y);
+    //   canvasCtx.strokeStyle = 'red';
+    //   canvasCtx.lineWidth = 2;
+    //   canvasCtx.stroke();
+    //   canvasCtx.closePath();
+    // })
+  },[currentPath])
 
 console.log('messages', messages, emojis, circles, paths, currentCircle);
   const pushMessage = ( content, channel )=>{
