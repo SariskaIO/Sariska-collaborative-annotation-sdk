@@ -48,14 +48,14 @@ const App = (props)=> {
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
     let content = JSON.parse(message.content);
     console.log('new_message', content, canvasCtx);
-    if(content && content.pen && content.pen?.length){
-      setPaths([...content.pen]);
+    if(content && content.pen && content.pen){
+      setPaths(prev => ([...prev, content.pen]));
     }
-    if(content && content.circle && content.circle?.length){
-      setCircles([...content.circle]);
+    if(content && content.circle && content.circle){
+      setCircles(prev => ([...prev, content.circle]));
     }
     if(content && content.emoji && content.emoji?.length){
-      setEmojis([...content.emoji]);
+      setEmojis(prev => ([prev, content.emoji]));
     }
     if(content && content.currentCircle){
       setCurrentCircle(content.currentCircle);

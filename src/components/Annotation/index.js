@@ -48,7 +48,7 @@ console.log('first annotation', paths, emojis, circles, currentTool);
       const centerYPercent = offsetY / canvas.height;
       setCurrentCircle({ x: centerXPercent, y: centerYPercent, radius: 0 });
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, circle: { x: centerXPercent, y: centerYPercent, radius: 0 }, props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, currentCircle: { x: centerXPercent, y: centerYPercent, radius: 0 }, props: otherProps }), channel);
       }
       // setAnnotation(prev => [
       //       ...(Array.isArray(prev) ? prev : []),
@@ -81,6 +81,9 @@ console.log('first annotation', paths, emojis, circles, currentTool);
         Math.pow(offsetY / canvas.height - currentCircle.y, 2)
       );
       setCurrentCircle((prevCircle) => ({ ...prevCircle, radius: radiusPercent }));
+      if(channel){
+        pushMessage(JSON.stringify({ ctx: canvasCtx, currentCircle: { x: currentCircle?.x, y: currentCircle?.y, radius: radiusPercent }, props: otherProps }), channel);
+      }
     }
   };
 
