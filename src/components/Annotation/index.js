@@ -95,7 +95,7 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
       canvasCtx.closePath();
       setPaths((prevPaths) => [...prevPaths, currentPath]);
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, pen: currentPath, props: otherProps }), channel);
+       // pushMessage(JSON.stringify({ ctx: canvasCtx, pen: currentPath, props: otherProps }), channel);
       }
     } else if (currentTool === ANNOTATION_TOOLS.circle && currentCircle) {
       setCircles((prevCircles) => [...prevCircles, currentCircle]);
