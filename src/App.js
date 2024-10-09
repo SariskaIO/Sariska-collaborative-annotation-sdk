@@ -48,14 +48,14 @@ const App = (props)=> {
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
     let content = JSON.parse(message.content);
     console.log('new_message', content, canvasCtx);
-    if(content && content.pen && content.pen){
+    if(content && content.pen){
       setPaths(prev => ([...prev, content.pen]));
     }
-    if(content && content.circle && content.circle){
+    if(content && content.circle){
       setCircles(prev => ([...prev, content.circle]));
     }
-    if(content && content.emoji && content.emoji?.length){
-      setEmojis(prev => ([prev, content.emoji]));
+    if(content && content.emoji){
+      setEmojis(prev => ([...prev, content.emoji]));
     }
     if(content && content.currentCircle){
       setCurrentCircle(content.currentCircle);
@@ -105,10 +105,11 @@ const App = (props)=> {
   // },[messages?.length])
 
   useEffect(() => {
-    if(!canvasRef && !canvasRef.current){
+    if(!canvasRef && !canvasRef?.current){
       return;
     }
-    const canvas = canvasRef.current;
+    console.log('canvasRef', canvasRef, canvasRef?.current)
+    const canvas = canvasRef?.current;
     const context = canvas.getContext('2d');
     const handleResize = () => {
       const canvas = canvasRef.current;
