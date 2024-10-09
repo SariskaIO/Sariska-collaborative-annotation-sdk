@@ -41,6 +41,9 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       setCurrentPath([{ x: startXPercent, y: startYPercent }]);
       canvasCtx.beginPath();
       canvasCtx.moveTo(offsetX, offsetY);
+      if(channel){
+        pushMessage(JSON.stringify({ ctx: canvasCtx, pen: { x: offsetX, y: offsetY}, props: otherProps }), channel);
+      }
     } else if (currentTool === ANNOTATION_TOOLS.circle) {
       const canvas = canvasRef.current;
       const centerXPercent = offsetX / canvas.width;
@@ -74,6 +77,9 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       const xPercent = offsetX / canvas.width;
       const yPercent = offsetY / canvas.height;
       setCurrentPath((prevPath) => [...prevPath, { x: xPercent, y: yPercent }]);
+      if(channel){
+        pushMessage(JSON.stringify({ ctx: canvasCtx, pen: { x: offsetX, y: offsetY}, props: otherProps }), channel);
+      }
     } else if (currentTool === ANNOTATION_TOOLS.circle && drawing) {
       console.log('first draw', annotation, currentCircle)
       const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
@@ -143,6 +149,9 @@ console.log('first annotation', annotation, paths, emojis, circles, currentTool)
       { type: 'emoji', ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: '😀' } },
     ]);
     redraw(canvasCtx, canvasRef, [...annotation, {type: 'emoji', ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: '😀' }}]); // Redraw to immediately show the emoji
+    if(channel){
+      pushMessage(JSON.stringify({ ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: '😀' }, props: otherProps }), channel);
+    }
   };
 
   return (
