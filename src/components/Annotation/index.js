@@ -9,10 +9,11 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
   const [emojis, setEmojis] = useState([]); // Store emoji positions
   const [circles, setCircles] = useState([]); // Store circle data
   const [currentCircle, setCurrentCircle] = useState(null); // Store current circle being drawn
-console.log('first annotation', paths, emojis, circles, currentTool);
+console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
+    console.log('context getContext', context)
     setCanvasCtx(context);
     const handleResize = () => {
       const canvas = canvasRef.current;
@@ -39,6 +40,7 @@ console.log('first annotation', paths, emojis, circles, currentTool);
       setCurrentPath([{ x: startXPercent, y: startYPercent }]);
       canvasCtx.beginPath();
       canvasCtx.moveTo(offsetX, offsetY);
+      console.log('setDrawing', canvasCtx)
       if(channel){
         pushMessage(JSON.stringify({ ctx: canvasCtx, pen: { x: offsetX, y: offsetY}, props: otherProps }), channel);
       }

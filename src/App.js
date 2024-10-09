@@ -108,7 +108,7 @@ const App = (props)=> {
     if(!canvasRef?.current){
       return;
     }
-    console.log('canvasRef', canvasRef, canvasRef?.current)
+    console.log('canvasRef', canvasRef, canvasRef?.current, canvasCtx, paths)
     const canvas = canvasRef?.current;
     const context = canvas.getContext('2d');
     const handleResize = () => {
