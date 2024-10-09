@@ -17,6 +17,10 @@ const App = (props)=> {
   const [canvasCtx, setCanvasCtx] = useState(null);
   const [remoteTextboxes, setRemoteTextboxes] = useState([]);
   const [annotation, setAnnotation] = useState([]);
+  const [paths, setPaths] = useState([]); // Store freehand paths
+  const [emojis, setEmojis] = useState([]); // Store emoji positions
+  const [circles, setCircles] = useState([]); // Store circle data
+  const [currentCircle, setCurrentCircle] = useState(null); // Store current circle being drawn
   const roomName = props.roomName || getRoomName();
   const {users, dispatch} = useStore();
   const rtcChannel = CreateChannel(`rtc:${roomName}`, {});
@@ -43,50 +47,85 @@ const App = (props)=> {
 
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
     let content = JSON.parse(message.content);
-    console.log('new_message', content, canvasCtx)
-      if(content?.ctx && Object.keys(content?.ctx)?.length){
-        if(props.annotationTool === ANNOTATION_TOOLS.pen){
-          initializeAnnotation('pen', canvasCtx, canvasRef);
-          drawAnnotation('pen', canvasCtx, canvasRef)
-          stopAnnotation(type, canvasCtx)
-         // onDraw(content);
-        }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
-          content.props = {width: props.width, height: props.height};
-         // onDrawCircle(content);
-          redraw(canvasCtx, canvasRef, annotation)
-        }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
-         setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
-        }else{
-          content.emojis = [...messages];
-          onDrawEmoji(content);
-        redraw(canvasCtx, canvasRef, annotation)
-        }
-      }else{
-        content.ctx = canvasCtx;
-        if(content.ctx){
-          if(props.annotationTool === ANNOTATION_TOOLS.pen){
-            onDraw(content);
-          }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
-            content.props = {width: props.width, height: props.height};
-            onDrawCircle(content);
-          }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
-            setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
-          }else{
-              content.emojis = [...messages];
-              onDrawEmoji(content);
-             // redraw(canvasCtx, canvasRef, annotation)
-            }
-          }
-        }
-      setAnnotation(annotation => [...annotation, content.annotation]);
+    console.log('new_message', content, canvasCtx);
+    if(content && content.pen && content.pen?.length){
+      setPaths([...content.pen]);
+    }
+    if(content && content.circle && content.circle?.length){
+      setCircles([...content.circle]);
+    }
+    if(content && content.emojis && content.emojis?.length){
+      setEmojis([...content.emojis]);
+    }
+    if(content && content.currentCircle){
+      setCurrentCircle(content.currentCircle);
+    }
+      // if(content?.ctx && Object.keys(content?.ctx)?.length){
+      //   if(props.annotationTool === ANNOTATION_TOOLS.pen){
+      //     initializeAnnotation('pen', canvasCtx, canvasRef);
+      //     drawAnnotation('pen', canvasCtx, canvasRef)
+      //     stopAnnotation(type, canvasCtx)
+      //    // onDraw(content);
+      //   }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
+      //     content.props = {width: props.width, height: props.height};
+      //    // onDrawCircle(content);
+      //     redraw(canvasCtx, canvasRef, annotation)
+      //   }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
+      //    setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
+      //   }else{
+      //     content.emojis = [...messages];
+      //     onDrawEmoji(content);
+      //   redraw(canvasCtx, canvasRef, annotation)
+      //   }
+      // }else{
+      //   content.ctx = canvasCtx;
+      //   if(content.ctx){
+      //     if(props.annotationTool === ANNOTATION_TOOLS.pen){
+      //       onDraw(content);
+      //     }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
+      //       content.props = {width: props.width, height: props.height};
+      //       onDrawCircle(content);
+      //     }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
+      //       setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
+      //     }else{
+      //         content.emojis = [...messages];
+      //         onDrawEmoji(content);
+      //        // redraw(canvasCtx, canvasRef, annotation)
+      //       }
+      //     }
+      //   }
+     //setAnnotation(annotation => [...annotation, content.annotation]);
       setMessages(messages => [...messages, content])
   });
   
-  useEffect(()=>{
-    redraw(canvasCtx, canvasRef, annotation);
-  },[messages?.length])
+  // useEffect(()=>{
+  //   if(canvasCtx && canvasRef?.current){
+  //     redraw(canvasCtx, canvasRef, annotation);
+  //   }
+  // },[messages?.length])
 
-console.log('messages', messages, annotation)
+  useEffect(() => {
+    if(!canvasRef && !canvasRef.current){
+      return;
+    }
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    const handleResize = () => {
+      const canvas = canvasRef.current;
+      canvas.width = width;
+      canvas.height = height;
+      redraw(context, canvasRef, paths, circles, emojis, currentCircle); // Redraw existing drawings based on new size
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Set initial canvas size
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [paths, emojis, circles, currentCircle]);
+
+console.log('messages', messages, emojis, circles, paths, currentCircle);
   const pushMessage = ( content, channel )=>{
     const new_message = {
       created_by_name: users.user.name,  

@@ -304,22 +304,15 @@ export const stopAnnotation = (type, canvasCtx) => {
     }
 }
 
-export const redraw = (context, canvasRef, annotation) => {
+export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle) => {
     if(!context && !(canvasRef && canvasRef?.current)) return;
     const canvas = canvasRef.current;
     context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
 
-    if(annotation && annotation?.length){
-        let paths = annotation?.filter(item => item.type === 'pen');
-        let circles = annotation?.filter(item => item.type === 'circle');
-        let emojis = annotation?.filter(item => item.type === 'emoji');
-        let currentCircle = annotation?.filter(item => item.type === 'currentCircle');
-        console.log('annotationpath', annotation, paths, circles, emojis, currentCircle);
+        console.log('annotationpath', paths, circles, emojis, currentCircle);
 
         // Redraw freehand paths
-        paths.forEach((item) => {
-            if (item.pen?.length > 0) {
-                const path = item.pen;
+        paths?.length && paths.forEach((path) => {
                 const startX = path[0].x * canvas.width;
                 const startY = path[0].y * canvas.height;
                 context.beginPath();
@@ -335,13 +328,10 @@ export const redraw = (context, canvasRef, annotation) => {
                 context.lineWidth = 2;
                 context.stroke();
                 context.closePath();
-            }
         });
 
         // Redraw circles
-        circles.forEach((item) => {
-        if(item?.circle){
-            const circle = item.circle;
+        circles?.length && circles.forEach((circle) => {
             const centerX = circle.x * canvas.width;
             const centerY = circle.y * canvas.height;
             const radius = circle.radius * canvas.width; // Using width scaling for simplicity
@@ -351,17 +341,15 @@ export const redraw = (context, canvasRef, annotation) => {
             context.lineWidth = 2;
             context.stroke();
             context.closePath();
-        }
         });
 
         // If currently drawing a circle, draw it
         
-        if (currentCircle && currentCircle?.length && currentCircle[0].circle) {
+        if (currentCircle) {
             console.log('currentCircle in', currentCircle)
-            const circle = currentCircle[0].circle
-            const centerX = circle.x * canvas.width;
-            const centerY = circle.y * canvas.height;
-            const radius = circle.radius * canvas.width;
+            const centerX = currentCircle.x * canvas.width;
+            const centerY = currentCircle.y * canvas.height;
+            const radius = currentCircle.radius * canvas.width;
             context.beginPath();
             context.arc(centerX, centerY, radius, 0, Math.PI * 2);
             context.strokeStyle = 'blue';
@@ -371,14 +359,10 @@ export const redraw = (context, canvasRef, annotation) => {
         }
 
             // Redraw emojis
-        emojis.forEach((item) => {
-            if(item.emoji){
-                let emoji = item.emoji;
+        emojis?.length && emojis.forEach((emoji) => {
                 const x = emoji.x * canvas.width;
                 const y = emoji.y * canvas.height;
                 context.font = '30px Arial';
                 context.fillText(emoji.emoji, x-15,y+15);
-            }
         });
-    }
   };
