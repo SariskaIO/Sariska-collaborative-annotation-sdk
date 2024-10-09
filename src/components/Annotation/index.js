@@ -23,7 +23,7 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
       const canvas = canvasRef.current;
       canvas.width = width;
       canvas.height = height;
-      redraw(context, canvasRef, paths, circles, emojis, currentCircle); // Redraw existing drawings based on new size
+      redraw(context, canvasRef, paths, circles, emojis, currentCircle, otherProps); // Redraw existing drawings based on new size
     };
 
     window.addEventListener('resize', handleResize);
