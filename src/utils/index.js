@@ -324,8 +324,8 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
                 context.lineTo(x, y);
                 });
 
-                context.strokeStyle = props.lineColor;
-                context.lineWidth = props.lineWidth;
+                context.strokeStyle = path.color;
+                context.lineWidth = path.width;
                 context.stroke();
                 context.closePath();
         });
@@ -337,8 +337,8 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
             const radius = circle.radius * canvas.width; // Using width scaling for simplicity
             context.beginPath();
             context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            context.strokeStyle = props.lineColor;
-            context.lineWidth = props.lineWidth;
+            context.strokeStyle = circle.color;
+            context.lineWidth = circle.width;
             context.stroke();
             context.closePath();
         });
@@ -352,8 +352,8 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
             const radius = currentCircle.radius * canvas.width;
             context.beginPath();
             context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            context.strokeStyle = props.lineColor;
-            context.lineWidth = props.lineWidth;
+            context.strokeStyle = circle.color;
+            context.lineWidth = circle.width;
             context.stroke();
             context.closePath();
         }

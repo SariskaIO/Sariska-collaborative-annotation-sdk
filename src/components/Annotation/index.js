@@ -44,20 +44,20 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
       const canvas = canvasRef.current;
       const startXPercent = offsetX / canvas.width; // Store percentage-based coordinates
       const startYPercent = offsetY / canvas.height;
-      setCurrentPath([{ x: startXPercent, y: startYPercent }]);
+      setCurrentPath([{ x: startXPercent, y: startYPercent, color: otherProps.lineColor, width: otherProps.lineWidth }]);
       canvasCtx.beginPath();
       canvasCtx.moveTo(offsetX, offsetY);
       console.log('setDrawing', canvasCtx)
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, currentPath: [{ x: offsetX, y: offsetY}], props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, currentPath: [{ x: offsetX, y: offsetY, color: otherProps.lineColor, width: otherProps.lineWidth}], props: otherProps }), channel);
       }
     } else if (currentTool === ANNOTATION_TOOLS.circle) {
       const canvas = canvasRef.current;
       const centerXPercent = offsetX / canvas.width;
       const centerYPercent = offsetY / canvas.height;
-      setCurrentCircle({ x: centerXPercent, y: centerYPercent, radius: 0 });
+      setCurrentCircle({ x: centerXPercent, y: centerYPercent, radius: 0, color: otherProps.lineColor, width: otherProps.lineWidth });
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, currentCircle: { x: centerXPercent, y: centerYPercent, radius: 0 }, props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, currentCircle: { x: centerXPercent, y: centerYPercent, radius: 0, color: otherProps.lineColor, width: otherProps.lineWidth }, props: otherProps }), channel);
       }
       // setAnnotation(prev => [
       //       ...(Array.isArray(prev) ? prev : []),
@@ -81,9 +81,9 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
       const canvas = canvasRef.current;
       const xPercent = offsetX / canvas.width;
       const yPercent = offsetY / canvas.height;
-      setCurrentPath((prevPath) => [...prevPath, { x: xPercent, y: yPercent }]);
+      setCurrentPath((prevPath) => [...prevPath, { x: xPercent, y: yPercent, color: otherProps.lineColor, width: otherProps.lineWidth }]);
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, currentPath: [...currentPath, { x: offsetX, y: offsetY}], props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, currentPath: [...currentPath, { x: offsetX, y: offsetY, color: otherProps.lineColor, width: otherProps.lineWidth}], props: otherProps }), channel);
       }
     } else if (currentTool === ANNOTATION_TOOLS.circle && drawing) {
       const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
@@ -94,7 +94,7 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
       );
       setCurrentCircle((prevCircle) => ({ ...prevCircle, radius: radiusPercent }));
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, currentCircle: { x: currentCircle?.x, y: currentCircle?.y, radius: radiusPercent }, props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, currentCircle: { x: currentCircle?.x, y: currentCircle?.y, radius: radiusPercent, color: otherProps.lineColor, width: otherProps.lineWidth }, props: otherProps }), channel);
       }
     }
   };
