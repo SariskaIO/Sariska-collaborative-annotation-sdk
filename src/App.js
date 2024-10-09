@@ -105,7 +105,7 @@ const App = (props)=> {
   // },[messages?.length])
 
   useEffect(() => {
-    if(!canvasRef && !canvasRef?.current){
+    if(!canvasRef?.current){
       return;
     }
     console.log('canvasRef', canvasRef, canvasRef?.current)
