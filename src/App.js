@@ -83,7 +83,7 @@ const App = (props)=> {
   });
   
   useEffect(()=>{
-    redraw(context, canvasRef, annotation);
+    redraw(canvasCtx, canvasRef, annotation);
   },[messages?.length])
 
 console.log('messages', messages, annotation)
