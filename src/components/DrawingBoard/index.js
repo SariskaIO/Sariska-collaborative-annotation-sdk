@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { useStore } from '../../store';
+import React from 'react'
 import Canvas from '../Canvas';
 
 const DrawingBoard = ({
@@ -8,7 +7,6 @@ const DrawingBoard = ({
     canvasCtx,
     setCanvasCtx,
     remoteTextboxes,
-    loading,
     inputProps,
     canvasRef
 }) => {

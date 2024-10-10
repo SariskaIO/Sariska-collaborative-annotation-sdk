@@ -7,8 +7,7 @@ import { useStore } from './store';
 import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
-import { getRoomName, initializeAnnotation, onDraw, onDrawCircle, onDrawEmoji, redraw, setAllRemoteTextBoxes } from './utils';
-import { ANNOTATION_TOOLS } from './constants';
+import { getRoomName, redraw } from './utils';
 
 const App = (props)=> {
   const [messages, setMessages] = useState([]);
@@ -68,50 +67,9 @@ const App = (props)=> {
     if(content && content.textbox){
       setRemoteTextboxes(prev => ([...prev, content.textbox]));
     }
-      // if(content?.ctx && Object.keys(content?.ctx)?.length){
-      //   if(props.annotationTool === ANNOTATION_TOOLS.pen){
-      //     initializeAnnotation('pen', canvasCtx, canvasRef);
-      //     drawAnnotation('pen', canvasCtx, canvasRef)
-      //     stopAnnotation(type, canvasCtx)
-      //    // onDraw(content);
-      //   }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
-      //     content.props = {width: props.width, height: props.height};
-      //    // onDrawCircle(content);
-      //     redraw(canvasCtx, canvasRef, annotation)
-      //   }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
-      //    setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
-      //   }else{
-      //     content.emojis = [...messages];
-      //     onDrawEmoji(content);
-      //   redraw(canvasCtx, canvasRef, annotation)
-      //   }
-      // }else{
-      //   content.ctx = canvasCtx;
-      //   if(content.ctx){
-      //     if(props.annotationTool === ANNOTATION_TOOLS.pen){
-      //       onDraw(content);
-      //     }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
-      //       content.props = {width: props.width, height: props.height};
-      //       onDrawCircle(content);
-      //     }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
-      //       setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
-      //     }else{
-      //         content.emojis = [...messages];
-      //         onDrawEmoji(content);
-      //        // redraw(canvasCtx, canvasRef, annotation)
-      //       }
-      //     }
-      //   }
-     //setAnnotation(annotation => [...annotation, content.annotation]);
       setMessages(messages => [...messages, content])
   });
   
-  // useEffect(()=>{
-  //   if(canvasCtx && canvasRef?.current){
-  //     redraw(canvasCtx, canvasRef, annotation);
-  //   }
-  // },[messages?.length])
-
   useEffect(() => {
     if(!canvasRef?.current){
       return;
