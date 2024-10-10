@@ -1,14 +1,17 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ANNOTATION_TOOLS } from '../../constants';
-import { getCanvasPosition, redraw } from '../../utils';
+import { getCanvasPosition, measureText, redraw } from '../../utils';
+import { makeStyles } from '@material-ui/core';
 
-const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, height, zIndex, pushMessage, channel, otherProps}) => {
+const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, height, zIndex, pushMessage, channel, otherProps, remoteTextboxes}) => {
   const [drawing, setDrawing] = useState(false);
   const [paths, setPaths] = useState([]); // Store freehand paths
   const [currentPath, setCurrentPath] = useState([]); // Store current freehand path
   const [emojis, setEmojis] = useState([]); // Store emoji positions
   const [circles, setCircles] = useState([]); // Store circle data
   const [currentCircle, setCurrentCircle] = useState(null); // Store current circle being drawn
+  const [textboxes, setTextboxes] = useState([]);
+
 console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -137,7 +140,85 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
     }
   };
 
+  const handleCanvasClick = (e) => {
+    if(!otherProps.isModerator){
+        return ;
+    }
+    const canvas = canvasRef?.current;
+    const rect = canvas?.getBoundingClientRect();
+    const ctx = canvasRef?.current?.getContext('2d');
+
+    // Get click coordinates relative to the canvas
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const newTextbox = {
+        id: Date.now(),
+        x: x,
+        y: y,
+        width: 200, // Max width or till the canvas's right end
+        height: 32, // Min height
+        text: ''
+    };
+
+    setTextboxes(textboxes => ([...textboxes, newTextbox]));
+  //  redrawAnnotations({ctx, annotations, props: otherProps});
+  //  setAnnotations((annotations) => [...annotations, { type: 'textbox', ctx, textbox: newTextbox }])
+    pushMessage(JSON.stringify({ctx, textbox: newTextbox, color: otherProps.lineColor, width: otherProps.lineWidth }), channel);
+};
+
+const handleTextChange = (e, id) => {
+    const newText = e.target.value;
+    const ctx = canvasRef?.current?.getContext('2d');
+    setTextboxes((prevTextboxes) =>
+        prevTextboxes.map((textbox) => {
+            if (textbox.id === id) {
+                const textMetrics = measureText(newText, textbox.width, canvasRef);
+                let newWidth = Math.min(200, canvasRef.current.width - textbox.x);
+                let newHeight = Math.max(textMetrics.height, 32);
+                newHeight = Math.min(newHeight, 96);
+                let newTextbox = {
+                    ...textbox,
+                    text: newText,
+                    width: newWidth,
+                    height: newHeight,
+                }
+               // redrawAnnotations({ctx, annotations, props: otherProps});
+             //   setAnnotations(annotations => ([...annotations, {type: 'textbox', ctx, textbox: newTextbox }]))
+                pushMessage(JSON.stringify({ctx, textbox: newTextbox, color: otherProps.lineColor, width: otherProps.lineWidth }), channel);
+                return newTextbox;
+            }
+          //  redrawAnnotations({ctx, annotations, props: otherProps});
+           // setAnnotations(annotations => ([...annotations, {type: 'textbox', ctx, textbox}]))
+            pushMessage(JSON.stringify({ctx, textbox, color: otherProps.lineColor, width: otherProps.lineWidth }), channel);
+            return textbox;
+        })
+    );
+};
+
+let textboxList = textboxes?.length ? textboxes : remoteTextboxes?.length ? remoteTextboxes: [];
+console.log('textboxList', textboxList, textboxes, remoteTextboxes)
+
+const useStyles = makeStyles(() => ({
+      textArea: {
+        position: 'absolute',
+        resize: 'none',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+        zIndex: otherProps.zIndex,
+        '&:focus-visible': {
+              outlineOffset: otherProps.isModeratorLocal && '0px',
+              outline: otherProps.isModeratorLocal ? '-webkit-focus-ring-color auto 1px' : 'none'
+        },
+        '&:focus': {
+              outline: otherProps.isModeratorLocal ? '-webkit-focus-ring-color auto 1px' : 'none'
+        }
+      }
+    }))
+   const classes = useStyles();
+
   return (
+    <>
       <canvas
         ref={canvasRef}
         style={{ 
@@ -153,6 +234,8 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
         onMouseDown={(e) => {
           if (currentTool === ANNOTATION_TOOLS.emoji) {
             placeEmoji(e);
+          } else if(currentTool === ANNOTATION_TOOLS.textbox){
+            handleCanvasClick(e)
           } else {
             startDrawing(e);
           }
@@ -161,6 +244,25 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
         onMouseUp={stopDrawing}
         onMouseLeave={stopDrawing}
       />
+      {textboxList?.length ? textboxList?.map((textbox) => (
+                <textarea
+                    key={textbox.id}
+                    className={classes.textArea}
+                    value={textbox.text}
+                    onChange={(e) => handleTextChange(e, textbox.id)}
+                    autoFocus={otherProps.isModeratorLocal}
+                    readOnly={!otherProps.isModeratorLocal}
+                    style={{
+                      top: textbox.y + 'px',
+                      left: textbox.x + 'px',
+                      width: textbox.width + 'px',
+                      height: textbox.height + 'px',
+                      maxWidth: `${Math.min(200, 600 - textbox.x)}px`,
+                      maxHeight: `${Math.min(96, 500 - textbox.y)}px`,
+                    }}
+                />
+            )) : null}
+    </>
   );
 };
 

@@ -66,6 +66,9 @@ const App = (props)=> {
     if(content && content.currentCircle){
       setCurrentCircle(content.currentCircle);
     }
+    if(content && content.textBox){
+      setRemoteTextboxes(prev => ([...prev, content.textBox]));
+    }
       // if(content?.ctx && Object.keys(content?.ctx)?.length){
       //   if(props.annotationTool === ANNOTATION_TOOLS.pen){
       //     initializeAnnotation('pen', canvasCtx, canvasRef);

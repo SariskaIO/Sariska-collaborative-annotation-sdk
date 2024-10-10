@@ -71,6 +71,7 @@ const Canvas = ({
           pushMessage={pushMessage} 
           channel={channel} 
           otherProps={otherProps}
+          remoteTextboxes={remoteTextboxes}
         />
         {/* <canvas 
             width={width}
