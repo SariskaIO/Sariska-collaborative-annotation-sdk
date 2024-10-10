@@ -48,7 +48,6 @@ const App = (props)=> {
 
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
     let content = JSON.parse(message.content);
-    console.log('new_message', content, canvasCtx);
     if(content && content.currentPath && content.currentPath?.length){
       setCurrentPath(prev => ([...prev, content.currentPath]));
     }else if(content && content.currentPath && !content.currentPath?.length){
@@ -117,7 +116,6 @@ const App = (props)=> {
     if(!canvasRef?.current){
       return;
     }
-    console.log('canvasRef', canvasRef, canvasRef?.current, canvasCtx, paths)
     const canvas = canvasRef?.current;
     const context = canvas.getContext('2d');
     const handleResize = () => {
@@ -136,20 +134,6 @@ const App = (props)=> {
     };
   }, [paths, emojis, circles, currentCircle]);
 
-  useEffect(()=>{
-    console.log('first currentPath', currentPath)
-    // canvasCtx.beginPath();
-    // canvasCtx.moveTo(currentPath[0].x, currentPath[0].y);
-    // currentPath?.forEach(path => {
-    //   canvasCtx.lineTo(path.x, path.y);
-    //   canvasCtx.strokeStyle = 'red';
-    //   canvasCtx.lineWidth = 2;
-    //   canvasCtx.stroke();
-    //   canvasCtx.closePath();
-    // })
-  },[currentPath])
-
-console.log('messages', messages, emojis, circles, paths, currentCircle, remoteTextboxes);
   const pushMessage = ( content, channel )=>{
     const new_message = {
       created_by_name: users.user.name,  

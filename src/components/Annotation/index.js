@@ -12,11 +12,9 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
   const [currentCircle, setCurrentCircle] = useState(null); // Store current circle being drawn
   const [textboxes, setTextboxes] = useState([]);
 
-console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
-    console.log('context getContext', context)
     setCanvasCtx(context);
 
     const handleResize = () => {
@@ -50,7 +48,6 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
       setCurrentPath([{ x: startXPercent, y: startYPercent, color: otherProps.lineColor, width: otherProps.lineWidth }]);
       canvasCtx.beginPath();
       canvasCtx.moveTo(offsetX, offsetY);
-      console.log('setDrawing', canvasCtx)
       if(channel){
         pushMessage(JSON.stringify({ ctx: canvasCtx, currentPath: [{ x: offsetX, y: offsetY, color: otherProps.lineColor, width: otherProps.lineWidth}], props: otherProps }), channel);
       }
@@ -79,7 +76,6 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
       canvasCtx.lineTo(offsetX, offsetY);
       canvasCtx.strokeStyle = otherProps.lineColor;
       canvasCtx.lineWidth = otherProps.lineWidth;
-      console.log('canvasCtx.lineWidth', canvasCtx, otherProps)
       canvasCtx.stroke();
 
       const canvas = canvasRef.current;
@@ -133,7 +129,6 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
     const canvas = canvasRef.current;
     const xPercent = offsetX / canvas.width;
     const yPercent = offsetY / canvas.height;
-    console.log('xPercent', xPercent)
     setEmojis((prevEmojis) => [...prevEmojis, { x: xPercent, y: yPercent, emoji: '😀' }]);
     if(channel){
       pushMessage(JSON.stringify({ ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: '😀' }, props: otherProps }), channel);
@@ -197,7 +192,6 @@ const handleTextChange = (e, id) => {
 };
 
 let textboxList = textboxes?.length ? textboxes : remoteTextboxes?.length ? remoteTextboxes: [];
-console.log('textboxList', textboxList, textboxes, remoteTextboxes)
 
 const useStyles = makeStyles(() => ({
       textArea: {
@@ -253,6 +247,7 @@ const useStyles = makeStyles(() => ({
                     autoFocus={otherProps.isModeratorLocal}
                     readOnly={!otherProps.isModeratorLocal}
                     style={{
+                      zIndex,
                       top: textbox.y + 'px',
                       left: textbox.x + 'px',
                       width: textbox.width + 'px',

@@ -309,11 +309,8 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
     const canvas = canvasRef.current;
     context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
 
-        console.log('annotationpath', paths, circles, emojis, currentCircle);
-
         // Redraw freehand paths
         paths?.length && paths.forEach((path) => {
-            console.log('path forEach', path)
                 const startX = path[0].x * canvas.width;
                 const startY = path[0].y * canvas.height;
                 context.beginPath();
@@ -327,7 +324,6 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
                 context.lineWidth = point.width;
                 });
 
-                console.log('context.strokeStyle', context, path.color)
                 context.stroke();
                 context.closePath();
         });
@@ -348,7 +344,6 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
         // If currently drawing a circle, draw it
         
         if (currentCircle) {
-            console.log('currentCircle in', currentCircle)
             const centerX = currentCircle.x * canvas.width;
             const centerY = currentCircle.y * canvas.height;
             const radius = currentCircle.radius * canvas.width;

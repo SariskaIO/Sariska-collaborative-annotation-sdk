@@ -170,10 +170,8 @@ export function useOnDraw(
     }
     
     function onMouseDown(e){
-        console.log('onMouseDown', canvasRef?.current, !otherProps.isModerator, !otherProps.isModeratorLocal, !canvasRef?.current && !otherProps.isModerator)
         if(!canvasRef?.current) return;
         if(!otherProps.isModeratorLocal) return;
-        console.log('onMouseDown')
         const {parentCanvasRef, ...props} = otherProps;
         isDrawingRef.current = true;
         const ctx = canvasRef?.current?.getContext('2d');
