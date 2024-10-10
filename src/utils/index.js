@@ -313,6 +313,7 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
 
         // Redraw freehand paths
         paths?.length && paths.forEach((path) => {
+            console.log('path forEach', path)
                 const startX = path[0].x * canvas.width;
                 const startY = path[0].y * canvas.height;
                 context.beginPath();
@@ -352,8 +353,8 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
             const radius = currentCircle.radius * canvas.width;
             context.beginPath();
             context.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            context.strokeStyle = circle.color;
-            context.lineWidth = circle.width;
+            context.strokeStyle = currentCircle.color;
+            context.lineWidth = currentCircle.width;
             context.stroke();
             context.closePath();
         }
