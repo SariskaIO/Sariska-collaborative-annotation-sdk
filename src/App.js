@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
 import CreateChannel from './channel/CreateChannel';
 import UseEventHandler from './hooks/UseEventHandler';
@@ -7,14 +7,20 @@ import { useStore } from './store';
 import { setRoom } from './store/action/room';
 import { setUser } from './store/action/user';
 import { SET_ROOM, SET_USER } from './store/action/types';
-import { getRoomName, onDraw, onDrawCircle, onDrawEmoji, setAllRemoteTextBoxes } from './utils';
-import { ANNOTATION_TOOLS } from './constants';
+import { getRoomName, redraw } from './utils';
 
 const App = (props)=> {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const canvasRef = useRef(null);
   const [canvasCtx, setCanvasCtx] = useState(null);
   const [remoteTextboxes, setRemoteTextboxes] = useState([]);
+  const [annotation, setAnnotation] = useState([]);
+  const [currentPath, setCurrentPath] = useState([]); // Store freehand paths
+  const [paths, setPaths] = useState([]); // Store freehand paths
+  const [emojis, setEmojis] = useState([]); // Store emoji positions
+  const [circles, setCircles] = useState([]); // Store circle data
+  const [currentCircle, setCurrentCircle] = useState(null); // Store current circle being drawn
   const roomName = props.roomName || getRoomName();
   const {users, dispatch} = useStore();
   const rtcChannel = CreateChannel(`rtc:${roomName}`, {});
@@ -41,37 +47,50 @@ const App = (props)=> {
 
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
     let content = JSON.parse(message.content);
-      if(content?.ctx && Object.keys(content?.ctx)?.length){
-        if(props.annotationTool === ANNOTATION_TOOLS.pen){
-          onDraw(content);
-        }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
-          content.props = {width: props.width, height: props.height};
-          onDrawCircle(content);
-        }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
-         setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
-        }else{
-          content.emojis = [...messages];
-          onDrawEmoji(content);
-        }
-      }else{
-        content.ctx = canvasCtx;
-        if(content.ctx){
-          if(props.annotationTool === ANNOTATION_TOOLS.pen){
-            onDraw(content);
-          }else if(props.annotationTool === ANNOTATION_TOOLS.circle){
-            content.props = {width: props.width, height: props.height};
-            onDrawCircle(content);
-          }else if(props.annotationTool === ANNOTATION_TOOLS.textbox){
-            setAllRemoteTextBoxes(content, remoteTextboxes, setRemoteTextboxes)
-          }else{
-              content.emojis = [...messages];
-              onDrawEmoji(content);
-            }
-          }
-        }
-      setMessages(messages => [...messages, message])
+    if(content && content.currentPath && content.currentPath?.length){
+      setCurrentPath(prev => ([...prev, content.currentPath]));
+    }else if(content && content.currentPath && !content.currentPath?.length){
+      setCurrentPath([]);
+    }
+    if(content && content.pen){
+      setPaths(prev => ([...prev, content.pen]));
+    }
+    if(content && content.circle){
+      setCircles(prev => ([...prev, content.circle]));
+    }
+    if(content && content.emoji){
+      setEmojis(prev => ([...prev, content.emoji]));
+    }
+    if(content && content.currentCircle){
+      setCurrentCircle(content.currentCircle);
+    }
+    if(content && content.textbox){
+      setRemoteTextboxes(prev => ([...prev, content.textbox]));
+    }
+      setMessages(messages => [...messages, content])
   });
   
+  useEffect(() => {
+    if(!canvasRef?.current){
+      return;
+    }
+    const canvas = canvasRef?.current;
+    const context = canvas.getContext('2d');
+    const handleResize = () => {
+      const canvas = canvasRef.current;
+      canvas.width = props.width;
+      canvas.height = props.height;
+
+      redraw(context, canvasRef, paths, circles, emojis, currentCircle, props); // Redraw existing drawings based on new size
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Set initial canvas size
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [paths, emojis, circles, currentCircle]);
 
   const pushMessage = ( content, channel )=>{
     const new_message = {
@@ -89,6 +108,8 @@ const App = (props)=> {
               pushMessage={pushMessage} 
               loading={loading}
               channel={rtcChannel}
+              canvasRef={canvasRef}
+              canvasCtx={canvasCtx}
               setCanvasCtx={setCanvasCtx}
               remoteTextboxes={remoteTextboxes}
             />

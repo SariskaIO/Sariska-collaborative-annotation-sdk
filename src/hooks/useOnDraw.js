@@ -11,6 +11,8 @@ export function useOnDraw(
     otherProps
     ){
     const [annotation, setAnnotation] = useState([]);
+   // const [initialCanvasSize, setInitialCanvasSize] = useState({ width: 0, height: 0 });
+    const [canvasSize, setCanvasSize] = useState({ width: props.width, height: props.height });
 
     const canvasRef = useRef(null);
     const prevPointRef = useRef()
@@ -18,46 +20,55 @@ export function useOnDraw(
 
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
+    
+    const handleResize = () => {
+        const newWidth = props.width;
+        const newHeight = props.height;
+    
+        const scaleX = newWidth / canvasSize.width;
+        const scaleY = newHeight / canvasSize.height;
+    
+        const scaledPaths = paths.map((path) =>
+          path.map(([x, y]) => [x * scaleX, y * scaleY])
+        );
+    
+        const scaledCircles = circles.map((circle) => ({
+          x: circle.x * scaleX,
+          y: circle.y * scaleY,
+          radius: circle.radius * Math.min(scaleX, scaleY),
+        }));
+    
+        const scaledEmojis = emojis.map((emoji) => ({
+          ...emoji,
+          x: emoji.x * scaleX,
+          y: emoji.y * scaleY
+        }));
+    
+        setCanvasSize({ width: newWidth, height: newHeight });
+        setPaths(scaledPaths);
+        setCircles(scaledCircles);
+        setEmojis(scaledEmojis);
+      };
 
-    // const saveImage = () => {
-    //     console.log('saveImage')
-    //     const context = canvasRef.current.getContext('2d');
-    //     const image = new Image();
-    //     image.src = otherProps.imageUrl;
-    //     image.onload = () => {
-    //       // Draw the image onto the canvas
-    //       context.drawImage(image, 0, 0, 800, 600);
-    
-    //       // Draw the annotations onto the canvas
-    //       context.strokeStyle = otherProps?.lineColor;
-    //       context.lineWidth = otherProps?.lineWidth;
-    //       annotations.forEach((annotation, index) => {
-    //         if (index === 0) {
-    //           context.beginPath();
-    //           context.moveTo(annotation.x, annotation.y);
-    //         } else {
-    //           context.lineTo(annotation.x, annotation.y);
-    //           context.stroke();
-    //         }
-    //       });
-    
-    //       // Convert the canvas to an image and open it in a new tab
-    //       const imageDataUrl = canvasRef.current.toDataURL('image/png');
-    //       console.log('first imageDataUrl', imageDataUrl)
-    //       const newWindow = window.open('about:blank', 'image from canvas');
-    //       newWindow.document.write('<img src="' + imageDataUrl + '" alt="Saved Annotation" />');
-    //     };
-    //     // const canvas = canvasRef.current;
-    //     // const link = document.createElement('a');
-    //     // link.download = 'image_with_drawing.png';
-    //     // canvas.toBlob((blob) => {
-    //     //   const url = URL.createObjectURL(blob);
-    //     //   setDownloadUrl(url);
-    //     //   link.href = url;
-    //     //   link.click();
-    //     // });
-    //   };
-    
+    // Function to handle window resize and persist annotations
+    // function handleResize() {
+    //     const canvas = canvasRef.current;
+    //     if (!canvas) return;
+
+    //     const ctx = canvas.getContext("2d");
+    //     const { width, height } = canvas.getBoundingClientRect();
+
+    //     // Calculate the scale factors based on initial canvas size
+    //     const scaleX = width / initialCanvasSize.width;
+    //     const scaleY = height / initialCanvasSize.height;
+
+    //     // Clear the canvas
+    //     clearCanvas(ctx, width, height);
+
+    //     // Redraw annotations after clearing
+    //     redrawAnnotations({ ctx, annotations, props: otherProps, scaleX, scaleY });
+    // }
+
     useEffect(()=>{
         if(otherProps.annotationTool !== ANNOTATION_TOOLS.pen){
             return;
@@ -67,6 +78,14 @@ export function useOnDraw(
         parentCanvasRef.current = canvasRef?.current;
         setCanvasCtx(ctx);
         
+        // Store initial canvas dimensions
+        const { width, height } = canvasRef?.current.getBoundingClientRect();
+       // setInitialCanvasSize({ width, height });
+
+        
+        // Initialize window resize listener
+      //  window.addEventListener('resize', handleResize);
+
         function initMouseMoveListener(){
             const mouseMoveListener = (e) => {
                 if(isDrawingRef.current){
@@ -122,6 +141,7 @@ export function useOnDraw(
             props.saveImage(annotation);
         }
         return ()=>{
+          //  window.removeEventListener('resize', handleResize); // Clean up resize listener
             if(props.isParticipantAccess){
                 removeMouseEventListeners();
             }else{
@@ -146,10 +166,12 @@ export function useOnDraw(
     function setCanvasRef(ref){
         if(!ref) return;
         canvasRef.current = ref;
+      //  handleResize(); // Ensure annotations are redrawn if the canvas size has changed
     }
     
     function onMouseDown(e){
         if(!canvasRef?.current) return;
+        if(!otherProps.isModeratorLocal) return;
         const {parentCanvasRef, ...props} = otherProps;
         isDrawingRef.current = true;
         const ctx = canvasRef?.current?.getContext('2d');
