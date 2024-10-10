@@ -323,10 +323,10 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
                 const x = point.x * canvas.width;
                 const y = point.y * canvas.height;
                 context.lineTo(x, y);
+                context.strokeStyle = point.color;
+                context.lineWidth = point.width;
                 });
 
-                context.strokeStyle = '#fff';
-                context.lineWidth = path.width;
                 console.log('context.strokeStyle', context, path.color)
                 context.stroke();
                 context.closePath();
