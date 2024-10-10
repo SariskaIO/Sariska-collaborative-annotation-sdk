@@ -33,7 +33,7 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [paths, emojis, circles, currentCircle]);
+  }, [paths, emojis, circles, currentCircle, textboxes]);
 
   const startDrawing = (e) => {
     if(!otherProps.isModerator){
@@ -241,7 +241,6 @@ const useStyles = makeStyles(() => ({
                     autoFocus={otherProps.isModeratorLocal}
                     readOnly={!otherProps.isModeratorLocal}
                     style={{
-                      zIndex,
                       top: textbox.y + 'px',
                       left: textbox.x + 'px',
                       width: textbox.width + 'px',
