@@ -325,8 +325,9 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
                 context.lineTo(x, y);
                 });
 
-                context.strokeStyle = 'red';
+                context.strokeStyle = '#fff';
                 context.lineWidth = path.width;
+                console.log('context.strokeStyle', context, path.color)
                 context.stroke();
                 context.closePath();
         });

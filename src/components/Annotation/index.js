@@ -76,6 +76,7 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
       canvasCtx.lineTo(offsetX, offsetY);
       canvasCtx.strokeStyle = otherProps.lineColor;
       canvasCtx.lineWidth = otherProps.lineWidth;
+      console.log('canvasCtx.lineWidth', canvasCtx, otherProps)
       canvasCtx.stroke();
 
       const canvas = canvasRef.current;
