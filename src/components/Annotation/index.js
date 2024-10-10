@@ -140,7 +140,7 @@ console.log('first annotation', paths, emojis, circles, currentTool, canvasCtx);
     }
   };
 
-  const handleCanvasClick = (e) => {
+  const createTextbox = (e) => {
     if(!otherProps.isModerator){
         return ;
     }
@@ -235,7 +235,7 @@ const useStyles = makeStyles(() => ({
           if (currentTool === ANNOTATION_TOOLS.emoji) {
             placeEmoji(e);
           } else if(currentTool === ANNOTATION_TOOLS.textbox){
-            handleCanvasClick(e)
+            createTextbox(e)
           } else {
             startDrawing(e);
           }

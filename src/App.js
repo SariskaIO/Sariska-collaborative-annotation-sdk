@@ -66,8 +66,8 @@ const App = (props)=> {
     if(content && content.currentCircle){
       setCurrentCircle(content.currentCircle);
     }
-    if(content && content.textBox){
-      setRemoteTextboxes(prev => ([...prev, content.textBox]));
+    if(content && content.textbox){
+      setRemoteTextboxes(prev => ([...prev, content.textbox]));
     }
       // if(content?.ctx && Object.keys(content?.ctx)?.length){
       //   if(props.annotationTool === ANNOTATION_TOOLS.pen){
@@ -149,7 +149,7 @@ const App = (props)=> {
     // })
   },[currentPath])
 
-console.log('messages', messages, emojis, circles, paths, currentCircle);
+console.log('messages', messages, emojis, circles, paths, currentCircle, remoteTextboxes);
   const pushMessage = ( content, channel )=>{
     const new_message = {
       created_by_name: users.user.name,  
