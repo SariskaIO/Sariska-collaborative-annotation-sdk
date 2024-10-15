@@ -129,9 +129,9 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
     const canvas = canvasRef.current;
     const xPercent = offsetX / canvas.width;
     const yPercent = offsetY / canvas.height;
-    setEmojis((prevEmojis) => [...prevEmojis, { x: xPercent, y: yPercent, emoji: '😀' }]);
+    setEmojis((prevEmojis) => [...prevEmojis, { x: xPercent, y: yPercent, emoji: otherProps.emojiType || '😀' }]);
     if(channel){
-      pushMessage(JSON.stringify({ ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: '😀' }, props: otherProps }), channel);
+      pushMessage(JSON.stringify({ ctx: canvasCtx, emoji: { x: xPercent, y: yPercent, emoji: otherProps.emojiType || '😀' }, props: otherProps }), channel);
     }
   };
 
