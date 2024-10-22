@@ -276,12 +276,12 @@ export const getCanvasPosition = (e, canvasRef) => {
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
     return {
-      offsetX: e.clientX - rect.left,
-      offsetY: e.clientY - rect.top,
+      offsetX: ((e.clientX - rect.left) / rect.width) * canvas.width, //e.clientX - rect.left,
+      offsetY: ((e.clientY - rect.top) / rect.height) * canvas.height //e.clientY - rect.top,
     };
   };
 
-export const initializeAnnotation = (type, canvasCtx, canvasRef) => {
+export const initializeAnnotation = (e, type, canvasCtx, canvasRef) => {
     const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
     if(type === 'pen'){
         canvasCtx.beginPath();
@@ -289,7 +289,7 @@ export const initializeAnnotation = (type, canvasCtx, canvasRef) => {
     }
 }
 
-export const drawAnnotation = (type, canvasCtx, canvasRef) => {
+export const drawAnnotation = (e, type, canvasCtx, canvasRef) => {
     const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
     if(type === 'pen'){
         canvasCtx.lineTo(offsetX, offsetY);
@@ -304,7 +304,7 @@ export const stopAnnotation = (type, canvasCtx) => {
     }
 }
 
-export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle, props) => {
+export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle, currentPath, props) => {
     if(!context && !(canvasRef && canvasRef?.current)) return;
     const canvas = canvasRef.current;
     context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
@@ -354,6 +354,22 @@ export const redraw = (context, canvasRef, paths, circles, emojis, currentCircle
             context.stroke();
             context.closePath();
         }
+
+        if(currentPath?.length){
+            const startX = currentPath[0].x * canvas.width;
+            const startY = currentPath[0].y * canvas.height;
+            context.beginPath();
+            context.moveTo(startX, startY);
+            currentPath.forEach((path) => {
+                const x = path.x * canvas.width;
+                const y = path.y * canvas.height;
+                context.lineTo(x, y);
+                context.strokeStyle = path.color;
+                context.lineWidth = path.width;
+            });
+            context.stroke();
+            context.closePath();
+          }
 
             // Redraw emojis
         emojis?.length && emojis.forEach((emoji) => {
