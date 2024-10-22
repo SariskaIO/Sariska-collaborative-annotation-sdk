@@ -22,9 +22,12 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
         return ;
       }
       const canvas = canvasRef.current;
+      const context = canvas.getContext('2d');
       canvas.width = width;
       canvas.height = height;
-      redraw(context, canvasRef, paths, circles, emojis, currentCircle, otherProps); // Redraw existing drawings based on new size
+      // Clear the canvas and redraw existing annotations using the updated sizes
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      redraw(context, canvasRef, paths, circles, emojis, currentCircle, currentPath, otherProps); // Redraw existing drawings based on new size
     };
 
     window.addEventListener('resize', handleResize);
@@ -33,12 +36,13 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [paths, emojis, circles, currentCircle, textboxes]);
-
+  }, [paths, emojis, circles, currentCircle, currentPath, textboxes]);
+  
   const startDrawing = (e) => {
     if(!otherProps.isModerator){
       return ;
     }
+    
     const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
     if (currentTool === ANNOTATION_TOOLS.pen) {
       setDrawing(true);
@@ -46,10 +50,10 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
       const startXPercent = offsetX / canvas.width; // Store percentage-based coordinates
       const startYPercent = offsetY / canvas.height;
       setCurrentPath([{ x: startXPercent, y: startYPercent, color: otherProps.lineColor, width: otherProps.lineWidth }]);
-      canvasCtx.beginPath();
-      canvasCtx.moveTo(offsetX, offsetY);
+      // canvasCtx.beginPath();
+      // canvasCtx.moveTo(offsetX, offsetY);
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, currentPath: [{ x: offsetX, y: offsetY, color: otherProps.lineColor, width: otherProps.lineWidth}], props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, currentPath: { x: startXPercent, y: startYPercent, color: otherProps.lineColor, width: otherProps.lineWidth}, props: otherProps }), channel);
       }
     } else if (currentTool === ANNOTATION_TOOLS.circle) {
       const canvas = canvasRef.current;
@@ -73,20 +77,21 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
     }
     if (currentTool === ANNOTATION_TOOLS.pen && drawing) {
       const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
-      canvasCtx.lineTo(offsetX, offsetY);
-      canvasCtx.strokeStyle = otherProps.lineColor;
-      canvasCtx.lineWidth = otherProps.lineWidth;
-      canvasCtx.stroke();
+      // canvasCtx.lineTo(offsetX, offsetY);
+      // canvasCtx.strokeStyle = otherProps.lineColor;
+      // canvasCtx.lineWidth = otherProps.lineWidth;
+      // canvasCtx.stroke();
 
       const canvas = canvasRef.current;
       const xPercent = offsetX / canvas.width;
       const yPercent = offsetY / canvas.height;
       setCurrentPath((prevPath) => [...prevPath, { x: xPercent, y: yPercent, color: otherProps.lineColor, width: otherProps.lineWidth }]);
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, currentPath: [...currentPath, { x: offsetX, y: offsetY, color: otherProps.lineColor, width: otherProps.lineWidth}], props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, currentPath: { x: xPercent, y: yPercent, color: otherProps.lineColor, width: otherProps.lineWidth}, props: otherProps }), channel);
       }
     } else if (currentTool === ANNOTATION_TOOLS.circle && drawing) {
-      const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
+     // const { offsetX, offsetY } = getCanvasPosition(e, canvasRef);
+     const { offsetX, offsetY } = e.nativeEvent;
       const canvas = canvasRef.current;
       const radiusPercent = Math.sqrt(
         Math.pow(offsetX / canvas.width - currentCircle.x, 2) +
@@ -105,10 +110,10 @@ const Annotation = ({canvasRef, currentTool, canvasCtx, setCanvasCtx, width, hei
     }
     if (currentTool === ANNOTATION_TOOLS.pen && drawing) {
       setDrawing(false);
-      canvasCtx.closePath();
+      // canvasCtx.closePath();
       setPaths((prevPaths) => [...prevPaths, currentPath]);
       if(channel){
-        pushMessage(JSON.stringify({ ctx: canvasCtx, currentPath: [], props: otherProps }), channel);
+        pushMessage(JSON.stringify({ ctx: canvasCtx, currentPath: null, props: otherProps }), channel);
         pushMessage(JSON.stringify({ ctx: canvasCtx, pen: currentPath, props: otherProps }), channel);
       }
     } else if (currentTool === ANNOTATION_TOOLS.circle && currentCircle) {

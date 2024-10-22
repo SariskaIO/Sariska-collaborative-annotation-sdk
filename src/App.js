@@ -47,9 +47,9 @@ const App = (props)=> {
 
   UseEventHandler(rtcChannel, 'new_message', setLoading, message => {
     let content = JSON.parse(message.content);
-    if(content && content.currentPath && content.currentPath?.length){
+    if(content && content.currentPath){
       setCurrentPath(prev => ([...prev, content.currentPath]));
-    }else if(content && content.currentPath && !content.currentPath?.length){
+    }else if(content && !content.currentPath){
       setCurrentPath([]);
     }
     if(content && content.pen){
@@ -80,8 +80,7 @@ const App = (props)=> {
       const canvas = canvasRef.current;
       canvas.width = props.width;
       canvas.height = props.height;
-
-      redraw(context, canvasRef, paths, circles, emojis, currentCircle, props); // Redraw existing drawings based on new size
+        redraw(context, canvasRef, paths, circles, emojis, currentCircle, currentPath, props); // Redraw existing drawings based on new size
     };
 
     window.addEventListener('resize', handleResize);
@@ -90,7 +89,7 @@ const App = (props)=> {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [paths, emojis, circles, currentCircle]);
+  }, [paths, emojis, circles, currentCircle, currentPath]);
 
   const pushMessage = ( content, channel )=>{
     const new_message = {
